@@ -1,0 +1,91 @@
+﻿@using Microsoft.AspNetCore.Identity
+@*@inject SignInManager<ApplicationUser> SignInManager*@
+@inject UserManager<NPUser> _userManager
+@{
+    var user = await _userManager.GetUserAsync(User);
+    //var avatar = user.AvatarLink is null ? "../img/avatar.png" : "../img/" + user.AvatarLink;
+    var avatar = "";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Менеджер - Новое Поколение</title>
+    <link rel="stylesheet" href="~/css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"
+            integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/6dbfe71658.js" crossorigin="anonymous"></script>
+</head>
+<body class="box">
+   @* @{
+        if (!User.Identity.IsAuthenticated) Context.Response.Redirect(Url.Action("SessionExpired", "Account"));
+    }*@
+    <header class="box">
+        <nav class="flex_between">
+            <ul class="nav__list grid_template" style="grid-template-columns: repeat(6, 1fr);">
+                <li class="nav__item flex_center">
+                    <a asp-action="Branches" asp-controller="Manager" class="nav__link active">
+                        <span class="nav__icon"><i class="fas fa-building"></i></span>
+                        <span class="nav__text">Филиалы</span>
+                    </a>
+                </li>
+                <li class="nav__item flex_center">
+                    <a asp-action="AttendanceMenu" asp-controller="Manager" class="nav__link non_active">
+                        <span class="nav__icon"><i class="fas fa-history"></i></span>
+                        <span class="nav__text">Посещения</span>
+                    </a>
+                </li>
+                <li class="nav__item flex_center">
+                    <a asp-action="PaymentMenu" asp-controller="Manager" class="nav__link non_active">
+                        <span class="nav__icon"><i class="fas fa-credit-card"></i></span>
+                        <span class="nav__text">Оплата</span>
+                    </a>
+                </li>
+                <li class="nav__item flex_center">
+                    <a asp-action="UsersMenu" asp-controller="Manager" class="nav__link non_active">
+                        <span class="nav__icon"><i class="fas fa-users"></i></span>
+                        <span class="nav__text">Пользователи</span>
+                    </a>
+                </li>
+                <li class="nav__item flex_center">
+                    <a asp-action="AllUserMainPage" asp-controller="Account" class="nav__link non_active">
+                        <span class="nav__icon"><i class="fas fa-search"></i></span>
+                        <span class="nav__text">Поиск</span>
+                    </a>
+                </li>
+                @*<li class="nav__item flex_center">
+                    <a asp-action="Settings" asp-controller="Account" class="nav__link non_active">
+                        <span class="nav__icon"><i class="fas fa-cogs"></i></span>
+                        <span class="nav__text">Настройки</span>
+                    </a>
+                </li>*@
+                <li class="nav__item flex_center">
+                    <a asp-action="Logout" asp-controller="Account" class="nav__link non_active">
+                        <span class="nav__icon"><i class="fas fa-sign-out-alt"></i></span>
+                        <span class="nav__text">Выход</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="nav__user flex_between">
+                <p class="nav__user_name">
+                    <!--<a asp-action="Settings" asp-controller="Account" class="nav__link">-->
+                       @(user.FirstName + " " + user.Lastname)
+                    <!--</a>-->
+                </p>
+                <img src="@avatar" alt="Аватар" class="nav__avatar">
+            </div>
+        </nav>
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+﻿@model List<Attendance>
+@using System.Linq
+@using NovoePokolenie.Helpers
+
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    List<DateTime> attended = Model.Where(x => x.AttendanceStatus == (int)AttendanceStatus.Attended)
+                                   .Select(x => x.Date)
+                                   .ToList();
+    List<DateTime> absent = Model.Where(x => x.AttendanceStatus == (int)AttendanceStatus.Absent)
+                                 .Select(x => x.Date)
+                                 .ToList();
+    var model_years = Model.OrderBy(x => x.Date)
+                           .GroupBy(x => x.Date.Year);
+    string className = "";
+}
+
+<div class="attendanceCalendarBlock">
+    @foreach(var year in model_years)
+    {
+        var model_months = year.GroupBy(x => x.Date.Month);
+        foreach(var month in model_months)
+        {
+            
+
+            List<DateTime> skipped = new List<DateTime>();
+            int maxDay = DateTime.DaysInMonth(year.Key, month.Key);
+            DateTime cDate = new DateTime(year.Key, month.Key, 1);
+            <table class="calendar">
+                <tr>
+                    <th colspan="7">@DateHelper.GetMonthName(month.Key) @year.Key</th>
+                </tr>
+                <tr>
+                    @for(int i = 0; i<7; i++)
+                    {
+                        <td class="back-g5 title-case">@DateHelper.GetDayOfWeekName(i, true).ToLower()</td>
+                    }
+                </tr>
+                <tr>
+                    @for(int i = 0; i<7; i++)
+                    {
+                        @if(DateHelper.GetDayOfWeekIndex(cDate.DayOfWeek) <= i)
+                        {
+                            if (attended.Contains(cDate)) className = "checkCalendarGreen";
+                            else if (absent.Contains(cDate)) className = "checkCalendarRed";
+                            else className = "";
+                            <td class="@className">
+                                <span>@cDate.Day</span>
+                                @{cDate = cDate.AddDays(1);}
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                </tr>
+                @{
+                    bool stop = false;
+                    while(cDate.Day <= maxDay && !stop)
+                    {
+                        <tr>
+                        @for(int i = 0; i<7; i++)
+                        {
+                            if(!stop)
+                            {
+                                if (attended.Contains(cDate)) className = "checkCalendarGreen";
+                                else if (absent.Contains(cDate)) className = "checkCalendarRed";
+                                else className = "";
+                                <td class="@className"><span>@cDate.Day</span></td>
+                                if(cDate.Day == maxDay) stop = true;
+                                else cDate = cDate.AddDays(1);
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        </tr>
+                    }
+                }
+            </table>
+        }
+    }
+</div>

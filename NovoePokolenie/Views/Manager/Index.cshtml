@@ -1,0 +1,51 @@
+﻿@inject Microsoft.AspNetCore.Identity.UserManager<NPUser> _userManager
+
+@{ 
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+    NPUser user = await _userManager.GetUserAsync(User);
+}
+<style>
+    .greeting_container{
+        text-align: center;
+        font-size: 3rem;
+        font-weight: 700;
+    }
+    
+    .greeting_container_date{
+        text-align: center;
+        font-size: 2rem;
+    }
+
+    .attention_greeting{
+        text-align: center;
+        color: #F8DF87;
+    }
+</style>
+<div>
+    <p class="greeting_container_date">@(NovoePokolenie.Helpers.StHel.GetGreetingDate(DateTime.Now))</p>
+     <p class="greeting_container">
+        @{
+            int hh = DateTime.Now.Hour;
+            string greeting = "";
+            if(hh>17 && hh<23)
+            {
+                greeting = "Добрый вечер, ";
+            }
+            else if(hh>5 && hh<11)
+            {
+                greeting = "Доброе утро, ";
+            }
+            else if(hh>10 && hh < 18)
+            {
+                greeting = "Хорошего дня, ";
+            }
+            else
+            {
+                greeting = "Спокойной ночи, ";
+            }
+            greeting += user.FirstName + "!";
+
+                @greeting;
+            }
+        </p>
+</div>

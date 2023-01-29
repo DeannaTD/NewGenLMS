@@ -1,0 +1,36 @@
+﻿@{ 
+    Layout = null;
+}
+
+<form asp-action="ChangeLogin" asp-controller="Account"
+      data-ajax="true"
+      data-ajax-mode="post"
+      data-ajax-success="Okay()"
+      data-ajax-failure="$('#password_error').text('Неверный пароль')">
+    <div>
+        <label>Имя</label>
+        <p class="pseudo_input">@ViewBag.FirstName</p>
+    </div>
+    <div>
+        <label>Фамилия</label>
+        <p class="pseudo_input">@ViewBag.LastName</p>
+    </div>
+    <div>
+        <label>Логин</label>
+        <input type="text" name="Login" class="form-control" value="@ViewBag.Login"/>
+    </div>
+    <div>
+        <label>Пароль для подтверждения</label>
+        <input type="password" name="Password" class="form-control" />
+        <span id="password_error"></span>
+    </div>
+    <div>
+        <input type="submit" class="form-control" value="Сохранить" />
+    </div>
+</form>
+<script>
+    function Okay() {
+        $('#password_error').text('');
+        alert('Логин успешно изменен');
+    }
+</script>

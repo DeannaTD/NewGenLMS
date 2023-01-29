@@ -1,0 +1,12 @@
+﻿@model Level
+<div>
+    <form asp-controller="Project" asp-action="CreateLevel">
+        <div asp-validation-summary="All"></div>
+        <div>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <input type="submit" value="Создать" />
+    </form>
+</div>

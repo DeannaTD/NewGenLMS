@@ -1,0 +1,45 @@
+﻿@using NovoePokolenie.Helpers;
+
+@model List<NPUser>
+@{
+    int index = 1;
+
+    //Model.Sort((x, y) => x.StatusId.CompareTo(y.StatusId));
+
+}
+
+@*Html.ActionLink("Сортировка", "SortedIndex", "Payment", new {comparator = "default"});*@
+@{
+    foreach(NPUser student in Model)
+    {
+        <p>@index) @student.FirstName @student.Lastname - @student.Id - 
+            @{
+                if(student.StatusId == 5)
+                {
+                    <span>Блок</span>
+                }
+                if(student.PaymentPeriods.Count != 0)
+                {
+                    <span> - @DateHelper.GetNormalizedDateString(student.PaymentPeriods.Last().PaymentStart)</span>
+                }
+                index++;
+            }
+        </p>
+    }
+}
+
+@*
+    <p>@index) @student.FirstName @student.Lastname - 
+            @{
+                if(student.StatusId == archiveStatus)
+                {
+                    <span>Архив</span>
+                }
+                else
+                {
+                    <span>@student.Group?.Id</span>
+                }
+                index++;
+            }
+        </p>
+*@

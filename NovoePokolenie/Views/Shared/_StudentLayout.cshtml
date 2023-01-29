@@ -1,0 +1,85 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<NPUser> _userManager
+
+@{
+    var user = await _userManager.GetUserAsync(User);
+    //var avatar = user.AvatarLink is null ? "../img/avatar.png" : "../img/" + user.AvatarLink;
+    var avatar = "";
+}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ученик - Новое Поколение</title>
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/css/lesson.css" />
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"
+            integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/6dbfe71658.js" crossorigin="anonymous"></script>
+
+    <style>
+        .nav__item .nav__icon{
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body class="box">
+    @*@{
+        if (!User.Identity.IsAuthenticated) Context.Response.Redirect(Url.Action("SessionExpired", "Account"));
+    }*@
+    <!--TODO: if blocked student-->
+    <header class="box">
+        <nav class="flex_between">
+            <ul class="nav__list grid_template">
+                <li class="nav__item flex_center">
+                    <a asp-action="Lesson" asp-controller="Student" asp-route-studentId="@_userManager.GetUserId(User)" class="nav__link active">
+                        <span class="nav__icon"><i class="fas fa-chalkboard-teacher"></i></span>
+                        <span class="nav__text">Урок</span>
+                    </a>
+                </li>
+                <li class="nav__item flex_center">
+                    <a asp-action="Payment" asp-controller="Payment" asp-route-studentId="@_userManager.GetUserId(User)" class="nav__link non_active">
+                        <span class="nav__icon"><i class="far fa-credit-card"></i></span>
+                        <span class="nav__text">Оплата</span>
+                    </a>
+                </li>
+                <li class="nav__item flex_center">
+                    <a asp-action="StudentAttendance" asp-controller="Attendance" asp-route-studentId="@_userManager.GetUserId(User)" class="nav__link non_active">
+                        <span class="nav__icon"><i class="far fa-calendar-check"></i></span>
+                        <span class="nav__text">Посещения</span>
+                    </a>
+                </li>
+                <li class="nav__item flex_center">
+                    <a asp-action="Settings" asp-controller="Account" class="nav__link non_active">
+                        <span class="nav__icon"><i class="fas fa-cogs"></i></span>
+                        <span class="nav__text">Настройки</span>
+                    </a>
+                </li>
+                <li class="nav__item flex_center">
+                    <a asp-action="Logout" asp-controller="Account" class="nav__link non_active">
+                        <span class="nav__icon"><i class="fas fa-sign-out-alt"></i></span>
+                        <span class="nav__text">Выход</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="nav__user flex_between">
+                <p class="nav__user_name">@user.FirstName @user.Lastname</p>
+                <img src="@avatar" alt="Аватар" class="nav__avatar">
+            </div>
+        </nav>
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>

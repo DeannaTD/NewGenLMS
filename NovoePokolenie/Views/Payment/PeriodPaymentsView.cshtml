@@ -1,0 +1,84 @@
+﻿@model List<Payment>
+
+@{
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<style>
+    input, textarea{
+        display: block;
+        border: 1px solid #F0F0F0;
+        padding: .5rem;
+        width: 50%;
+        color: #202020;
+    }
+</style>
+
+@**@
+
+<form asp-controller="Payment" asp-action="CreatePayment"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-success="window.location.reload(true)">
+    <div asp-validation-summary="All"></div>
+    <div>
+        <input class="hidden" name="UserId" type="text" value="@ViewBag.UserId" />
+    </div>
+    <div>
+        <input class="hidden" name="PaymentPeriodId" type="text" value="@ViewBag.PeriodId" />
+    </div>
+    <div>
+        <label>Добавить новый платеж</label><br />
+        <input class="date_input" name="PaymentAmount" type="number" placeholder="Сумма" />
+    </div>
+    <div>
+        <input class="date_input" name="PaymentCreated" type="date" />
+    </div>
+    <div>
+        <textarea class="date_input" name="Comment" placeholder="Комментарий"></textarea>
+    </div>
+    <input type="submit" value="Создать" />
+</form>
+
+<p>Оплата: @ViewBag.Price</p>
+<p>Всего внесено:</p>
+@foreach(Payment payment in Model)
+{
+<form class="payment_form" asp-action="UpdatePayment" asp-controller="Payment" data-ajax="true">
+    <div>
+        <input class="hidden" name="PaymentId" value="@payment.Id" />
+        <input class="submit_change" name="PaymentCreated" type="date" value="@payment.PaymentCreated.ToString("yyyy-MM-dd")" /> - <input class="submit_change" type="number" name="PaymentAmount" value="@payment.PaymentAmount" />
+        <span data-href="@Url.Action("DeletePayment", "Payment", new { paymentId = payment.Id })" class="delete_link">+</span>
+    </div>
+</form>
+}
+
+    
+
+<script>
+    $('.payment_form .delete_link').on('click', event => {
+        $.ajax({
+            type: "POST",
+            url: $(event.currentTarget).attr('data-href'),
+            success: function () {
+                $(event.currentTarget).parents()[1].remove()
+                alert("Платеж успешно удален")
+            },
+            error: function () {
+                alert("Произошла ошибка. Обратитесь к администратору")
+            }
+        });
+
+    })
+
+    $('#submit').one('click', event => {
+        event.preventDefault();
+        let form = $(event.currentTarget).parent('form');
+        $(form).submit();
+    });
+
+    $('.submit_change').on('change', event => {
+        let form = $(event.currentTarget).parent('form');
+        $(form).submit();
+    });
+</script>

@@ -1,0 +1,18 @@
+﻿@model Comment
+
+<div>
+    <form asp-action="" asp-controller="">
+        <div asp-validation-summary="All"></div>
+        <div>
+            <label asp-for="Text"></label><br />
+            <input asp-for="DateCreated" class="form-control" />
+        </div>
+        <div>
+            <label asp-for="Text"></label><br />
+            <input asp-for="DateToNotify" class="form-control" />
+        </div>
+        <div>
+            <input type="submit" value="Создать напоминание" class="btn" />
+        </div>
+    </form>
+</div>

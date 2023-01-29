@@ -1,0 +1,126 @@
+﻿@model List<NovoePokolenie.ViewModels.StudentCardViewModel>
+
+@using Microsoft.AspNetCore.Identity
+@using NovoePokolenie.Helpers
+
+@inject UserManager<NPUser> _userManager
+
+@{ 
+    string login = "";
+}
+
+<div>
+    <table class="table table_bordered_shadow">
+        <tr>
+            <th>
+                Имя
+            </th>
+            <th>
+                Логин
+            </th>
+            <th>
+                Имя родителя
+            </th>
+            <th>
+                Дата начала
+            </th>
+            <th>
+                Номер родителя
+            </th>
+            <th>
+                Номер ребенка
+            </th>
+            <th>
+                Оплата
+            </th>
+            <th>
+                Уровень
+            </th>
+            <th>
+                В архив/Заблокировать
+            </th>
+        </tr>
+        @foreach (var student in Model)
+        {
+            <tr>
+                <td>
+                    @{
+                        if (student.LevelId == (int)DefaultValues.TrialLevel)
+                        {
+                            <a href="@Url.Action("TrialDetail", "Student", new { trialId = student.StudentId })"
+                                data-ajax="true"
+                                data-ajax-mode="replace"
+                                data-ajax-update="#student_card"
+                                data-ajax-success="$('#studentCard').css('display','block')">
+                            @(student.FirstName + " " + student.LastName)
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("StudentDetail", "Student", new { studentId = student.StudentId })"
+                                data-ajax="true"
+                                data-ajax-mode="replace"
+                                data-ajax-update="#student_card"
+                                data-ajax-success="$('#studentCard').css('display','block')">
+                            @(student.FirstName + " " + student.LastName)
+                            </a>
+                        }
+                    }
+                    
+                </td>
+                <td>
+                    @{
+                        if (student.LevelId == (int)DefaultValues.TrialLevel) login = "student";
+                        else
+                        {
+                            NPUser st = await _userManager.FindByIdAsync(student.StudentId);
+                            login = st.UserName;
+                        }
+                    }
+                    <a href = "@Url.Action("ResetPasswordManager", "Account", new { userId = student.StudentId })"
+                        data-ajax="true"
+                        data-ajax-success="alert('Пароль сброшен')"
+                        data-ajax-failute="alert('Ошибка сброса')">
+                        @login
+                    </a>
+                </td>
+                <td>
+                    @student.ParentName
+                </td>
+                <td>
+                    @NovoePokolenie.Helpers.StHel.GetFormatedDate(student.DateStarted, false)
+                </td>
+                <td>
+                    @student.PhoneNumber
+                </td>
+                <td>
+                    @student.StudentPhoneNumber
+                </td>
+                <td>
+                    @student.PaymentCharge
+                </td>
+                <td>
+                    @student.Level
+                </td>
+                <td>
+                    <a href="@Url.Action("MakeArchived", "Student", new { studentId = student.StudentId})" data-ajax="true">
+                        Архив
+                    </a>
+                    <a href="@Url.Action("Block", "Student", new { studentId = student.StudentId})" data-ajax="true">
+                        Заблокировать
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+    <div id="student_card">
+        @*<div class="close_icon add_button"><i class="fas fa-times"></i></div>*@
+    </div>
+</div>
+
+<script>
+    $('.close_icon').on('click', () => {
+        $('.add_period').css('display', 'none');
+        $('.add_period').children().not(':first-child').remove();
+    });
+</script>

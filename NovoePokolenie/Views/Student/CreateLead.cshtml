@@ -1,0 +1,78 @@
+﻿@model NovoePokolenie.Models.Lead
+
+@using NovoePokolenie.Helpers
+
+@inject NovoePokolenie.Services.StudentService _studentService;
+@inject NovoePokolenie.Services.GroupService _groupService;
+
+@{
+    Layout = null;
+}
+
+<div class="scroll_card">
+    <form method="post" asp-controller="Student" asp-action="CreateLead" class="padding010"
+    data-ajax="true" data-ajax-success="closeWindow()">
+        <div asp-validation-summary="All"></div>
+        <div>
+            <input asp-for="GroupId" value="@ViewBag.GroupId" class="hidden" />
+            @if(ViewBag.GroupId != null){
+                TimeTable tt = await _groupService.GetTimeTableAsync(ViewBag.GroupId);
+           
+                <p class="accent_text">Группа: 
+                    @StHel.TimeTableToShortString(tt)
+                     &nbsp;
+                    @(await _studentService.GetStudentMentorNameAsync(ViewBag.GroupId))
+                </p>
+            }
+        </div>
+        <div>
+            <label asp-for="ParentName"></label>
+            <input asp-for="ParentName" class="form-control" />
+            <span asp-validation-for="ParentName"></span>
+        </div>
+        <div>
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName"></span>
+        </div>
+        <div>
+            <label asp-for="LastName"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName"></span>
+        </div>
+        <div>
+            <label asp-for="PhoneNumber"></label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber"></span>
+        </div>
+        <div>
+            <label asp-for="DateOfTrial"></label>
+            <input asp-for="DateOfTrial" class="form-control" type="date"/>
+            <span asp-validation-for="DateOfTrial"></span>
+        </div>
+        <div>
+            <label asp-for="DateOfBirth"></label>
+            <input asp-for="DateOfBirth" class="form-control" type="date"/>
+            <span asp-validation-for="DateOfBirth"></span>
+        </div>
+        <div>
+            <label asp-for="SocialLink"></label>
+            <input asp-for="SocialLink" class="form-control" />
+            <span asp-validation-for="SocialLink"></span>
+        </div>
+        <div>
+            <input type="submit" value="Добавить" class="form-control submit_button_dark" />
+        </div>
+    </form>
+    <input type="button" value="&#x2717" class="close_button" /> 
+</div>
+
+<script>
+    $('.close_button').on('click', ()=>{
+        $('#trial-add').children().remove();
+    });
+
+    function closeWindow(){
+        $('#trial-add').children().remove();
+    }
+</script>

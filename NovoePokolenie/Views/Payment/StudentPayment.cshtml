@@ -1,0 +1,44 @@
+﻿@*List<PaymentPeriod> payments = await _paymentPeriodService.GetStudentsPaymentPeriodsAsync(studentId);
+    return View("StudentPayment", payments);*@
+
+@{ 
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+@model List<PaymentPeriod>
+
+<div class="payments_list">
+    @foreach(var period in Model)
+    {
+    <div class="payment_detail">
+        <p class="period_title">От @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentStart, false) до @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentEnd, false)</p>
+        <p>Внесено:</p>
+        <ul class="period_payments_list">
+            @foreach (var payment in period.Payments)
+            {
+             <li>
+                 <span>@NovoePokolenie.Helpers.StHel.GetFormatedDate(payment.PaymentCreated, false) - @payment.PaymentAmount с.</span>
+             </li>
+            }
+        </ul>
+    </div>
+    }
+    @*<ul class="period_list">
+        @foreach (var period in Model)
+        {
+        <li>
+            <p class="period_name">Период от @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentStart, false) до @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentEnd, false)</p>
+            <p>Внесено:</p>
+            <ul class="payment_list">
+                @foreach (var payment in period.Payments)
+                {
+                <li>
+                    <p class="list_item">
+                        <span class="icon"><i class="fas fa-circle"></i></span> <span>@NovoePokolenie.Helpers.StHel.GetFormatedDate(payment.PaymentCreated, false) - @payment.PaymentAmount сом</span>
+                    </p>
+                </li>
+                }
+            </ul>
+        </li>
+        }
+    </ul>*@
+</div>

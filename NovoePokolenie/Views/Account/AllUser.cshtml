@@ -1,0 +1,118 @@
+﻿@using NovoePokolenie.Helpers
+@model List<NPUser>
+
+@inject Microsoft.AspNetCore.Identity.UserManager<NPUser> _userManager
+@inject NovoePokolenie.Services.GroupService _groupService
+@inject NovoePokolenie.Services.BranchService _branchService
+
+@{
+    Layout = null;
+    var groups = await _groupService.GetGroupsAsync();
+    int i = 0;
+}
+<style>
+    table * {
+        font-size: 1rem !important;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    select {
+        border: none !important;
+    }
+</style>
+<div class="container table-container">
+    <table class="table table_bordered">
+        <tr>
+            <th>№</th>
+            <th>Имя</th>
+            <th>Логин</th>
+            <th>Номер</th>
+            <th>Из архива</th>
+        </tr>
+        @{
+            if (Model.Count == 0)
+            {
+                <tr>
+                    <td colspan="5">Совпадений не найдено</td>
+                </tr>
+            }
+            foreach (NPUser user in Model)
+            {
+                <tr>
+                    <td>@(++i)</td>
+                    <td>
+                        @{
+                            if (user.StatusId == (int)ActivityStatus.Archive)
+                            {
+                                <a asp-fragment="@user.Id" asp-action="Archive" asp-controller="Student" title="Перейти в архив">
+                                    @user.FirstName @user.Lastname (архив)
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("StudentDetail", "Student", new { studentId = user.Id })"
+                                   data-ajax="true"
+                                   data-ajax-mode="replace"
+                                   data-ajax-update="#student_card"
+                                   data-ajax-success="$('#studentCard').css('display','block')"
+                                   title="Открыть карточку">
+                                    @user.FirstName @user.Lastname
+                                </a>
+                                <a asp-action="StudentPaymentCard" asp-controller="Payment" asp-route-studentId="@user.Id">
+                                    <i class="fas fa-file-invoice"></i>
+                                </a>
+                            }
+                        }
+
+                    </td>
+                    <td>@user.UserName</td>
+                    <td>@user.PhoneNumber</td>
+                    <td>
+                        @{
+                            if (user.StatusId == (int)ActivityStatus.Archive)
+                            {
+                                <form asp-action="UnblockUser" asp-controller="Student" data-ajax="true" data-ajax-success="Okay(@user.Id)">
+                                    <input type="hidden" name="studentId" value="@user.Id" />
+                                    <select name="groupId" class="form_control" data-name="@(user.FirstName+" "+user.Lastname)">
+                                        @foreach (var group in groups)
+                                        {
+                                            <option value="@group.Id">
+                                                @((await _branchService.GetBranchByIdAsync(group.BranchId)).Name)
+                                                @NovoePokolenie.Helpers.StHel.TimeTableToString(group.TimeTable)
+                                            </option>
+                                        }
+                                    </select>
+                                </form>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+<div id="student_card"></div>
+
+<script>
+    $('.close_icon').on('click', () => {
+        $('.add_period').css('display', 'none');
+        $('.add_period').children().not(':first-child').remove();
+    });
+
+    function Okay(st_data) {
+        let st = "[data-id = " + st_data + "]";
+        $(st).remove();
+    }
+
+    $('select').on('change', (event) => {
+        let submit_button = $(event.currentTarget).parent();
+        let message = 'Разархивировать пользователя ' + $(event.currentTarget).attr('data-name') + "?";
+        if (confirm(message)) {
+            $(submit_button).submit();
+            $(event.currentTarget).parents('tr').remove();
+        }
+    });
+</script>

@@ -1,0 +1,52 @@
+﻿@model NovoePokolenie.ViewModels.StudentLessonViewModel
+@inject NovoePokolenie.Services.GroupService _groupService
+@inject NovoePokolenie.Services.AccountService _accountService
+@inject NovoePokolenie.Services.StudentService _studentService
+@inject NovoePokolenie.Services.ProjectService _projectService 
+@inject NovoePokolenie.Services.LevelService _levelService
+
+@{
+    NPUser student = await _studentService.GetStudentById(ViewBag.StudentId);
+    List<Level> levels = await _levelService.GetCollectionAsync();
+    List<Project> projects = await _projectService.GetProjectsByLevelIdAsync(ViewBag.LevelId);
+}
+
+<div>
+    <form asp-action="LessonDetailSubmit" asp-controller="Student" id="levelForm"
+          data-ajax="true"
+          data-ajax-method="post"
+          data-ajax-mode="replace"
+          data-ajax-update=".lesson-window">
+        <div asp-validation-summary="All"></div>
+        <div class="d-none">
+            <label asp-for="StudentId"></label><br />
+            <input asp-for="StudentId" class="form-control d-none" value="@ViewBag.StudentId" />
+            <span asp-validation-for="StudentId"></span>
+        </div>
+        <div>
+            <label asp-for="StudentName">Имя:</label><br />
+            <input asp-for="StudentName" value="@student.FirstName @student.Lastname" class="dark_input margin_bottom" />
+            <span asp-validation-for="StudentName"></span>
+        </div>
+        <div>
+            <label asp-for="LevelId">Уровень:</label><br />
+            <select class="dark_input margin_bottom" asp-for="@Model.LevelId" 
+                    asp-items="@(new SelectList(levels, "Id", "Name", ViewBag.LevelId.ToString()))"
+                    onchange="loadProjects(this)">
+              
+            </select>
+            <span asp-validation-for="LevelId"></span>
+        </div>
+
+        <div>
+            <label asp-for="ProjectId">Проект:</label><br />
+            <select class="dark_input" asp-for="@Model.ProjectId" id="projects"
+                    asp-items="@(new SelectList(projects, "Id", "Name", ViewBag.ProjectId.ToString()))"
+                    onchange="loadProjects(this)">
+      
+            </select>
+            <span asp-validation-for="ProjectId"></span>
+        </div>
+
+    </form>
+</div> 

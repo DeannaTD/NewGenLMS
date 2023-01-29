@@ -1,0 +1,52 @@
+@font-face{
+	font-family: "name";
+	src: url(../fonts/UbuntuCondensed-Regular.ttf);
+}
+@font-face{
+	font-family: "Rob_bold";
+	src: url(../fonts/RobotoCondensed-Bold.ttf);
+}
+@font-face{
+	font-family: "Rob_light";
+	src: url(../fonts/RobotoCondensed-Light.ttf);
+}
+@font-face{
+	font-family: "Rob_reg";
+	src: url(../fonts/RobotoCondensed-Regular.ttf);
+}
+.container{
+	max-width: 1366px;
+	margin: 0 auto;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+.obj{
+	margin: 0 auto;
+	max-width: 768px;
+    padding: 30px 30px;
+    background-color: rgba(0,0,0,0.5);
+}
+.obj h1{
+	font-family: "Rob_bold";
+	color: #fff;
+	font-size: 26px;
+	text-decoration: underline;
+    text-underline-position: under;
+}
+.obj p{
+	color: #fff;
+	font-family: "Rob_reg";
+	font-size: 20px;
+}
+.gif p{
+	font-size: 32px;
+}
+img.app{
+	width: 100px;
+}
+.gif{
+	text-align: center;
+}
+.gif img{
+	width: 400px;
+}

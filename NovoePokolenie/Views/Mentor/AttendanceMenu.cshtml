@@ -1,0 +1,33 @@
+﻿@model List<Branch>
+@inject NovoePokolenie.Services.StudentService _studentService;
+@inject NovoePokolenie.Services.GroupService _groupService;
+@using NovoePokolenie.Helpers;
+
+@{
+    Layout = "~/Views/Shared/_MentorLayout.cshtml";
+    DateTime now = DateTime.Now;
+}
+
+<style>
+    .branchContainer{
+        grid-template-columns: repeat(@Model.Count, 1fr);
+    }
+</style>
+
+<div class="branchContainer">
+    @foreach(Branch branch in Model)
+    {
+        <div class="branchBlock">
+            <div class="branchBlock-header">@branch.Name</div>
+            @{
+                List<Group> groups = await _groupService.GetGroupsByBranchIdAsync(branch.Id);
+                groups.Sort((g1, g2) => StHel.CompareTimeTables(g1.TimeTable, g2.TimeTable));
+            }
+            @foreach(Group group in groups)
+            {
+                <a class="branchBlock-content branchBlock-closed" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = group.Id, date = DateTime.Now })">
+                    @StHel.TimeTableToShortString(group.TimeTable)</a>
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+@model List<Group>
+@using NovoePokolenie.Helpers
+
+<div class="flex_column">
+<p class="month_name">
+    @ViewBag.BranchName
+</p>
+
+@{
+    foreach (Group group in Model)
+    {
+        <a asp-controller="Group" asp-action="Edit" asp-route-id="@group.Id" class="group_link">
+            @StHel.TimeTableToShortString(group.TimeTable)
+        </a>
+    }
+}
+</div>

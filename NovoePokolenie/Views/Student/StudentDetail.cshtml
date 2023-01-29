@@ -1,0 +1,183 @@
+﻿@using NovoePokolenie.Helpers
+@model NovoePokolenie.ViewModels.StudentCardViewModel
+@inject NovoePokolenie.Services.GroupService _groupService
+@inject NovoePokolenie.Services.BranchService _branchService
+@inject NovoePokolenie.Services.AccountService _accountService
+@inject NovoePokolenie.Services.LevelService _levelService
+
+
+@{
+    var groups = await _groupService.GetGroupsAsync();
+    var mentors = await _accountService.GetAllUsersInRole("Mentor");
+    var levels = await _levelService.GetCollectionAsync();
+    var action = Model.LevelId == (int)DefaultValues.TrialLevel ? "SaveTrial" : "SaveStudent";
+}
+<div class="scroll_card">
+    <form asp-action="@action" asp-controller="Student" data-ajax="true" data-ajax-begin="startWait()" data-ajax-success="endWait()" id="form" data-trialid="@Model.StudentId">
+        <div asp-validation-summary="All"></div>
+        <input asp-for="StudentId" type="hidden" value="@Model.StudentId" />
+        <input asp-for="StatusId" type="hidden" value="@Model.StatusId" />
+        <div class="flex_column">
+                <p>@ViewBag.UserName</p>
+                <div>
+                    <label asp-for="FirstName"></label>
+                    <input asp-for="FirstName" value="@Model.FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName"></span>
+                </div>
+                <div>
+                    <label asp-for="LastName"></label>
+                    <input asp-for="LastName" value="@Model.LastName" class="form-control" />
+                    <span asp-validation-for="LastName"></span>
+                </div>
+                <div>
+                    <label asp-for="PhoneNumber"></label>
+                    <input asp-for="PhoneNumber" value="@Model.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber"></span>
+                </div>
+                 <div>
+                    <label asp-for="StudentPhoneNumber"></label>
+                    <input asp-for="StudentPhoneNumber" value="@Model.StudentPhoneNumber" class="form-control" />
+                    <span asp-validation-for="StudentPhoneNumber"></span>
+                </div>
+                <div>
+                    <label asp-for="DateOfBirth"></label>
+                    <input asp-for="DateOfBirth" value="@Model.DateOfBirth.ToString("yyyy-MM-ddThh:mm")" class="form-control" />
+                    <span asp-validation-for="DateOfBirth"></span>
+                </div>
+
+                <div>
+                    <label asp-for="DateOfTrial"></label>
+                    <input asp-for="DateOfTrial" value="@Model.DateOfTrial.ToString("yyyy-MM-ddThh:mm")" />
+                    <span asp-validation-for="DateOfTrial"></span>
+                </div>
+
+                <div>
+                    <label asp-for="DateStarted"></label>
+                    <input asp-for="DateStarted" value="@Model.DateStarted.ToString("yyyy-MM-ddThh:mm")" />
+                    <span asp-validation-for="DateStarted"></span>
+                </div>
+                <div>
+                    <label asp-for="ParentName"></label>
+                    <input asp-for="ParentName" value="@Model.ParentName" />
+                    <span asp-validation-for="ParentName"></span>
+                </div>
+                @if(Model.LevelId != (int)DefaultValues.TrialLevel)
+                {
+                    <div>
+                        <label asp-for="PaymentCharge"></label>
+                        <input asp-for="PaymentCharge" value="@Model.PaymentCharge" />
+                        <span asp-validation-for="PaymentCharge"></span>
+                    </div>
+                }
+                else{
+                    <a id="createStudentSpan" data-action="@Url.Action("RegisterStudentTrial", "Account")"></a>
+                }
+                <div>
+                    <label asp-for="LevelId">Уровень</label>
+                    <select class="form-control" asp-for="@Model.LevelId">
+                        @{
+                            foreach (var level in levels)
+                            {
+                                        <option value="@level.Id">
+                                            @level.Name
+                                        </option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="LevelId"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Note"></label>
+                    <input asp-for="Note" value="@Model.Note" />
+                    <span asp-validation-for="Note"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Debt"></label>
+                    <input asp-for="Debt" value="@Model.Debt" disabled />
+                    <span asp-validation-for="Debt"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Group"></label>
+                    <select class="form-control" asp-for="@Model.GroupId" id="group-select">
+                        @{
+                            foreach (var group in groups)
+                            {
+                                        <option value="@group.Id" data-mentorId="@group.MentorId">
+                                            @((await _branchService.GetBranchByIdAsync(group.BranchId)).Name)
+                                            @NovoePokolenie.Helpers.StHel.TimeTableToString(group.TimeTable)
+                                        </option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="Group"></span>
+                </div>
+
+                <div>
+                    <label asp-for="MentorName"></label>
+                    <select asp-for="@Model.MentorId" id="mentor-select" disabled>
+                        @{
+                            foreach (var mentor in mentors)
+                            {
+                                        <!option value="@mentor.Id" @(mentor.Id == Model.MentorId ? "selected" : "")>
+                                            @mentor.FirstName
+                                        </!option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="MentorName"></span>
+                </div>
+                <input type="submit" value="&#x2713" class="save_button" />
+                <input type="button" value="&#x2717" class="close_button" /> 
+        </div>
+    </form>
+</div>
+<script>
+    var level = @Model.LevelId;
+    var trialLevel = @((int)DefaultValues.TrialLevel);
+    var checkTrial = level == trialLevel;
+
+    $("input[type='submit'].save_button").on('click', (event)=>{
+        event.preventDefault();
+
+        if(checkTrial){
+            let checkedLevel = $("select#group-select").val();
+            if(checkedLevel != trialLevel){
+                let path = $('#createStudentSpan').data('action') + "?trialId=" + $("#form").data("trialid");
+                $('#form').attr('action', path);
+            }
+        }
+
+        $('#form').submit();
+        $('#student_card').children().remove();
+    });
+
+    $('.close_button').on('click', ()=>{
+        $('#student_card').children().remove();
+    });
+
+    $('#group-select').on('change', () => {
+        let mentorId = $('#group-select>option:selected').attr('data-mentorId');
+        $('#mentor-select option').each(function (index, item) { if (item.value == mentorId) $(item).attr('selected', true); else $(item).attr('selected', false); });
+    });
+
+        function startWait() {
+            let waiter = document.createElement('div');
+            for (let i = 0; i < 3; i++) {
+            waiter.appendChild(document.createElement('div'));
+            }
+            document.body.appendChild(waiter);
+            $(waiter).addClass('waiter');
+            $(document.body).css('overflow', 'hidden');
+        }
+
+        function endWait() {
+            $('.waiter').remove();
+            $(document.body).css('overflow-y', 'scroll');
+            $('.pop_up_card').css('display', 'none');
+            alert("Изменения успешно сохранены");
+        }
+
+</script>

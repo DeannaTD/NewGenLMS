@@ -1,0 +1,113 @@
+﻿@model NovoePokolenie.ViewModels.UserSettingsViewModel
+
+@{
+    if (User.IsInRole("Mentor"))
+    {
+        Layout = "~/Views/Shared/_MentorLayout.cshtml";
+    }
+    else if (User.IsInRole("Manager"))
+    {
+        Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+    }
+    else if (User.IsInRole("Student"))
+    {
+        Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    }
+}
+<span id="error_message" class="error_window"></span>
+<div class ="grid grid-2 grid-shrink form-block">
+    <div>
+        <p class="accent-header flex a-center">Основная информация</p>
+        <form class="grid grid-2" asp-action="ChangeLogin" asp-controller="Account"
+              data-ajax="true"
+              data-ajax-mode="post"
+              data-ajax-success="Okay('Информация обновлена')"
+              data-ajax-failure="Failure('Неверный пароль')">
+                <label>Имя</label>
+                <p class="pseudo_input">@Model.FirstName</p>
+                <label>Фамилия</label>
+                <p class="pseudo_input">@Model.LastName</p>
+                <label>Логин</label>
+                <input type="text" name="Login" class="form-control" value="@Model.Login" />
+                <label>Пароль:</label>
+                <input type="password" name="Password" class="form-control" />
+            <div class="grid-all-2">
+                <input type="submit" class="accent-submit block" value="Сохранить" />
+            </div>
+        </form>
+    </div>
+    <div>
+        <p class="accent-header flex a-center">Пароль</p>
+        <form class="grid grid-2"
+              asp-action="ResetPassword" asp-controller="Account"
+              data-ajax="true"
+              data-ajax-mode="post"
+              data-ajax-success="Okay('Пароль успешно изменен')"
+              data-ajax-failure="Failure('Неверный пароль')"
+              id="change_password_form"
+              class="setings_form">
+                <label>Текущий:</label>
+                <input type="password" name="CurrentPassword" class="form-control" />
+                <label>Новый:</label>
+                <input type="password" name="NewPassword" class="form-control" />
+                <label>Повтор:</label>
+                <input type="password" name="CheckPassword" class="form-control" />
+                <div class="grid-all-2"><input type="submit" class="accent-submit block" value="Сохранить"></div>
+                <div class="grid-all-2"><button class="secondary-submit block">Восстановить пароль</button></div>
+
+        </form>
+    </div>
+    <div>
+        <p class="accent-header flex a-center">Изображение профиля</p>
+        <form class="file_input_form" asp-controller="Account" asp-action="SettingsAccount" enctype="multipart/form-data"
+              data-ajax="true"
+              data-ajax-mode="post"
+              data-ajax-success="Okay('Изображение профиля успешно обновлено')"
+              data-ajax-failure="Failure('Файл поврежден или указан неверно')">
+            <input name="image" type="file" id="fileInput" class="d-none" />
+            <div><button class="secondary-submit block" id="fileButton">Выберите файл</button></div>
+            <p id="fileName" class="inline-block">Файл не выбран</p>
+            <div><input type="submit" class="accent-submit block" value="Загрузить фото"></div>
+        </form>
+    </div>
+</div>
+<script>
+    $('#fileButton').on('click', event => {
+        event.preventDefault();
+        $("#fileInput").trigger('click');
+    });
+
+    $('#fileInput').on('change', event => {
+        $('#fileName').text($('#fileInput')[0].files[0].name);
+    });
+
+    function Okay(message) {
+        alert(message);
+        window.location.reload();
+    }
+
+    function Failure(message) {
+        $('#error_message').css('display', 'block')
+        $('#error_message').css('animation', 'fadeInOut 4s ease forwards')
+        $('#error_message').text(message);
+        setTimeout(()=>{
+            $('#error_message').css('display', 'none')
+        }, 4000)
+    }
+
+    $("#change_password_form [type='submit']").on('click', (event) => {
+        event.preventDefault();
+        let np = $("[name='NewPassword']").val();
+        let cp = $("[name='CheckPassword']").val();
+        if (cp != np) {
+            Failure("Введенные пароли не совпадают");
+            return;
+        }
+        else if (!np.match(/^([a-zA-Z0-9]{6,})$/)) {
+            Failure('Пароль должен состоять из букв латинского алфавита и содержать не менее 6 знаков')
+        }
+        else {
+            $('#change_password_form').submit();
+        }
+    });
+</script>

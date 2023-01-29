@@ -1,0 +1,41 @@
+﻿@model NovoePokolenie.ViewModels.CreateGroupViewModel
+
+<div>
+    <form method="post" asp-controller="Group" asp-action="Create">
+        <div asp-validation-summary="All"></div>
+        <div>
+            <label asp-for="Day1"></label><br />
+            <select asp-for="Day1" class="form-control" asp-items="@NovoePokolenie.Helpers.StHel.DaysOfWeek()">
+                <option>День недели</option>
+            </select>
+            <span asp-validation-for="Day1"></span>
+        </div>
+        <div>
+            <label asp-for="Day2"></label><br />
+            <select asp-for="Day2" class="form-control" asp-items="@NovoePokolenie.Helpers.StHel.DaysOfWeek()">
+                <option>День недели</option>
+            </select>
+            <span asp-validation-for="Day2"></span>
+        </div>
+        <div>
+            <label asp-for="Time"></label><br />
+            <input asp-for="Time" class="form-control" />
+            <span asp-validation-for="Time"></span>
+        </div>
+        <div>
+            <select asp-for="MentorId" class="form-control">
+                @foreach (var mentor in Model.Mentors)
+                {
+                    <option value="@mentor.Id">@(mentor.FirstName + " " + mentor.Lastname)</option>
+                }
+            </select>
+            <span asp-validation-for="MentorId" id="password_span"></span>
+        </div>
+        <div>
+            <input asp-for="BranchId" value="@Model.BranchId" />
+        </div>
+        <div>
+            <input type="submit" value="Создать" class="btn btn-outline-dark" />
+        </div>
+    </form>
+</div>

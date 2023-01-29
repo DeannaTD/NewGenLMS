@@ -1,0 +1,95 @@
+﻿@model NovoePokolenie.ViewModels.PaymentsViewModel
+
+@{
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+    int totalForPeriod = 0;
+}
+
+<style>
+        th,
+        td {
+            border: 1px solid #efefef;
+            padding: 0;
+        }
+
+        .table-input{
+            width: 8rem;
+            display: inline-block;
+            margin: 0;
+            padding: .6rem;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: #F0F0F0;
+            font-family: sans-serif;
+            font-size: 1rem;
+        }
+
+        th{
+            padding: .6rem;
+        }
+
+        ::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        .paymentTitle{
+            font-size: 2rem;
+            text-align: center;
+        }
+</style>
+
+<p>
+    @Model.FirstName @Model.LastName - @Model.PhoneNumber
+</p>
+<p>
+    <a class="paymentTitle" href="@Url.Action("CreatePaymentPeriod", "Payment", new { UserId = Model.StudentId, MustTotal = Model.Total })">Новый период оплаты</a>
+</p>
+
+<table class="table table_bordered">
+    <tr>
+        <th>Период</th>
+        <th>Стоимость</th>
+        <th>Факт</th>
+        <th>Долг</th>
+        <th>Дата оплаты</th>
+        <th>Действие</th>
+    </tr>
+    @foreach(PaymentPeriod period in Model.PaymentPeriods)
+    {
+        <tr>
+            <td>
+                <form asp-action="ChangePeriodDates" asp-controller="Payment" data-ajax="true" data-ajax-success="" data-ajax-failure="alert('Ошибка TableStudentCalendar')">
+                    <input class="trigger-input table-input" type="date" name="PaymentStart" value="@period.PaymentStart.ToString("yyyy-MM-dd")">
+                    -
+                    <input class="trigger-input table-input" type="date" name="PaymentEnd" value="@period.PaymentEnd.ToString("yyyy-MM-dd")">
+                    <input type="text" class="hidden" name="periodId" value="@period.Id">
+                </form>
+            </td>
+            <td>@period.MustTotal</td>
+            <td>
+                @{
+                    totalForPeriod = 0;
+                    foreach(Payment payment in period.Payments)
+                        totalForPeriod += payment.PaymentAmount;
+                }
+                @totalForPeriod
+            </td>
+            <td>
+                @(totalForPeriod - period.MustTotal)
+            </td>
+            <td>
+                @(period.Payments.Count == 0 ? "" : period.Payments.Last().PaymentCreated.ToString("dd/MM/yyyy"))
+            </td>
+            <td>
+                <a href="@Url.Action("PeriodInfo", "Payment", new { PeriodId = period.Id, UserId = Model.StudentId })">Подробнее</a>
+            </td>
+          </tr>
+    }
+</table>
+<script>
+    $('.trigger-input').on('change', (event)=>{
+        let form = $(event.currentTarget).parents('form');
+        $(form).submit();
+    });
+</script>

@@ -1,0 +1,10 @@
+﻿@model List<NPUser>
+
+@{
+    foreach(var user in Model)
+    {
+        <p>
+            @user.UserName - @user.FirstName @user.Lastname (@user.Id)
+        </p>
+    }
+}

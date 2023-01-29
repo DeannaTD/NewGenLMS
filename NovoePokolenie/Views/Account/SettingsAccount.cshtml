@@ -1,0 +1,28 @@
+﻿@model string
+@{
+    Layout = null;
+}
+<form class="file_input_form" asp-controller="Account" asp-action="SettingsAccount" enctype="multipart/form-data"
+      data-ajax="true"
+      data-ajax-mode="post"
+      data-ajax-success="Okay()"
+      data-ajax-failure="alert('Произошла ошибка. Обратитесь к администратору или попробуйте позже')">
+    <input name="image" type="file" id="fileInput" />
+    <p class="button inline-block" id="fileButton">Выберите файл</p>
+    <p id="fileName" class="inline-block">Файл не выбран</p>
+    <input type="submit" class="button block" value="Загрузить фото" />
+</form>
+<script>
+    $('#fileButton').on('click', event => {
+        $("#fileInput").trigger('click');
+    });
+
+    $('#fileInput').on('change', event => {
+        $('#fileName').text($('#fileInput')[0].files[0].name);
+    });
+
+    function Okay() {
+        alert('Изображение профиля успешно обновлено');
+        window.location.reload();
+    }
+</script>

@@ -1,0 +1,27 @@
+﻿@model NovoePokolenie.ViewModels.BranchViewModel
+
+<div>
+    <p>@Model.BranchName</p>
+    <table>
+        @foreach(var group in Model.Groups)
+        {
+            <tr>
+                <td>
+                    <a asp-action="GroupStudents" asp-controller="Student" asp-route-groupId="@group.Id">
+                        @NovoePokolenie.Helpers.StHel.TimeTableToString(group.TimeTable)
+                    </a>
+                </td>
+                <td>
+                    <a asp-action="Create" asp-controller="Student" asp-route-groupId="@group.Id">
+                        Добавить ученика
+                    </a>
+                </td>
+                <td>
+                    <a asp-action="GroupAttendance" asp-controller="Attendance" asp-route-groupId="@group.Id">
+                        Посещения
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

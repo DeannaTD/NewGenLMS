@@ -1,0 +1,25 @@
+﻿@model List<Level>
+
+<p>Привет?</p>
+<div>
+    @foreach(var l in Model)
+    {
+        <ul>
+            <li>
+                <a asp-action="CreateProject" asp-controller="Project" asp-route-levelId="@l.Id">
+                    @l.Name
+                </a>
+            </li>
+            <li>
+                <ol>
+                    @foreach(var p in l.Projects)
+                    {
+                        <li>
+                            @p.Name
+                        </li>
+                    }
+                </ol>
+            </li>
+        </ul>
+    }
+</div>

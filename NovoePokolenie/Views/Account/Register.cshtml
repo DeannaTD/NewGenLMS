@@ -1,0 +1,54 @@
+﻿@model NovoePokolenie.ViewModels.StaffRegistrationViewModel
+
+<div>
+    <form method="post" asp-controller="Account" asp-action="Register">
+        <div asp-validation-summary="All"></div>
+        <div>
+            <label asp-for="Login"></label><br />
+            <input asp-for="Login" class="form-control" />
+            <span asp-validation-for="Login"></span>
+        </div>
+        <div>
+            <label asp-for="Password"></label><br />
+            <input asp-for="Password" class="form-control" id="password_input" />
+            <span asp-validation-for="Password" id="password_span"></span>
+        </div>
+        <div>
+            <label asp-for="PasswordConfirm"></label><br />
+            <input asp-for="PasswordConfirm" class="form-control" id="confirm_input" />
+            <span asp-validation-for="PasswordConfirm" id="confirm_span"></span>
+        </div>
+        <div>
+            <label asp-for="FirstName"></label><br />
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName"></span>
+        </div>
+        <div>
+            <label asp-for="LastName"></label><br />
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName"></span>
+        </div>
+        <div class="hidden">
+            <label asp-for="Role"></label><br />
+            <input asp-for="Role" class="form-control role_input" value="Mentor"/>
+            <span asp-validation-for="Role"></span>
+        </div>
+        <div>
+            <label>Роль</label><br />
+            <select class="form-control" id="role_picker">
+                <option value="Mentor" selected>Преподаватель</option>
+                <option value="Manager">Менеджер</option>
+                <option value="Staff">Другой персонал</option>
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Регистрация" class="btn add_button" />
+        </div>
+    </form>
+</div>
+
+<script>
+    $('#role_picker').on('change', () => {
+        $('.role_input').val($('#role_picker').val());
+    });
+</script>

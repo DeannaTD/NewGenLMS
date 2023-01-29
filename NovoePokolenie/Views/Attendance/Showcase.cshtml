@@ -1,0 +1,18 @@
+﻿@*@using System.Linq
+
+@model List<Attendance>
+
+@{
+    var dups = Model.GroupBy(at => new { at.UserId, at.Date }).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+}
+@foreach(var att in dups)
+{
+    <p>@att.UserId - @att.Date</p>
+}*@
+
+@model List<Attendance>
+
+    @foreach(var att in Model)
+    {
+        <p>@att.Date - @att.AttendanceStatus</p>
+    }

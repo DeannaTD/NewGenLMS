@@ -1,0 +1,57 @@
+﻿@model NovoePokolenie.ViewModels.PaymentsViewModel
+<!-- Model.PaymentPeriods.Sort((x, y) => DateTime.Compare(y.PaymentStart, x.PaymentStart));-->
+@{
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<div class="manager_payment">
+    <div class="payment_container">
+        <div class="periods">
+            <ul class="periods_list">
+                <li class="periods_item">
+                    <a class="period_link">
+                        @Model.FirstName @Model.LastName
+                    </a>
+                </li>
+                <li class="periods_item">
+                    <a class="period_link" href="@Url.Action("CreatePaymentPeriod", "Payment", new { UserId = Model.StudentId, MustTotal = Model.Total })"
+                       data-ajax="true"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#content">Добавить период оплаты</a>
+                </li>
+                @foreach (var period in Model.PaymentPeriods)
+                {
+                <li class="periods_item">
+                    <a class="period_link" href="@Url.Action("PeriodInfo", "Payment", new { PeriodId = period.Id, UserId = Model.StudentId })"
+                                            data-ajax="true"
+                                            data-ajax-mode="replace"
+                                            data-ajax-update="#content">
+                    @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentStart, false) - @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentEnd, false)
+                    <span class="delete_link" data-href="@Url.Action("DeletePaymentPeriod", "Payment", new { PeriodId = period.Id })">+</span>
+                    
+                    </a>
+                </li>
+                }
+            </ul>
+        </div>
+        <div class="payments">
+            <div id="content"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.periods_item .delete_link').on('click', event => {
+        $.ajax({
+            type: "POST",
+            url: $(event.currentTarget).attr('data-href'),
+            success: function () {
+                $(event.currentTarget).parents()[1].remove()
+                alert("Выполнено")
+            },
+            error: function () {
+                alert("Произошла ошибка. Обратитесь к администратору")
+            }
+        });
+
+    })
+</script>

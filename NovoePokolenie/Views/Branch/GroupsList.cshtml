@@ -1,0 +1,138 @@
+﻿@model NovoePokolenie.ViewModels.BranchViewModel
+@using NovoePokolenie.Helpers
+
+@inject NovoePokolenie.Services.StudentService _studentService;
+@inject NovoePokolenie.Services.LeadService _leadService;
+
+@{
+    var scheduleDay = "";
+}
+
+
+<div class="group_container flex_evenly">
+    @{
+        for (int i = 0; i < Model.Groups.Count;)
+        {
+            <div>
+                @{
+                    scheduleDay = StHel.ScheduleDays(Model.Groups[i].TimeTable);
+                    while (scheduleDay == StHel.ScheduleDays(Model.Groups[i].TimeTable))
+                    {
+                        <div id="@Model.Groups[i].Id" class="group-name">
+                            <a href="@Url.Action("GroupStudents", "Student", new { groupId = Model.Groups[i].Id })"
+                               data-ajax="true"
+                               data-ajax-mode="replace"
+                               data-ajax-update="#attendance">
+                                @StHel.TimeTableToShortString(Model.Groups[i].TimeTable)
+                                &nbsp;
+                                @(await _studentService.GetStudentMentorNameAsync(Model.Groups[i].Id))
+                                &nbsp;
+                                @{
+                                    int trials = await _leadService.GetTrialsCount(Model.Groups[i].Id);
+                                    if(trials == 0)
+                                    {
+                                        <span class="tooltip">[@(Model.Groups[i].Users?.Count)]</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="tooltip">[@(Model.Groups[i].Users?.Count) + @trials]</span>
+                                    }
+                                }
+                                
+                            </a>
+                            <div class="group-context-menu">
+                                <ul class="group-context-menu">
+                                    <li>
+                                    <!--todo: не работает формат времени  @*data-ajax-success="$('#trial-add').empty()"*@-->
+                                        <a asp-action="RegisterStudent" asp-controller="Account" asp-route-groupId="@Model.Groups[i].Id"
+                                        data-ajax="true"
+                                        data-ajax-mode="replace"
+                                        data-ajax-update="#trial-add"
+                               >
+                                            Добавить ученика
+                                        </a>
+                                    </li>
+                                    <li>
+                                        @*<a asp-action="CreateLead" asp-controller="Student" asp-route-groupId="@Model.Groups[i].Id">
+                                            Добавить пробник
+                                        </a>*@
+                                         <a data-groupId="@Model.Groups[i].Id" class="add-trial" data-action="@Url.Action("CreateLead", "Student", new {groupId = Model.Groups[i].Id})">
+                                            Добавить пробник
+                                        </a>
+                                    </li>
+                                    <li>Добавить из лидов</li>
+                                    <li>
+                                        <span class="delete_group_icon" id="@("s" + Model.Groups[i].Id)">
+                                            Удалить группу
+                                        </span>       
+                                     </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        i++;
+                        if (i == Model.Groups.Count) break;
+                    }
+                }
+            </div>
+        }
+    }
+</div>
+
+<div id="attendance">
+
+</div>
+
+<div id="trial-add"></div>
+
+<script>
+    $('.delete_group_icon').on('click', (event) => {
+        let result = confirm("Удалить группу? Это действие нельзя будет отменить");
+        if (result) {
+            jQuery.ajax({
+                type: "POST",
+                url: "/Group/Delete",
+                data: {
+                    "groupId": $(event.currentTarget).attr("id").substring(1)
+                },
+                success: () => {
+                    alert("Группа удалена");
+                    let groupId = $(event.currentTarget).attr("id").substring(1);
+                    let groupP = document.getElementById(groupId);
+                    $(groupP).remove();
+                },
+                error: () => alert("Невозможно удалить группу, в которой числятся ученики")
+            });
+        }
+    });
+
+    
+    $('.group-name').on('contextmenu', (event) => {
+        event.preventDefault();
+        let block = event.currentTarget;
+        let menu = $(block).children('div.group-context-menu')[0];
+        $('div.group-context-menu').removeClass('d-block');
+        let left = event.pageX - $(block).offset().left;
+        $(menu).css('left', left);
+        $(menu).addClass('d-block');
+    });
+
+    $(document).on('click', ()=>{
+         $('div.group-context-menu').removeClass('d-block');
+    });
+
+    $('.add-trial').on('click', (event) =>{
+        event.preventDefault();
+        let actionUrl = $(event.currentTarget).data('action');
+        
+        $.ajax({
+            type: "GET",
+            url: actionUrl,
+            success: function(data){
+                $('#trial-add').html(data);
+            }
+        });
+        //window.location.replace(actionUrl);
+    });
+
+</script>

@@ -1,0 +1,22 @@
+﻿@model List<NPUser>
+
+<div>
+    <table class="table table_bordered">
+        @foreach(var student in Model)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("StudentProjectInfo", "Project")"
+                       data-ajax="true"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#studentCard">
+                        @(student.FirstName + " " + student.Lastname)
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+    <div id="studentCard">
+
+    </div>
+</div>

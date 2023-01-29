@@ -1,0 +1,80 @@
+﻿@model List<Payment>
+@{
+    Layout = null;
+}
+
+<div class="container">
+    @foreach(Payment payment in Model)
+    {
+        <div class="payment-block table_row_mimic">
+            <form>
+                <label>Оплачено:</label>
+                <input type="number" class="text-right border-bottom money" name="PaymentAmount" value="@payment.PaymentAmount"/>
+                <label>с.</label>
+                <input type="date" class="border-bottom" name="PaymentCreated" value="@payment.PaymentCreated.ToString("yyyy-MM-dd")"/>
+                <input type="hidden" name="PaymentId" value="@payment.Id"/>
+                <a class="text-error" asp-action="DeletePayment" asp-controller="Payment" asp-route-paymentId="@payment.Id"
+                    data-period="@payment.PaymentPeriodId"
+                    data-ajax="true"
+                    data-ajax-success="PaymentDeleteOK(this)"
+                    data-ajax-failure="alert('Ошибка оплаты, перезагрузите страницу')">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+            </form>
+        </div>
+    }
+    <div class="table_row_mimic">
+        <div>
+            <p class="text-center margin-none">Добавить новую оплату:</p>
+            <form asp-action="CreateNewPayment" asp-controller="Payment"
+                data-ajax="true"
+                data-ajax-success="PaymentCreateOK(this)"
+                class="flex-column-form">
+                <div>
+                    <label>Дата:</label>
+                    <input name="dateCreated" class="border-bottom" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")"/>
+                </div>
+                <input name="periodId" type="hidden" value="@ViewBag.PeriodId"/>
+                <div>
+                    <label>Внесено:</label>
+                    <input name="amount" class="money border-bottom" type="number" value="@ViewBag.Amount"/>
+                </div>
+                <input type="submit" id="create_payment_button" class="button button_green" value="Создать" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function PaymentDeleteOK(link){
+        let form = $(link).parents('.payment-block');
+        $(form).remove();
+        let amount = $(link).siblings("[name='PaymentAmount']").val();
+        let debt = document.getElementById('total-debt-td');
+        debt.innerText = (Number(debt.innerText) + Number(amount));
+
+        let periodDebt = document.getElementById($(link).attr('data-period'));
+        periodDebt.innerText = Number(periodDebt.innerText) + Number(amount);
+
+        ChangeDebtCondition();
+    }
+
+    function PaymentCreateOK(form){
+        let periodId = $(form).children("[name='periodId']").val();
+        let row = document.querySelector("[data-periodId='" + periodId + "']");
+        $(row).children().children('.invoice').click();
+        let amount = $(form).children().children("[name='amount']").val();
+        let debt = document.getElementById('total-debt-td');
+        debt.innerText = (Number(debt.innerText) - Number(amount));
+        let periodDebt = document.getElementById(periodId);
+        periodDebt.innerText = Number(periodDebt.innerText) - Number(amount);
+
+        let date = $(form).children().children().("[name='dateCreated']").val();
+        date = new Date(Date.parse(date))
+        $(row).children('.date-cell').text(date.toLocaleDateString('it'));
+        ChangeDebtCondition();
+    }
+</script>
+
+
+

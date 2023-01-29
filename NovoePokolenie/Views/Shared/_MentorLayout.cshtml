@@ -1,0 +1,138 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<NPUser> _userManager
+@{
+    var user = await _userManager.GetUserAsync(User);
+    //var avatar = user.AvatarLink is null ? "../img/avatar.png" : "../img/" + user.AvatarLink;
+    var avatar = "../img/avatar.png";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Преподаватель - Новое Поколение</title>
+    <link rel="stylesheet" href="~/css/mentor_style.css" />
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"
+            integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/6dbfe71658.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    @{
+        if (!User.Identity.IsAuthenticated) Context.Response.Redirect(Url.Action("SessionExpired", "Account"));
+    }
+    <header class="flex flex-between">
+        <div class="menu-toggle-button flex flex-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 3l3-3 12 12-12 12-3-3 9-9z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 3l3-3 12 12-12 12-3-3 9-9z" /></svg>
+        </div>
+        <div class="info-block flex flex-acenter">
+            <p class="datetime flex flex-list text-right">
+                <span id="date"></span>
+                <span id="time"></span>
+            </p>
+            <img class="avatar-image" src="@avatar">
+        </div>
+    </header>
+    <aside class="navigation">
+        <nav>
+            <ul class="nav-list flex-list">
+                <li class="nav-item">
+                    <a asp-action="AttendanceMenu" asp-controller="Mentor" class="icon-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20 12.875v5.068c0 2.754-5.789 4.057-9 4.057-3.052 0-9-1.392-9-4.057v-6.294l9 4.863 9-3.637zm-8.083-10.875l-12.917 5.75 12 6.5 11-4.417v7.167h2v-8.25l-12.083-6.75zm13.083 20h-4c.578-1 1-2.5 1-4h2c0 1.516.391 2.859 1 4z" /></svg>
+                        <span class="hidden-span"><span>Урок и посещения</span></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="icon-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M22 13v-13h-20v24h8.409c4.857 0 3.335-8 3.335-8 3.009.745 8.256.419 8.256-3zm-4-7h-12v-1h12v1zm0 3h-12v-1h12v1zm0 3h-12v-1h12v1zm-2.091 6.223c2.047.478 4.805-.279 6.091-1.179-1.494 1.998-5.23 5.708-7.432 6.881 1.156-1.168 1.563-4.234 1.341-5.702z" /></svg>
+                        <span class="hidden-span"><span>Планы и проекты</span></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-action="Settings" asp-controller="Account" class="icon-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 0h-14c-2.762 0-5 2.239-5 5v14c0 2.761 2.238 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-4 4h2v3h-2v-3zm-8 0h2v8h-2v-8zm4 13h-2v3h-2v-3h-2v-3h6v3zm8-5h-2v8h-2v-8h-2v-3h6v3z" /></svg>
+                        <span class="hidden-span"><span>Настройки</span></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-action="Logout" asp-controller="Account" class="icon-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16 9v-4l8 7-8 7v-4h-8v-6h8zm-2 10v-.083c-1.178.685-2.542 1.083-4 1.083-4.411 0-8-3.589-8-8s3.589-8 8-8c1.458 0 2.822.398 4 1.083v-2.245c-1.226-.536-2.577-.838-4-.838-5.522 0-10 4.477-10 10s4.478 10 10 10c1.423 0 2.774-.302 4-.838v-2.162z" /></svg>
+                        <span class="hidden-span"><span>Выход</span></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>      
+    <main class="content">
+        @RenderBody()
+    </main>
+    <script>
+        var time = new Date();
+        var daysOfWeek = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+        $(window).on('load', () => {
+            $('span#date').text(getDateString(time));
+            $('span#time').text(getTimeString(time));
+            setInterval(() => {
+                time = new Date();
+                $('span#time').text(getTimeString(time));
+            }, 1000)
+
+        });
+
+        $('.menu-toggle-button').on('click', (event) => {
+            $(event.currentTarget).toggleClass('menu-toggle-button-opened');
+            $('.navigation').toggleClass('navigation-opened')
+        });
+
+        $('.branchBlock-header').on('click', (event) => {
+            if (window.innerWidth < 600) {
+                let blocks = Array.from($(event.currentTarget).siblings())
+                blocks.forEach(block => {
+                    $(block).toggleClass('branchBlock-closed')
+                });
+            }
+        })
+
+        function getDateString(datetime) {
+            let result = '';
+            result += daysOfWeek[datetime.getDay()] + ', ';
+            result += getTwoDigit(datetime.getDate()) + '/';
+            result += getTwoDigit(datetime.getMonth() + 1) + '/';
+            result += datetime.getFullYear();
+            return result;
+        }
+
+        function getTimeString(datetime) {
+            let result = '';
+            result += getTwoDigit(datetime.getHours()) + ':';
+            result += getTwoDigit(datetime.getMinutes());
+            return result;
+        }
+
+        function getTwoDigit(number) {
+            if (number < 10) {
+                return '0' + number;
+            }
+            else return '' + number;
+        }
+    </script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>
+
+@*
+  <a asp-action="StudentsMenu" asp-controller="Mentor" class="nav__link active">
+                        <span class="nav__icon"><i class="fas fa-chalkboard-teacher"></i></span>
+                        <span class="nav__text">Ученики</span>
+                    </a>
+                </li>
+
+*@
