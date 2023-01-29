@@ -283,6 +283,5 @@ lilog.txt
 HomeController.cs
 
 **/Migrations/
-**/Services/
 **/Home/Index.cshtml
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore
