@@ -51,9 +51,12 @@ namespace NovoePokolenie.Controllers
 
             return PartialView(levels);
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var levels = await _levelService.GetCollectionAsync();
+            foreach(var level in levels)
+                level.Projects.OrderBy(x => x.ProjectLink);
+            return View(levels);
         }
     }
 }
