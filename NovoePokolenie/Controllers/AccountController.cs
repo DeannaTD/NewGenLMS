@@ -325,8 +325,10 @@ namespace NovoePokolenie.Controllers
             using FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create);
             image.CopyTo(stream);
 
-            Random r = new Random();
-            user.AvatarLink = fileName + "?" + r.Next(1000,9999);
+            //WEIRD!!!
+            //Random r = new Random();
+            //user.AvatarLink = fileName + "?" + r.Next(1000,9999);
+            user.AvatarLink = fileName;
             await _userManager.UpdateAsync(user);
             return new EmptyResult();
         }

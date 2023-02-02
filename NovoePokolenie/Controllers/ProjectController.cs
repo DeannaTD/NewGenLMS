@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using NovoePokolenie.Models;
 using NovoePokolenie.Services;
@@ -13,10 +15,12 @@ namespace NovoePokolenie.Controllers
     {
         LevelService _levelService;
         ProjectService _projectService;
-        public ProjectController(LevelService levelService, ProjectService projectService)
+        IWebHostEnvironment _webHost;
+        public ProjectController(LevelService levelService, ProjectService projectService, IWebHostEnvironment webHost)
         {
             _levelService = levelService;
             _projectService = projectService;
+            _webHost = webHost;
         }
 
         public IActionResult CreateLevel()
@@ -57,6 +61,20 @@ namespace NovoePokolenie.Controllers
             foreach(var level in levels)
                 level.Projects.OrderBy(x => x.ProjectLink);
             return View(levels);
+        }
+
+        public async Task<bool> RenameProjectFile(int projectId, string newLink)
+        {
+            var project = await _projectService.GetProjectAsync(projectId);
+            string newPath = Path.Combine(_webHost.WebRootPath, "projects", newLink);
+            string oldLink = project.ProjectLink.Split("/").Last();
+            string oldPath = Path.Combine(_webHost.WebRootPath, "projects", oldLink);
+            if(System.IO.File.Exists(newPath))
+            {
+                return false;
+            }
+            System.IO.File.Move(oldPath, newPath);
+            return true;
         }
     }
 }
