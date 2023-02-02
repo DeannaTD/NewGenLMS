@@ -1,6 +1,8 @@
 ﻿@model List<Level>
 
 @{
+    string defaultAddress = @"http://pokolenie.kg/";
+    int index = 0;
     //TODO: get layout name by role to helpers
     if (User.IsInRole("Mentor"))
     {
@@ -11,17 +13,19 @@
 <div class="project-index-container">
     @foreach(var level in Model)
     {
+        index = 1;
         <div class="level-container">
             <div class="accent-header">@level.Name</div>
             <table>
                 @foreach(var project in level.Projects)
                 {
                     <tr>
-                        <td>#</td>
+                        <td>@index</td>
                         <td>@project.Name</td>
                         <td>
                             @{
-                                string url = project.ProjectLink.Replace("../../", @"http://pokolenie.kg/");
+                                index++;
+                                string url = project.ProjectLink.Replace("../../", defaultAddress);
                             }
                             <a href="@url">
                                 @url.Split("/").Last()
