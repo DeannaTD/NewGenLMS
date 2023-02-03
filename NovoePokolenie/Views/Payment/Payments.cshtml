@@ -47,16 +47,16 @@
 
 <script>
     function PaymentDeleteOK(link){
-        let form = $(link).parents('.payment-block');
-        $(form).remove();
-        let amount = $(link).siblings("[name='PaymentAmount']").val();
-        let debt = document.getElementById('total-debt-td');
-        debt.innerText = (Number(debt.innerText) + Number(amount));
+            let form = $(link).parents('.payment-block');
+            $(form).remove();
+            let amount = $(link).siblings("[name='PaymentAmount']").val();
+            let debt = document.getElementById('total-debt-td');
+            debt.innerText = (Number(debt.innerText) + Number(amount));
 
-        let periodDebt = document.getElementById($(link).attr('data-period'));
-        periodDebt.innerText = Number(periodDebt.innerText) + Number(amount);
+            let periodDebt = document.getElementById($(link).attr('data-period'));
+            periodDebt.innerText = Number(periodDebt.innerText) + Number(amount);
 
-        ChangeDebtCondition();
+            ChangeDebtCondition();
     }
 
     function PaymentCreateOK(form){
@@ -69,7 +69,7 @@
         let periodDebt = document.getElementById(periodId);
         periodDebt.innerText = Number(periodDebt.innerText) - Number(amount);
 
-        let date = $(form).children().children().("[name='dateCreated']").val();
+        let date = $(form).children().children("[name='dateCreated']").val();
         date = new Date(Date.parse(date))
         $(row).children('.date-cell').text(date.toLocaleDateString('it'));
         ChangeDebtCondition();
