@@ -3,8 +3,6 @@
 
 @model List<NPUser>
 @{
-    int index = 0;
-
     long GetDebt(NPUser student)
     {
         long totalSum = 0;
@@ -34,7 +32,7 @@
 @{
     <table class="table table_bordered">
         <tr>
-            @*<th>№</th>*@
+            <th>№</th>
             <th>
                 <span id="sort_firstname">Имя</span>
                 /
@@ -55,9 +53,9 @@
         </tr>
         @foreach (NPUser student in Model)
         {
-            index++;
+            //index++;
             <tr>
-                @*<td>@index</td>*@
+                <td class="table-index"></td>
                 <td id="row_name">
                     <a asp-action="StudentPaymentCard" asp-controller="Payment" asp-route-studentId="@student.Id">
                         <span data-name="lastname">@student.Lastname</span>
@@ -86,36 +84,50 @@
 
 <script>
     let r;
-    function sortTableByOption(event, dataName) {
-        let table = $(event.currentTarget).parents('table');
+    function sortTableByOption(target, dataName, descending) {
+        let table = $(target).parents('table');
         let rows = $(table).find('tr');
         let headers = rows.splice(0, 1);
+        descending = descending ? true : false;
         for (let i = 0; i < rows.length; i++) {
             for (let j = 0; j < rows.length - i - 1; j++) {
                 let v1 = $(rows[j]).find("[data-name='" + dataName + "']");
                 let v2 = $(rows[j + 1]).find("[data-name='" + dataName + "']");
-                if (v1.text() > v2.text()) {
+                if (v1.text() < v2.text() && descending) {
                     let tmp = rows[j];
                     rows[j] = rows[j + 1];
                     rows[j + 1] = tmp;
                 }
+                else if(v1.text() > v2.text() && !descending){
+                    let tmp = rows[j];
+                    rows[j] = rows[j + 1];
+                    rows[j + 1] = tmp;
+                }   
             }
         }
 
         $(table).empty();
         $(table).append(headers);
         $(table).append(rows);
+
+        let indexCells = $('.table-index');
+        for(let i = 0; i<indexCells.length; i++)
+            $(indexCells[i]).text(i+1)
     }
 
     $('#sort_firstname').on('click', (event) => {
-        sortTableByOption(event, "firstname");
+        sortTableByOption(event.currentTarget, "firstname", false);
     });
 
     $('#sort_lastname').on('click', (event) => {
-        sortTableByOption(event, "lastname");
+        sortTableByOption(event.currentTarget, "lastname", false);
     });
 
     $('#sort_debt').on('click', (event) => {
-        sortTableByOption(event, "debt");
+        sortTableByOption(event.currentTarget, "debt", true);
     });
+
+    $(window).on("load", ()=>{
+        sortTableByOption($('td.table-index'), "debt", true);
+    })
 </script>
