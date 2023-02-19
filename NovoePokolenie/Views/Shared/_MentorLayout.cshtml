@@ -2,8 +2,8 @@
 @inject UserManager<NPUser> _userManager
 @{
     var user = await _userManager.GetUserAsync(User);
-    //var avatar = user.AvatarLink is null ? "../img/avatar.png" : "../img/" + user.AvatarLink;
-    var avatar = "../img/avatar.png";
+    var avatar = user.AvatarLink is null ? "../img/avatar.png" : "../img/" + user.AvatarLink;
+   // var avatar = "../img/avatar.png";
 }
 <!DOCTYPE html>
 <html lang="en">
