@@ -61,6 +61,7 @@ namespace NovoePokolenie.Controllers
 
         public async Task ResetPasswordManager(string userId)
         {
+            //NPUser user = await _userManager.FindByNameAsync("kamaneicha");
             NPUser user = await _userManager.FindByIdAsync(userId);
             string token = await _userManager.GeneratePasswordResetTokenAsync(user);
             await _userManager.ResetPasswordAsync(user, token, user.UserName);
@@ -254,7 +255,6 @@ namespace NovoePokolenie.Controllers
 
         public async Task DeleteUser(string login)
         {
-            //NPUser user = await _userManager.FindByNameAsync("dfghjkl");
             NPUser user = await _userManager.FindByIdAsync(login);
             await _userManager.DeleteAsync(user);
         }
@@ -393,28 +393,28 @@ namespace NovoePokolenie.Controllers
         {
             var users = await _service.GetAllUsersInRole("Student");
             //Для поиска дупликатов
-            //var duplicates = new List<NPUser>();
-            //var all = new List<NPUser>();
-            //foreach (var user in users)
-            //{
-            //    if (Char.IsDigit(user.UserName.Last()))
-            //    {
-            //        duplicates.Add(user);
-            //    }
-            //}
-            //foreach(var user in duplicates)
-            //{
-            //    string name = System.Text.RegularExpressions.Regex.Replace(user.UserName, @"[0-9]", "");
-            //    all.AddRange(users.Where(x => x.UserName.Contains(name)).ToList());
-            //}
+            var duplicates = new List<NPUser>();
+            var all = new List<NPUser>();
+            foreach (var user in users)
+            {
+                if (Char.IsDigit(user.UserName.Last()))
+                {
+                    duplicates.Add(user);
+                }
+            }
+            foreach (var user in duplicates)
+            {
+                string name = System.Text.RegularExpressions.Regex.Replace(user.UserName, @"[0-9]", "");
+                all.AddRange(users.Where(x => x.UserName.Contains(name)).ToList());
+            }
 
             //Для поиска студентов без групп
-            var all = new List<NPUser>();
-            foreach(var user in users)
-            {
-                if (user.GroupId != null && user.GroupId != 0)
-                    if (user.StatusId != (int)ActivityStatus.Archive) all.Add(user);
-            }
+            //var all = new List<NPUser>();
+            //foreach(var user in users)
+            //{
+            //    if (user.GroupId != null && user.GroupId != 0)
+            //        if (user.StatusId != (int)ActivityStatus.Archive) all.Add(user);
+            //}
             return View("Duplicates", all);
         }
     }

@@ -2,7 +2,7 @@
 
 <div>
     <form method="post" asp-controller="Account" asp-action="RegisterStudent"
-    data-ajax="true">
+    data-ajax="true" id="registerForm">
         <div asp-validation-summary="All"></div>
         <div>
             <input asp-for="GroupId" value="@Model.GroupId" />
@@ -80,3 +80,11 @@
         </div>
     </form>
 </div>
+
+<script>
+    $("[type='submit'].add_button").on('click', event=>{
+        event.preventDefault();
+        event.currentTarget.disabled = true;
+        $('#registerForm').submit();
+    })
+</script>
