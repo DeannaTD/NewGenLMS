@@ -16,5 +16,12 @@ namespace NovoePokolenie.Repositories
         {
             return (await _dbSet.FirstOrDefaultAsync(p => p.LevelId == LevelId)).Id;
         }
+
+        public async Task<Project> GetByIdAsync(int ProjectId)
+        {
+            return await _dbSet.Where(p => p.Id == ProjectId)
+                                .Include(p => p.Level)
+                                .FirstOrDefaultAsync();
+        }
     }
 }

@@ -84,6 +84,7 @@ namespace NovoePokolenie.Controllers
         public async Task LoadProject(int projectId, IFormFile file)
         {
             var project = await _projectService.GetProjectAsync(projectId);
+            //var level = await _levelService.
             string zipLink = project.Level.Name + project.IndexNumber + "_id" + projectId;
             //AI4_id57 - name of dir
             string path = Path.Combine(_webHost.WebRootPath, "projects", file.Name);
