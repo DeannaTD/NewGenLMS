@@ -12,6 +12,7 @@ namespace NovoePokolenie.Models
         public int LevelId { get; set; }
         public string ProjectLink { get; set; }
 
+        public int IndexNumber { get; set; }
         public virtual ICollection<UserProject> UserProjects { get; set; }
         public virtual Level Level { get; set; }
     }

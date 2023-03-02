@@ -27,9 +27,16 @@
                                 index++;
                                 string url = project.ProjectLink.Replace("../../", defaultAddress);
                             }
-                            <a href="@url">
-                                @url.Split("/").Last()
-                            </a>
+                            @if (User.Identity.Name == "tdboodman409")
+                            {
+                                <a href="@url" target="_blank">
+                                    Открыть @project.IndexNumber
+                                </a>
+                                <form asp-action="LoadProject" asp-controller="Project" enctype="multipart/form-data">
+                                    <input type="file" name="file" />
+                                    <input type="number" name="projectId" value="@project.Id">
+                                </form>
+                            }
                         </td>
                     </tr>
                 }
@@ -37,3 +44,14 @@
         </div>
     }
 </div>
+<script>
+    $("input[type=file]").on("change", event=> {
+        alert($(event.currentTarget).val());
+        if(confirm("Заменить текущий файл на новый?")){
+            $(event.currentTarget).parent().submit();
+        }
+        else{
+            $(event.currentTarget).val("");
+        }
+    });
+</script>

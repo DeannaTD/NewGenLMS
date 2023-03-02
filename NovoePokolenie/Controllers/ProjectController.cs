@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NovoePokolenie.Models;
 using NovoePokolenie.Services;
+using System.IO.Compression;
+using Microsoft.VisualBasic;
 
 namespace NovoePokolenie.Controllers
 {
@@ -75,6 +79,28 @@ namespace NovoePokolenie.Controllers
             }
             System.IO.File.Move(oldPath, newPath);
             return true;
+        }
+
+        public async Task LoadProject(int projectId, IFormFile file)
+        {
+            var project = await _projectService.GetProjectAsync(projectId);
+            string zipLink = project.Level.Name + project.IndexNumber + "_id" + projectId;
+            //AI4_id57 - name of dir
+            string path = Path.Combine(_webHost.WebRootPath, "projects", file.Name);
+            //path to zip file
+            using FileStream stream = new FileStream(path, FileMode.Create);
+            file.CopyTo(stream);
+            stream.Close();
+            UnzipFile(path, zipLink);
+            /*
+             * Архив должен содержать файл index.html и всё необходимое для его работы
+             */
+        }
+
+        private void UnzipFile(string filePath, string zipLink)
+        {
+            string extractPath = Path.Combine(_webHost.WebRootPath, "projects", zipLink);
+            ZipFile.ExtractToDirectory(filePath, extractPath);
         }
     }
 }
