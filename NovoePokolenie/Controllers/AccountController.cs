@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +6,14 @@ using NovoePokolenie.Helpers;
 using NovoePokolenie.Models;
 using NovoePokolenie.Services;
 using NovoePokolenie.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 //0551 20 47 10 Бурмат Султановна Шукурова Московская-Логвиненко, со стороны Московской, 2 этаж, Эндокринология
-          //  var user = _context.NPUser.FirstOrDefault(x => x.UserName == "tdboodman");
+//  var user = _context.NPUser.FirstOrDefault(x => x.UserName == "tdboodman");
 namespace NovoePokolenie.Controllers
 {
     public class AccountController : Controller
@@ -172,6 +171,10 @@ namespace NovoePokolenie.Controllers
             return View();
         }
 
+        public IActionResult MentorLogin()
+        {
+            return View();
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -212,7 +215,7 @@ namespace NovoePokolenie.Controllers
         #endregion
 
         #region Settings
-   
+
 
         //TODO: Other settings to User
         [HttpPost]
@@ -289,7 +292,7 @@ namespace NovoePokolenie.Controllers
             NPUser user = await _userManager.GetUserAsync(User);
             PasswordHasher<NPUser> hasher = new PasswordHasher<NPUser>();
             var result = hasher.VerifyHashedPassword(user, user.PasswordHash, Password);
-            if(result == PasswordVerificationResult.Success)
+            if (result == PasswordVerificationResult.Success)
             {
                 user.UserName = Login;
                 user.Email = Login + @"@pokolenie.kg";
@@ -345,7 +348,7 @@ namespace NovoePokolenie.Controllers
             NPUser user = await _service.GetUserByIdAsync(id);
             return user.FirstName + " " + user.Lastname;
         }
-        
+
         public IActionResult SessionExpired()
         {
             return View("LoginError");
@@ -355,7 +358,7 @@ namespace NovoePokolenie.Controllers
         {
             if (name == "" || name is null) name = " ";
             if (phone == "" || phone is null) phone = "null";
-           
+
             List<NPUser> users = new List<NPUser>();
             foreach (NPUser user in _userManager.Users)
             {
