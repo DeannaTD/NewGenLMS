@@ -1,6 +1,5 @@
 ﻿using NovoePokolenie.Models;
 using NovoePokolenie.UoW;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +36,12 @@ namespace NovoePokolenie.Services
         {
             int projectId = await _unitOfWork.Projects.GetFirstProjectIdAsync(id);
             return await _unitOfWork.Projects.GetByIdAsync(projectId);
+        }
+
+        public async Task Update(Project project)
+        {
+            _unitOfWork.Projects.Update(project);
+            await _unitOfWork.Save();
         }
     }
 }

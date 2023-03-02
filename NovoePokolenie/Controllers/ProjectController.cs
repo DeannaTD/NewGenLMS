@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Policy;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NovoePokolenie.Models;
 using NovoePokolenie.Services;
+using System.Collections.Generic;
+using System.IO;
 using System.IO.Compression;
-using Microsoft.VisualBasic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace NovoePokolenie.Controllers
 {
@@ -62,7 +58,7 @@ namespace NovoePokolenie.Controllers
         public async Task<IActionResult> Index()
         {
             var levels = await _levelService.GetCollectionAsync();
-            foreach(var level in levels)
+            foreach (var level in levels)
                 level.Projects.OrderBy(x => x.ProjectLink);
             return View(levels);
         }
@@ -73,7 +69,7 @@ namespace NovoePokolenie.Controllers
             string newPath = Path.Combine(_webHost.WebRootPath, "projects", newLink);
             string oldLink = project.ProjectLink.Split("/").Last();
             string oldPath = Path.Combine(_webHost.WebRootPath, "projects", oldLink);
-            if(System.IO.File.Exists(newPath))
+            if (System.IO.File.Exists(newPath))
             {
                 return false;
             }
@@ -84,7 +80,6 @@ namespace NovoePokolenie.Controllers
         public async Task LoadProject(int projectId, IFormFile file)
         {
             var project = await _projectService.GetProjectAsync(projectId);
-            //var level = await _levelService.
             string zipLink = project.Level.Name + project.IndexNumber + "_id" + projectId;
             //AI4_id57 - name of dir
             string path = Path.Combine(_webHost.WebRootPath, "projects", file.Name);
@@ -93,8 +88,11 @@ namespace NovoePokolenie.Controllers
             file.CopyTo(stream);
             stream.Close();
             UnzipFile(path, zipLink);
+            project.ProjectLink = "../projects/" + zipLink + "/index.html";
+            await _projectService.Update(project);
             /*
              * Архив должен содержать файл index.html и всё необходимое для его работы
+             * путь к работе:../projects/scratch_0.html
              */
         }
 
