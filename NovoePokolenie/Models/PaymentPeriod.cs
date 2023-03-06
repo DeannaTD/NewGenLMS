@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace NovoePokolenie.Models
 {
@@ -13,7 +11,7 @@ namespace NovoePokolenie.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         public string UserId { get; set; }
-        public long MustTotal { get; set; } //TODO: MUST TOTAL это вообще что?
+        public long MustTotal { get; set; }
         public DateTime PaymentStart { get; set; }
         public DateTime PaymentEnd { get; set; }
 
