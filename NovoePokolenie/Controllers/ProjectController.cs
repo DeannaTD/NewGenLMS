@@ -90,12 +90,25 @@ namespace NovoePokolenie.Controllers
             UnzipFile(path, zipLink);
             project.ProjectLink = "../projects/" + zipLink + "/index.html";
             await _projectService.Update(project);
+            RedirectToAction("Index");
             /*
              * Архив должен содержать файл index.html и всё необходимое для его работы
              * путь к работе:../projects/scratch_0.html
              */
         }
 
+        //todo: temporary method to be called from Home/Index
+        public async Task<IActionResult> UpdateProjectsLinks()
+        {
+            List<Project> projects = await _projectService.GetCollectionAsync();
+            foreach (Project project in projects)
+            {
+                string zipLink = project.Level.Name + project.IndexNumber + "_id" + project.Id;
+                project.ProjectLink = "../projects/" + zipLink + "/index.html";
+                await _projectService.Update(project);
+            }
+            return View();
+        }
         private void UnzipFile(string filePath, string zipLink)
         {
             string extractPath = Path.Combine(_webHost.WebRootPath, "projects", zipLink);

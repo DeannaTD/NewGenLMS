@@ -46,7 +46,6 @@
 </div>
 <script>
     $("input[type=file]").on("change", event=> {
-        alert($(event.currentTarget).val());
         if(confirm("Заменить текущий файл на новый?")){
             $(event.currentTarget).parent().submit();
         }

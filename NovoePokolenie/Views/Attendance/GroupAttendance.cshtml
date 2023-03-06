@@ -5,9 +5,12 @@
 @{
     Layout = "~/Views/Shared/_MentorLayout.cshtml";
     DateTime startDate = ViewBag.Date;
+    DateTime endDate = new DateTime(startDate.Year, startDate.Month, DateTime.DaysInMonth(startDate.Year, startDate.Month));
     int aInd = -1;
     int status = (int)AttendanceStatus.Unknown;
+
 }
+<a href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = DateTime.Now, monthly = true })">Посещения за текущий месяц</a>
 <div class="date-block padding-rem">
     <div class="calendar-block">
         <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -33,7 +36,8 @@
         <span class="date-span">
             @startDate.ToString("dd/MM/yyyy")
             -
-            @startDate.AddDays(7).ToString("dd/MM/yyyy")
+            @if(ViewBag.Monthly) @startDate.AddDays(7).ToString("dd/MM/yyyy")
+            else @endDate.ToString("dd/MM/yyyy")
         </span>
         <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = startDate.AddDays(8) })">
             <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -46,7 +50,7 @@
     <table class="attendance-table">
         <tr>
             <td class="table-header"></td>
-            @for (int i = 0; i < 7; i++)
+            @for (int i = 0; i < endDate.Day; i++)
             {
                 <td class="table-header">
                     @DateHelper.GetDayOfWeekName(startDate.AddDays(i).DayOfWeek, true)

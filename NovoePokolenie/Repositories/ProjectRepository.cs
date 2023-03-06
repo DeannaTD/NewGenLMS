@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NovoePokolenie.Data;
 using NovoePokolenie.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +21,11 @@ namespace NovoePokolenie.Repositories
             return await _dbSet.Where(p => p.Id == ProjectId)
                                 .Include(p => p.Level)
                                 .FirstOrDefaultAsync();
+        }
+
+        public override async Task<List<Project>> GetCollectionAsync()
+        {
+            return await _dbSet.Include(p => p.Level).ToListAsync();
         }
     }
 }

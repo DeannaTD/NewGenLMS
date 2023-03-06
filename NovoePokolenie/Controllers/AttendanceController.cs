@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NovoePokolenie.Helpers;
 using NovoePokolenie.Models;
 using NovoePokolenie.Services;
 using NovoePokolenie.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace NovoePokolenie.Controllers
 {
@@ -51,19 +50,29 @@ namespace NovoePokolenie.Controllers
             return _dates;
         }
 
-        public async Task<IActionResult> GroupAttendanceNew(int groupId, DateTime date)
+        public async Task<IActionResult> GroupAttendanceNew(int groupId, DateTime date, bool monthly = false)
         {
+            //todo - manager monthly issue
             List<NPUser> students = await _studentService.GetStudentsAndAttendances(groupId);
             //ID, NAME, USERNAME, CURRENT PROJECT ID
             List<MentorViewModel> model = new List<MentorViewModel>();
             //найти прошлый понедельник
-            date = new DateTime(date.Year, date.Month, date.Day);
+            DateTime end;
+            if (!monthly)
+            {
+                date = new DateTime(date.Year, date.Month, date.Day);
 
-            while(date.DayOfWeek != DayOfWeek.Monday)
-                date = date.AddDays(-1);
+                while (date.DayOfWeek != DayOfWeek.Monday)
+                    date = date.AddDays(-1);
 
-            DateTime end = date.AddDays(7);
-            foreach(NPUser student in students)
+                end = date.AddDays(7);
+            }
+            else
+            {
+                date = new DateTime(date.Year, date.Month, 1);
+                end = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+            }
+            foreach (NPUser student in students)
             {
                 model.Add(new MentorViewModel()
                 {
@@ -76,6 +85,7 @@ namespace NovoePokolenie.Controllers
             }
             ViewBag.Date = date;
             ViewBag.groupId = groupId;
+            ViewBag.Monthly = monthly;
             return View("GroupAttendance", model);
         }
         public async Task<IActionResult> GroupAttendance(int groupId, int month, int year)
@@ -85,7 +95,7 @@ namespace NovoePokolenie.Controllers
             List<NPUser> _students = await _studentService.GetStudentsAndAttendances(groupId);
 
             List<AttendanceViewModel> model = new List<AttendanceViewModel>();
-            foreach(NPUser student in _students)
+            foreach (NPUser student in _students)
             {
                 model.Add(new AttendanceViewModel()
                 {
@@ -109,8 +119,8 @@ namespace NovoePokolenie.Controllers
         {
             DateTime date = AttendanceDate;
             string attendanceId = await _attendanceService.AttendanceExists(StudentId, date);
-            
-            if(attendanceId == "")
+
+            if (attendanceId == "")
             {
                 await _attendanceService.Create(StudentId, date, (AttendanceStatus)AttendanceState);
             }
@@ -122,13 +132,13 @@ namespace NovoePokolenie.Controllers
 
         public async Task<IActionResult> StudentAttendance(string studentId)
         {
-            List<Attendance> model =  await _attendanceService.GetAttendances(studentId);
-            for(int i = 0; i<model.Count; i++)
+            List<Attendance> model = await _attendanceService.GetAttendances(studentId);
+            for (int i = 0; i < model.Count; i++)
             {
                 var atts = model.FindAll(attendance => attendance.Date == model[i].Date);
-                if(atts.Count > 1)
+                if (atts.Count > 1)
                 {
-                    for(int j = atts.Count - 1; j>0; j--)
+                    for (int j = atts.Count - 1; j > 0; j--)
                     {
                         await _attendanceService.DeleteAttendanceByIdAsync(atts[j].Id);
                     }

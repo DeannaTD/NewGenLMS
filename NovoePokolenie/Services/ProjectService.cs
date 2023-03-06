@@ -14,6 +14,12 @@ namespace NovoePokolenie.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<List<Project>> GetCollectionAsync()
+        {
+            List<Project> collection = await _unitOfWork.Projects.GetCollectionAsync();
+            return collection;
+        }
+
         public async Task Create(Project project)
         {
             await _unitOfWork.Projects.CreateAsync(project);
