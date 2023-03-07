@@ -1,8 +1,16 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using NovoePokolenie.Helpers
 @inject UserManager<NPUser> _userManager
 @{
     var user = await _userManager.GetUserAsync(User);
     var avatar = user.AvatarLink is null ? "../img/avatar.png" : "../img/" + user.AvatarLink;
+
+    //Ugly but works
+    string roleTitle = "";
+    if (User.IsInRole("Student")) roleTitle = RolesEnum.NormalizedToRus("Student");
+    else if (User.IsInRole("Mentor")) roleTitle = RolesEnum.NormalizedToRus("Mentor");
+    else if (User.IsInRole("Manager")) roleTitle = RolesEnum.NormalizedToRus("Manager");
+    else if (User.IsInRole("Admin")) roleTitle = RolesEnum.NormalizedToRus("Admin");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +18,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Преподаватель - Новое Поколение</title>
+    <title>@roleTitle - Новое Поколение</title>
     <link rel="stylesheet" href="~/css/layout-style.css" />
     <script src="https://code.jquery.com/jquery-3.5.0.min.js"
             integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
@@ -79,12 +87,12 @@
                         <span class="hidden-span"><span>Пользователи</span></span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a asp-action="AllUserMainPage" asp-controller="Account" class="icon-link">
-                       <i class="fas fa-search"></i>
-                        <span class="hidden-span"><span>Поиск</span></span>
-                    </a>
-                </li>
+                //<li class="nav-item">
+                //    <a asp-action="AllUserMainPage" asp-controller="Account" class="icon-link">
+                //       <i class="fas fa-search"></i>
+                //        <span class="hidden-span"><span>Поиск</span></span>
+                //    </a>
+                //</li>
             }
             else if(User.IsInRole("Student"))
             {

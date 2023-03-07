@@ -1,18 +1,7 @@
 ﻿@model NovoePokolenie.ViewModels.UserSettingsViewModel
 
 @{
-    if (User.IsInRole("Mentor"))
-    {
-        Layout = "~/Views/Shared/_MentorLayout.cshtml";
-    }
-    else if (User.IsInRole("Manager"))
-    {
-        Layout = "~/Views/Shared/_ManagerLayout.cshtml";
-    }
-    else if (User.IsInRole("Student"))
-    {
-        Layout = "~/Views/Shared/_StudentLayout.cshtml";
-    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <span id="error_message" class="error_window"></span>
 <div class ="grid grid-2 grid-shrink form-block">

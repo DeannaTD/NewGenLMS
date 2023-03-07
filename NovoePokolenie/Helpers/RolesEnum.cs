@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NovoePokolenie.Helpers
 {
@@ -14,7 +12,7 @@ namespace NovoePokolenie.Helpers
             foreach (IdentityRole role in roles)
             {
                 string roleName = NormalizedToRus(role.Name);
-                if(roleName != string.Empty)
+                if (roleName != string.Empty)
                     values.Add(role.Name, roleName);
             }
             return values;
@@ -31,7 +29,7 @@ namespace NovoePokolenie.Helpers
         }
     }
 
-    
+
 
     public enum AttendanceStatus
     {

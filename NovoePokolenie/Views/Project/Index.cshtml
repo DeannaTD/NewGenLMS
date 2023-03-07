@@ -3,11 +3,7 @@
 @{
     string defaultAddress = @"http://pokolenie.kg/";
     int index = 0;
-    //TODO: get layout name by role to helpers
-    if (User.IsInRole("Mentor"))
-    {
-        Layout = "~/Views/Shared/_MentorLayout.cshtml";
-    }
+        Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="project-index-container">
