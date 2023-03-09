@@ -25,7 +25,7 @@
             }
             @foreach(Group group in groups)
             {
-                <a class="branchBlock-content branchBlock-closed" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = group.Id, date = DateTime.Now })">
+                <a class="branchBlock-content branchBlock-closed" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = group.Id, date = DateTime.Now, monthly = false })">
                     @StHel.TimeTableToShortString(group.TimeTable)</a>
             }
         </div>

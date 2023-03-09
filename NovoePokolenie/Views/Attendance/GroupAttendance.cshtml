@@ -8,7 +8,9 @@
     DateTime endDate = new DateTime(startDate.Year, startDate.Month, DateTime.DaysInMonth(startDate.Year, startDate.Month));
     int aInd = -1;
     int status = (int)AttendanceStatus.Unknown;
-
+    if (!ViewBag.Monthly)
+        endDate = startDate.AddDays(7);
+    int dates = ViewBag.Monthly ? endDate.Day : 7;
 }
 <a href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = DateTime.Now, monthly = true })">Посещения за текущий месяц</a>
 <div class="date-block padding-rem">
@@ -28,7 +30,7 @@
         </svg>
     </div>
     <p class="flex flex-center dateChoose-block">
-        <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = startDate.AddDays(-1) })">
+        <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = startDate.AddDays(-1), monthly = ViewBag.Monthly })">
             <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="m13.789 7.155c.141-.108.3-.157.456-.157.389 0 .755.306.755.749v8.501c0 .445-.367.75-.755.75-.157 0-.316-.05-.457-.159-1.554-1.203-4.199-3.252-5.498-4.258-.184-.142-.29-.36-.29-.592 0-.23.107-.449.291-.591 1.299-1.002 3.945-3.044 5.498-4.243z" />
             </svg>
@@ -36,10 +38,9 @@
         <span class="date-span">
             @startDate.ToString("dd/MM/yyyy")
             -
-            @if(ViewBag.Monthly) @startDate.AddDays(7).ToString("dd/MM/yyyy")
-            else @endDate.ToString("dd/MM/yyyy")
+            @endDate.ToString("dd/MM/yyyy")
         </span>
-        <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = startDate.AddDays(8) })">
+        <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = endDate.AddDays(1), monthly = ViewBag.Monthly })">
             <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="m10.211 7.155c-.141-.108-.3-.157-.456-.157-.389 0-.755.306-.755.749v8.501c0 .445.367.75.755.75.157 0 .316-.05.457-.159 1.554-1.203 4.199-3.252 5.498-4.258.184-.142.29-.36.29-.592 0-.23-.107-.449-.291-.591-1.299-1.002-3.945-3.044-5.498-4.243z" />
             </svg>
@@ -50,7 +51,7 @@
     <table class="attendance-table">
         <tr>
             <td class="table-header"></td>
-            @for (int i = 0; i < endDate.Day; i++)
+            @for (int i = 0; i < dates; i++)
             {
                 <td class="table-header">
                     @DateHelper.GetDayOfWeekName(startDate.AddDays(i).DayOfWeek, true)
@@ -68,7 +69,7 @@
                     </span>
                     (<span class="pointer hint" data-hint="&#x1F5CE;" onclick="toCopy(this)">@student.StudentLogin</span>)
                 </td>
-                @for (int i = 0; i < 7; i++)
+                @for (int i = 0; i < dates; i++)
                 {
                     aInd = student.Attendances.FindIndex(att => att.Date.Equals(startDate.AddDays(i)));
                     <td>
