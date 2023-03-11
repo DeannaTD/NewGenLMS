@@ -34,6 +34,8 @@
 
   <ItemGroup>
     <Folder Include="Views\Comment\" />
+    <Folder Include="Views\Manager\" />
+    <Folder Include="Views\Mentor\" />
     <Folder Include="wwwroot\profile_img\" />
   </ItemGroup>
 
