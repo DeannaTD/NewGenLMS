@@ -116,3 +116,57 @@
         }
     });
 </script>
+
+
+
+@*
+    Blocked users page
+
+    @{
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+@model List<NPUser>
+@inject NovoePokolenie.Services.GroupService _groupService
+@inject NovoePokolenie.Services.BranchService _branchService
+
+@{
+    var groups = await _groupService.GetGroupsAsync();
+    Model.Sort((x,y) => String.Compare(x.FirstName, y.FirstName));
+}
+<div class="users_container">
+    <table class="table table_bordered">
+        @foreach (var student in Model)
+        {
+            <tr data-id="@student.Id">
+                <td>
+                    @student.FirstName @student.Lastname
+                </td>
+                <td>
+                    <form asp-action="UnblockUser" asp-controller="Student"
+                          data-ajax="true"
+                          data-ajax-success="Okay(@student.Id)">
+                        <input type="hidden" name="studentId" value="@student.Id" />
+                        <select name="groupId" class="form_control">
+                            @foreach (var group in groups)
+                            {
+                                <option value="@group.Id">
+                                    @((await _branchService.GetBranchByIdAsync(group.BranchId)).Name)
+                                    @NovoePokolenie.Helpers.StHel.TimeTableToString(group.TimeTable)
+                                </option>
+                            }
+                        </select>
+                        <input type="submit" class="button_fit" value="Разблокировать"/>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<script>
+    function Okay(st_data) {
+        let st = "[data-id = " + st_data + "]";
+        $(st).remove();
+    }
+</script>
+*@
