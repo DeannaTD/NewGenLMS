@@ -15,12 +15,14 @@ namespace NovoePokolenie.Controllers
         AttendanceService _attendanceService;
         GroupService _groupService;
         StudentService _studentService;
+        BranchService _branchService;
 
-        public AttendanceController(AttendanceService attendanceService, GroupService groupService, StudentService studentService)
+        public AttendanceController(AttendanceService attendanceService, GroupService groupService, StudentService studentService, BranchService branchService)
         {
             _attendanceService = attendanceService;
             _groupService = groupService;
             _studentService = studentService;
+            _branchService = branchService;
         }
 
         public IActionResult Index()
@@ -145,6 +147,12 @@ namespace NovoePokolenie.Controllers
                 }
             }
             return View(model);
+        }
+
+        public async Task<IActionResult> AttendanceMenu()
+        {
+            var branches = await _branchService.GetBranchesAsync();
+            return View(branches);
         }
 
         public async Task<IActionResult> AllAtendanceTest()

@@ -12,27 +12,45 @@
         index = 1;
         <div class="level-container">
             <div class="accent-header">@level.Name</div>
-            <table>
+            <table class="project-table">
                 @foreach(var project in level.Projects)
                 {
                     <tr>
                         <td>@index</td>
-                        <td>@project.Name</td>
                         <td>
                             @{
                                 index++;
                                 string url = project.ProjectLink.Replace("../../", defaultAddress);
                             }
-                            @if (User.Identity.Name == "tdboodman409")
+                            @if (User.IsInRole("Mentor"))
                             {
-                                <a href="@url" target="_blank">
-                                    Открыть @project.IndexNumber
+                                <a href="@url" target="_blank" class="project-link" title="Открыть">
+                                    @project.Name
                                 </a>
-                                <form asp-action="LoadProject" asp-controller="Project" enctype="multipart/form-data">
-                                    <input type="file" name="file" />
-                                    <input type="number" name="projectId" value="@project.Id">
-                                </form>
                             }
+                        </td>
+                        <td>
+                            <div class="flex project-flex">
+                            @if (User.IsInRole("Mentor"))
+                            {
+                                <form asp-action="LoadProject" asp-controller="Project" enctype="multipart/form-data" data-ajax="true" data-ajax-success="alert('Проект загружен')">
+                                    <label class="project-button" for="@("file" + project.Id)" title="Загрузить новый файл">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="project-button--icon">
+                                            <path d="M12 8L12 16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M15 11L12.087 8.08704V8.08704C12.039 8.03897 11.961 8.03897 11.913 8.08704V8.08704L9 11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </label>
+                                    <input type="file" name="file" id="@("file" + project.Id)" class="d-none"/>
+                                    <input type="number" name="projectId" value="@project.Id" class="d-none">
+                                </form>
+                                <a href="@("../../projects/" + level.Name + "_id" + project.Id + ".zip")" class="project-button" title="Скачать архив проекта">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="project-button--icon">
+                                        <path d="M12 16L12 8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M9 13L11.913 15.913V15.913C11.961 15.961 12.039 15.961 12.087 15.913V15.913L15 13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                            }
+                            </div>
                         </td>
                     </tr>
                 }
@@ -41,6 +59,10 @@
     }
 </div>
 <script>
+    $("input[type=file]").on("click", event=>{
+        alert("Для загрузки новой версии проекта необходимо выбрать ZIP архив со структурой 'css/img/index.html'");
+    });
+
     $("input[type=file]").on("change", event=> {
         if(confirm("Заменить текущий файл на новый?")){
             $(event.currentTarget).parent().submit();

@@ -29,11 +29,17 @@
             <span asp-validation-for="StudentName"></span>
         </div>
         <div>
+            @{
+                int aa = ViewBag.LevelId;
+                int bb = ViewBag.ProjectId;
+                SelectList ss = new SelectList(levels, "Id", "Name", ViewBag.LevelId.ToString());
+                int cc = 0;
+            }
             <label asp-for="LevelId">Уровень:</label><br />
-            <select class="dark_input margin_bottom" asp-for="@Model.LevelId" 
-                    asp-items="@(new SelectList(levels, "Id", "Name", ViewBag.LevelId.ToString()))"
-                    onchange="loadProjects(this)">
-              
+            <select
+                class="dark_input margin_bottom"
+                asp-for="@Model.LevelId" asp-items="@ss"
+                onchange="loadProjects(this)">
             </select>
             <span asp-validation-for="LevelId"></span>
         </div>
@@ -50,3 +56,9 @@
 
     </form>
 </div> 
+
+<script>
+    function loadProjects(levelSelect) {
+        $('#levelForm').submit();
+    }
+</script>

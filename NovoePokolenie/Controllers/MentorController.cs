@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NovoePokolenie.Services;
+using System.Threading.Tasks;
 
 namespace NovoePokolenie.Controllers
 {
@@ -17,6 +13,7 @@ namespace NovoePokolenie.Controllers
             _branchService = branchService;
         }
 
+        //TODO: remove
         public async Task<IActionResult> AttendanceMenu()
         {
             var branches = await _branchService.GetBranchesAsync();

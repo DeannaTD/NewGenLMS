@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NovoePokolenie.Helpers;
 using NovoePokolenie.Models;
 using NovoePokolenie.Services;
 using NovoePokolenie.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace NovoePokolenie.Controllers
 {
@@ -104,14 +102,14 @@ namespace NovoePokolenie.Controllers
             var students = await _studentService.GetStudentsByGroupIdAsync(groupId);
             var trials = await _leadService.GetTrials(groupId);
             List<StudentCardViewModel> studentCards = new List<StudentCardViewModel>();
-            foreach(var student in students)
+            foreach (var student in students)
             {
                 studentCards.Add(new StudentCardViewModel(student, new List<Group>()));
                 studentCards.Last().Level = (await _studentService.GetStudentLevelByProjectId(student.CurrentProjectId ?? 0)).Name;
                 studentCards.Last().Group = await _studentService.GetStudentGroupNameAsync(student.GroupId ?? 0);
                 studentCards.Last().MentorName = await _studentService.GetStudentMentorNameAsync(student.GroupId);
             }
-            foreach(var trial in trials)
+            foreach (var trial in trials)
             {
                 studentCards.Add(new StudentCardViewModel(trial));
                 studentCards.Last().Level = (await _studentService.GetStudentLevelByProjectId(0)).Name;
@@ -128,7 +126,7 @@ namespace NovoePokolenie.Controllers
         {
             List<Lead> trials = await _leadService.GetTrials();
             List<StudentCardViewModel> trialsCards = new List<StudentCardViewModel>();
-            foreach(var trial in trials)
+            foreach (var trial in trials)
             {
                 trialsCards.Add(new StudentCardViewModel(trial));
                 trialsCards.Last().Level = (await _studentService.GetStudentLevelByProjectId(0)).Name;
@@ -160,7 +158,7 @@ namespace NovoePokolenie.Controllers
             ViewBag.ProjectId = project.Id;
             ViewBag.LevelId = level.Id;
             ViewBag.StudentId = student.Id;
-            return PartialView();
+            return PartialView(new StudentLessonViewModel());
         }
 
         public async Task<IActionResult> LessonDetailSubmit(StudentLessonViewModel model)
@@ -168,7 +166,7 @@ namespace NovoePokolenie.Controllers
             var student = await _studentService.GetStudentById(model.StudentId);
             var level = await _studentService.GetStudentLevelByProjectId(student.CurrentProjectId ?? 1);
             Project project;
-            if(level.Id == model.LevelId)
+            if (level.Id == model.LevelId)
             {
                 await _studentService.ChangeStudentProjectAsync(model.StudentId, model.ProjectId);
                 project = await _projectService.GetProjectAsync(model.ProjectId);
@@ -179,12 +177,11 @@ namespace NovoePokolenie.Controllers
                 project = await _projectService.GetProjectByLevelIdAsync(model.LevelId);
                 await _studentService.ChangeStudentProjectAsync(model.StudentId, project.Id);
             }
-            
+
             ViewBag.ProjectId = project.Id;
             ViewBag.LevelId = level.Id;
             ViewBag.StudentId = student.Id;
-            return PartialView("LessonDetail");
-
+            return PartialView("LessonDetail", new StudentLessonViewModel());
         }
 
         public async Task<IActionResult> Lesson(string studentId)

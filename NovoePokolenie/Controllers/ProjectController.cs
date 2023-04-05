@@ -80,9 +80,9 @@ namespace NovoePokolenie.Controllers
         public async Task LoadProject(int projectId, IFormFile file)
         {
             var project = await _projectService.GetProjectAsync(projectId);
-            string zipLink = project.Level.Name + project.IndexNumber + "_id" + projectId;
+            string zipLink = project.Level.Name + "_id" + projectId;
             //AI4_id57 - name of dir
-            string path = Path.Combine(_webHost.WebRootPath, "projects", file.Name);
+            string path = Path.Combine(_webHost.WebRootPath, "projects", zipLink + ".zip");
             //path to zip file
             using FileStream stream = new FileStream(path, FileMode.Create);
             file.CopyTo(stream);
@@ -90,7 +90,6 @@ namespace NovoePokolenie.Controllers
             UnzipFile(path, zipLink);
             project.ProjectLink = "../projects/" + zipLink + "/index.html";
             await _projectService.Update(project);
-            RedirectToAction("Index");
             /*
              * Архив должен содержать файл index.html и всё необходимое для его работы
              * путь к работе:../projects/scratch_0.html
@@ -112,7 +111,7 @@ namespace NovoePokolenie.Controllers
         private void UnzipFile(string filePath, string zipLink)
         {
             string extractPath = Path.Combine(_webHost.WebRootPath, "projects", zipLink);
-            ZipFile.ExtractToDirectory(filePath, extractPath);
+            ZipFile.ExtractToDirectory(filePath, extractPath, true);
         }
     }
 }

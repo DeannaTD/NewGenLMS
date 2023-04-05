@@ -13,7 +13,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 //0551 20 47 10 Бурмат Султановна Шукурова Московская-Логвиненко, со стороны Московской, 2 этаж, Эндокринология
-//  var user = _context.NPUser.FirstOrDefault(x => x.UserName == "tdboodman");
 namespace NovoePokolenie.Controllers
 {
     public class AccountController : Controller
@@ -22,6 +21,7 @@ namespace NovoePokolenie.Controllers
         UserManager<NPUser> _userManager;
         IWebHostEnvironment _webHost;
 
+        //конструктор контроллера
         public AccountController(AccountService accountService, UserManager<NPUser> userManager, IWebHostEnvironment webHost)
         {
             _service = accountService;
@@ -29,17 +29,20 @@ namespace NovoePokolenie.Controllers
             _webHost = webHost;
         }
 
+        //todo: удалить
         public IActionResult Index()
         {
             return View();
         }
 
+        //todo: удалить, обхединено со всеми настройками
         [HttpGet]
         public IActionResult SettingsPassword()
         {
             return View();
         }
 
+        //todo: что это
         [HttpPost]
         public async Task<IActionResult> ResetPassword(string NewPassword, string CurrentPassword, string CheckPassword)
         {
@@ -58,6 +61,7 @@ namespace NovoePokolenie.Controllers
             }
         }
 
+        //todo: добавить ограничение доступа для менеджера
         public async Task ResetPasswordManager(string userId)
         {
             //NPUser user = await _userManager.FindByNameAsync("kamaneicha");
@@ -66,6 +70,7 @@ namespace NovoePokolenie.Controllers
             await _userManager.ResetPasswordAsync(user, token, user.UserName);
         }
 
+        //todo: что это
         #region Register
         [HttpGet]
         public IActionResult Register()
@@ -73,6 +78,7 @@ namespace NovoePokolenie.Controllers
             return View();
         }
 
+        //todo: что это
         [HttpPost]
         public async Task<IActionResult> Register(StaffRegistrationViewModel model)
         {
@@ -92,17 +98,20 @@ namespace NovoePokolenie.Controllers
             return RedirectToAction("UsersMenu", "Manager");
         }
 
+        //todo: что это
         [HttpGet]
         public IActionResult RegisterStudent(int groupId)
         {
             return View(new StudentRegistrationViewModel() { GroupId = groupId });
         }
 
+        //todo: что это
         public async Task RegisterUsers()
         {
             await _service.RegisterUser();
         }
 
+        //todo: что это
         [HttpPost]
         public async Task<IActionResult> RegisterStudent(StudentRegistrationViewModel model)
         {
@@ -122,6 +131,7 @@ namespace NovoePokolenie.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        //todo: что это
         [HttpPost]
         public async Task<IActionResult> RegisterStudentTrial(StudentCardViewModel model, string trialId)
         {
@@ -167,14 +177,11 @@ namespace NovoePokolenie.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            if (User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
+            //todo: куда делся view MainPage?
+            if (User.Identity.IsAuthenticated) return View("MainPage");
             return View();
         }
 
-        public IActionResult MentorLogin()
-        {
-            return View();
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -196,7 +203,7 @@ namespace NovoePokolenie.Controllers
                         string udata = DateTime.UtcNow.ToString("G") + " - " + model.Login;
                         sw.WriteLine(udata);
                         sw.Close();
-                        return RedirectToAction("Index", "Home");
+                        return View("MainPage");
                     }
                 }
                 else

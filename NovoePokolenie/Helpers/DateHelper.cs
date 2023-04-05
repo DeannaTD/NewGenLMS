@@ -22,6 +22,7 @@ namespace NovoePokolenie.Helpers
             return inCase ? months[monthIndex] : monthsDefault[monthIndex];
         }
 
+        //todo: почему у функции есть перегрузка
         public static string GetDayOfWeekName(DayOfWeek dayOfWeek, bool isShort = false)
         {
             int dayIndex = (int)dayOfWeek;
@@ -30,7 +31,6 @@ namespace NovoePokolenie.Helpers
 
         public static string GetDayOfWeekName(int dayOfWeek, bool isShort = false)
         {
-            //changing Sunday from 0 to 6 and moving indexes
             dayOfWeek = dayOfWeek == 6 ? 0 : dayOfWeek + 1;
             return isShort ? daysOfWeekShort[dayOfWeek] : daysOfWeek[dayOfWeek];
         }
@@ -41,11 +41,13 @@ namespace NovoePokolenie.Helpers
             else return (int)dayOfWeek - 1;
         }
 
+        //todo: удалить
         public static string GetDateId(DateTime date, string prefix = "")
         {
             return prefix + date.Year + "-" + date.Month + "-" + date.Day;
         }
 
+        //todo: удалить
         public static string GetShowDateName(DateTime date)
         {
             return date.Day + " " + months[date.Month - 1] + ", " + date.Year + "г.";
