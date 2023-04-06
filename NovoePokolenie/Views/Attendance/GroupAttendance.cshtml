@@ -12,7 +12,9 @@
         endDate = startDate.AddDays(7);
     int dates = ViewBag.Monthly ? endDate.Day : 7;
 }
-<a href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = DateTime.Now, monthly = true })">Посещения за текущий месяц</a>
+<div class="flex flex-center">
+    <a class="link" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = DateTime.Now, monthly = true })">Посещения по месяцам</a>
+</div>
 <div class="date-block padding-rem">
     <div class="calendar-block">
         <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

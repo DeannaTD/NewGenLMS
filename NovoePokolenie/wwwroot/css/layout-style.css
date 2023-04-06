@@ -503,3 +503,13 @@ form.grid-2 {
     margin-left: auto;
     margin-right: auto;
 }
+
+.link{
+    color: #4E5478;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.link:hover{
+    text-decoration: underline;
+}
