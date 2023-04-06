@@ -42,6 +42,10 @@ header {
     justify-content: space-around;
 }
 
+.flex-evenly{
+    justify-content: space-evenly;
+}
+
 .menu-toggle-button {
     width: 4rem;
     height: 4rem;
@@ -443,6 +447,7 @@ form.grid-2 {
         }
 
     .form-block input,
+    .form-block select,
     .form-block .pseudo_input {
         padding: .5rem;
         outline: none;
@@ -491,4 +496,10 @@ form.grid-2 {
 
 .overflow{
     overflow: scroll;
+}
+
+.centered-container{
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
 }

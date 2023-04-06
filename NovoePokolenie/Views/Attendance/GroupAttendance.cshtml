@@ -3,7 +3,7 @@
 @using NovoePokolenie.Helpers;
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = ViewBag.Partial ? null : "~/Views/Shared/_Layout.cshtml";
     DateTime startDate = ViewBag.Date;
     DateTime endDate = new DateTime(startDate.Year, startDate.Month, DateTime.DaysInMonth(startDate.Year, startDate.Month));
     int aInd = -1;

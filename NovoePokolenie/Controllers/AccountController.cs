@@ -178,7 +178,7 @@ namespace NovoePokolenie.Controllers
         public IActionResult Login()
         {
             //todo: куда делся view MainPage?
-            if (User.Identity.IsAuthenticated) return View("MainPage");
+            if (User.Identity.IsAuthenticated) return View("_Index");
             return View();
         }
 
@@ -203,7 +203,7 @@ namespace NovoePokolenie.Controllers
                         string udata = DateTime.UtcNow.ToString("G") + " - " + model.Login;
                         sw.WriteLine(udata);
                         sw.Close();
-                        return View("MainPage");
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 else

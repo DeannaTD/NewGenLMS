@@ -52,7 +52,7 @@ namespace NovoePokolenie.Controllers
             return _dates;
         }
 
-        public async Task<IActionResult> GroupAttendanceNew(int groupId, DateTime date, bool monthly = false)
+        public async Task<IActionResult> GroupAttendanceNew(int groupId, DateTime date, bool monthly = false, bool partial = false)
         {
             //todo - manager monthly issue
             List<NPUser> students = await _studentService.GetStudentsAndAttendances(groupId);
@@ -88,6 +88,8 @@ namespace NovoePokolenie.Controllers
             ViewBag.Date = date;
             ViewBag.groupId = groupId;
             ViewBag.Monthly = monthly;
+            ViewBag.Partial = partial;
+            if (partial) return PartialView("GroupAttendance", model);
             return View("GroupAttendance", model);
         }
         public async Task<IActionResult> GroupAttendance(int groupId, int month, int year)

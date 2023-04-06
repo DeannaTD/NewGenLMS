@@ -65,26 +65,26 @@ namespace NovoePokolenie.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             Group group = await _groupService.GetByIdAsync(id);
-            TimeTable timeTable = await _timeTableService.GetByIdAsync(group.TimeTableId);
+            group.TimeTable = await _timeTableService.GetByIdAsync(group.TimeTableId);
+            //TimeTable timeTable = await _timeTableService.GetByIdAsync(group.TimeTableId);
             CreateGroupViewModel model = new CreateGroupViewModel()
             {
                 Mentors = await _accountService.GetAllUsersInRole("Mentor"),
                 BranchId = group.Id,
                 MentorId = group.MentorId,
-                Day1 = timeTable.Day1,
-                Day2 = timeTable.Day2
+                Day1 = group.TimeTable.Day1,
+                Day2 = group.TimeTable.Day2
             };
-            ViewBag.TimeName = timeTable.TimeName;
+            ViewBag.TimeName = group.TimeTable.TimeName;
             ViewBag.Id = id;
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(CreateGroupViewModel model, int Id)
+        public async Task Edit(CreateGroupViewModel model, int Id)
         {
             Group group = await _groupService.GetByIdAsync(Id);
             await _groupService.EditGroup(Id, model);
-            return RedirectToAction("Index", "Branch");
         }
 
         [HttpPost]

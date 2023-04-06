@@ -1,13 +1,40 @@
-﻿@{ 
+﻿@model List<Branch>
+
+@using NovoePokolenie.Helpers;
+@inject NovoePokolenie.Services.GroupService _groupService;
+@inject NovoePokolenie.Services.StudentService _studentService;
+
+@{ 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@model List<Branch>
 <style>
-    .context_menu{
-        z-index: 999 !important;
+    .branchContainer {
+        grid-template-columns: repeat(@Model.Count, 1fr);
     }
 </style>
+
+<div class="branchContainer">
+    @foreach (Branch branch in Model)
+    {
+        <div class="branchBlock">
+            <div class="branchBlock-header">@branch.Name</div>
+            @{
+                List<Group> groups = await _groupService.GetGroupsByBranchIdAsync(branch.Id);
+                groups.Sort((g1, g2) => StHel.CompareTimeTables(g1.TimeTable, g2.TimeTable));
+            }
+            @foreach (Group group in groups)
+            {
+                <a class="branchBlock-content branchBlock-closed" href="@Url.Action("Edit", "Group", new { id = group.Id })">
+                    @StHel.TimeTableToShortString(group.TimeTable)
+                    <br>
+                    @(await _studentService.GetStudentMentorNameAsync(group.Id)) - @group.Users?.Count
+                </a>
+            }
+        </div>
+    }
+</div>
+
 <div class="box">
     <a asp-action="Create" class="add_icon">
         <i class="far fa-plus-square"></i>

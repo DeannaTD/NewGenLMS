@@ -1,7 +1,10 @@
 ﻿@model NovoePokolenie.ViewModels.CreateGroupViewModel
+@using System.Linq
 
-<div>
-    <form method="post" asp-controller="Group" asp-action="Edit" asp-route-id="@ViewBag.Id">
+<div class="form-block">
+    <form data-ajax-method="post" asp-controller="Group" asp-action="Edit" asp-route-id="@ViewBag.Id"
+    data-ajax="true"
+          class="flex flex-acenter flex-evenly centered-container ajax-form">
         <div asp-validation-summary="All"></div>
         <div>
             <label asp-for="Day1"></label><br />
@@ -19,29 +22,38 @@
         </div>
         <div>
             <label asp-for="Time"></label><br />
-            <input asp-for="Time" class="form-control" value="@ViewBag.TimeName"/>
+            <input asp-for="Time" class="form-control" value="@ViewBag.TimeName" />
             <span asp-validation-for="Time"></span>
         </div>
         <div>
-            <select asp-for="MentorId" class="form-control" id="mentor_select">
-                @foreach (var mentor in Model.Mentors)
+            <label asp-for="MentorId">Преподаватель</label><br />
+            <select asp-for="MentorId" class="form-control" asp-items="@(new SelectList(
+                from mentor in Model.Mentors
+                select new
                 {
-                    <option value="@mentor.Id">@(mentor.FirstName + " " + mentor.Lastname)</option>
-                }
-            </select>
+                    mentor.Id, mentor.FirstName, mentor.Lastname,
+                    Name = mentor.FirstName + " " + mentor.Lastname
+                }, "Id", "Name", Model.MentorId))"></select>
             <span asp-validation-for="MentorId" id="password_span"></span>
         </div>
         <div>
             <input asp-for="BranchId" value="@Model.BranchId" />
         </div>
-        <div>
-            <input type="submit" value="Сохранить" class="btn btn-outline-light" />
-        </div>
     </form>
 </div>
+<div id="attendance-block"></div>
+<a href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.Id, date = DateTime.Now, monthly = false, partial=true })"
+id="triggerLink"
+data-ajax="true"
+data-ajax-mode="replace"
+data-ajax-update="#attendance-block"> 
+</a>
 
 <script>
-    $(document).on('ready', () => {
-        $('#mentor_select').val(@Model.MentorId);
+    $(document).ready(() => {
+        $("#triggerLink")[0].click();
+    })
+    $(".ajax-form input, .ajax-form select").on('change', () => {
+        $(".ajax-form").submit();
     })
 </script>

@@ -5,11 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     NPUser user = await _userManager.GetUserAsync(User);
 }
-@if(User.IsInRole("Manager"))
+@if (User.IsInRole("Manager"))
 {
     <form asp-action="AllUserSearch" asp-controller="Account" method="post"
-      data-ajax="true" data-ajax-mode="replace"
-      data-ajax-update="#users">
+          data-ajax="true" data-ajax-mode="replace"
+          data-ajax-update="#users">
         <input type="text" placeholder="Имя" name="name" autofocus />
         <input type="text" placeholder="Телефон" name="phone" />
         <input type="submit" value="Поиск" />
@@ -22,15 +22,15 @@
             @{
                 int hh = DateTime.Now.Hour;
                 string greeting = "";
-                if(hh>17 && hh<23)
+                if (hh > 17 && hh < 23)
                 {
                     greeting = "Добрый вечер!";
                 }
-                else if(hh>5 && hh<11) 
+                else if (hh > 5 && hh < 11)
                 {
                     greeting = "Доброе утро!";
                 }
-                else if(hh>10 && hh < 18)
+                else if (hh > 10 && hh < 18)
                 {
                     greeting = "Хорошего дня!";
                 }
@@ -38,10 +38,9 @@
                 {
                     greeting = "Спокойной ночи!";
                 }
-                greeting += user.FirstName + "!";
-
-                    @greeting;
-                }
+                @greeting
+                ;
+            }
         </p>
     </div>
 </div>
