@@ -1,0 +1,149 @@
+[33mcommit 5a1e631d6650b9375cc2bcf5f4089f351301a7a1[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Wed Apr 5 14:30:23 2023 +0200
+
+    model switch faield solution
+
+[33mcommit f1f10830ed0d2f25d1de4cfb69675f6c07552626[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Mon Mar 20 15:55:06 2023 +0100
+
+    mentor style file added
+
+[33mcommit d949b8abd06afffb40081f8abba20adc4cd0b905[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Sat Mar 11 12:29:12 2023 +0100
+
+    merged views deleted #3
+
+[33mcommit df8aa2b1905ad3bf6e0d4932870c8f7b7df84e14[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Sat Mar 11 11:27:14 2023 +0100
+
+    branch and account views removed
+
+[33mcommit 33328fd9543fa256c53b63c290da2f6ae881ba12[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Thu Mar 9 14:17:19 2023 +0100
+
+    Montly attendance switch fixed
+
+[33mcommit add84df962b1f631925619bca0e9457af9cbe375[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Tue Mar 7 13:35:13 2023 +0100
+
+    Mentor layout changed to _Layout
+
+[33mcommit bcff12eba4e0c739b0d2af94345fb7ca77138505[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Mon Mar 6 23:30:31 2023 +0100
+
+    Unused style files removed
+
+[33mcommit 9de222035e80106b422c5de935c3aedc6b5ae1d4[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Mon Mar 6 23:24:51 2023 +0100
+
+    Student, mentor and management layouts merged
+
+[33mcommit f20243c45d091b73bb1f45bb4dbeda9c8da8128e[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Mon Mar 6 18:34:54 2023 +0100
+
+    views cleaning - scratch views removed
+
+[33mcommit d474c5a14cb18da3958b9dab04bfa3180f4cb2f4[m[33m ([m[1;32mmodeltest[m[33m)[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Mon Mar 6 18:23:58 2023 +0100
+
+    projects folder cleared
+
+[33mcommit 802e56443da2916c1c6f82363009b86fc08251b3[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Thu Mar 2 17:39:50 2023 +0100
+
+    New project link set
+
+[33mcommit dbd4dcd889834246564c2fdf950a1c8fe21323dd[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Thu Mar 2 17:21:12 2023 +0100
+
+    Mentor login new view added
+
+[33mcommit ee3071912b8537be293835395ac28a7fa1eb60fe[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Thu Mar 2 14:51:06 2023 +0100
+
+    Added getting the project from dbSet with Level instance
+
+[33mcommit 494358e7ec20c1146817fbdbdebeaec966cfb7d5[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Thu Mar 2 14:37:03 2023 +0100
+
+    Adding project files as zip archives added
+
+[33mcommit be08ad0caa22f12094da4319f52ab03795cbf93a[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Thu Feb 23 14:12:35 2023 +0100
+
+    Student registration form temporary fix
+
+[33mcommit 7dedf010699a9062751e94cccd446c38b7d57d3a[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Thu Feb 23 12:58:59 2023 +0100
+
+    Attendace table adaptive view fixed
+
+[33mcommit 9ce0dc0b6227a86a0bed517f97253362edc71168[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Sun Feb 19 17:33:24 2023 +0100
+
+    Profile image in mentor layout back
+
+[33mcommit b47f4bccd9d753027caf6ab23a743cdad6902cd0[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Mon Feb 6 17:25:26 2023 +0100
+
+    payment sort fixed
+
+[33mcommit a39d1eaeff437bf0d8e24aec530da4a4df666c3c[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Fri Feb 3 17:43:48 2023 +0100
+
+    Payment card syntax error fixed
+
+[33mcommit 75999fbc9ee8670b6dfa7beecb703dd10789dc2c[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Thu Feb 2 16:33:27 2023 +0100
+
+    Project link rename post method added
+
+[33mcommit a76f61abc59e52fb8d1e610b5f5e21f918f82cdf[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Thu Feb 2 11:31:51 2023 +0100
+
+    Minor UI changes to project index
+
+[33mcommit 5eefad96803df27069f457767ef6f7d0faca24f8[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Wed Feb 1 18:13:46 2023 +0100
+
+    Projects view index  added
+
+[33mcommit 0efdfec5f36cea46c9fbda20fa53cbbc4f52e7c0[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Wed Feb 1 17:25:35 2023 +0100
+
+    Static files provider removed
+
+[33mcommit f96e2a9516894666febdba0569b4fd200fabe35a[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Sun Jan 29 20:03:26 2023 +0100
+
+    Services added
+
+[33mcommit c63a997cd88dc281602b74114d9a446e2e56312e[m
+Author: Tolubaeva Diana <kamaneicha@live.com>
+Date:   Sun Jan 29 16:43:13 2023 +0100
+
+    Initial to new repo

@@ -158,7 +158,7 @@ namespace NovoePokolenie.Controllers
             ViewBag.ProjectId = project.Id;
             ViewBag.LevelId = level.Id;
             ViewBag.StudentId = student.Id;
-            return PartialView(new StudentLessonViewModel());
+            return PartialView();
         }
 
         public async Task<IActionResult> LessonDetailSubmit(StudentLessonViewModel model)
@@ -181,7 +181,7 @@ namespace NovoePokolenie.Controllers
             ViewBag.ProjectId = project.Id;
             ViewBag.LevelId = level.Id;
             ViewBag.StudentId = student.Id;
-            return PartialView("LessonDetail", new StudentLessonViewModel());
+            return PartialView("LessonDetail");
         }
 
         public async Task<IActionResult> Lesson(string studentId)
