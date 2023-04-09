@@ -13,7 +13,6 @@ namespace NovoePokolenie.ViewModels
         [HiddenInput]
         public int GroupId { get; set; }
 
-        [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Логин")]
         public string Login { get; set; }
@@ -28,18 +27,15 @@ namespace NovoePokolenie.ViewModels
         [Display(Name = "Фамилия")]
         public string LastName { get; set; }
 
-        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 
-        [Required]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         [DataType(DataType.Password)]
         [Display(Name = "Подтвердить пароль")]
         public string PasswordConfirm { get; set; }
 
-        [Required]
         [DataType(DataType.PhoneNumber)]
         [Display(Name = "Номер родителя")]
         [DisplayFormat(DataFormatString ="{0:###-##-##-##", ApplyFormatInEditMode = true)]

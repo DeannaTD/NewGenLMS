@@ -11,9 +11,21 @@
     if (!ViewBag.Monthly)
         endDate = startDate.AddDays(7);
     int dates = ViewBag.Monthly ? endDate.Day : 7;
+
+    string studentUrlAction = User.IsInRole("Manager") ? "StudentDetail" : "LessonDetail";
 }
 <div class="flex flex-center">
-    <a class="link" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = DateTime.Now, monthly = true })">Посещения по месяцам</a>
+    @if(ViewBag.Partial)
+    {
+        <a class="link" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = DateTime.Now, monthly = true, Partial = true })"
+           data-ajax="true"
+           data-ajax-mode="replace"
+           data-ajax-update="#attendance-block">
+           Посещения по месяцам</a>
+    }
+    else{
+        <a class="link" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = DateTime.Now, monthly = true })">Посещения по месяцам</a>
+    }
 </div>
 <div class="date-block padding-rem">
     <div class="calendar-block">
@@ -32,21 +44,47 @@
         </svg>
     </div>
     <p class="flex flex-center dateChoose-block">
-        <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = startDate.AddDays(-1), monthly = ViewBag.Monthly })">
+        @if (ViewBag.Partial)
+        {
+            <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = startDate.AddDays(-1), monthly = ViewBag.Monthly, Partial = true })"
+               data-ajax="true"
+               data-ajax-mode="replace"
+               data-ajax-update="#attendance-block">
+                <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="m13.789 7.155c.141-.108.3-.157.456-.157.389 0 .755.306.755.749v8.501c0 .445-.367.75-.755.75-.157 0-.316-.05-.457-.159-1.554-1.203-4.199-3.252-5.498-4.258-.184-.142-.29-.36-.29-.592 0-.23.107-.449.291-.591 1.299-1.002 3.945-3.044 5.498-4.243z" />
+                </svg>
+            </a>
+            <span class="date-span">
+                @startDate.ToString("dd/MM/yyyy")
+                -
+                @endDate.ToString("dd/MM/yyyy")
+            </span>
+            <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = endDate.AddDays(1), monthly = ViewBag.Monthly, Partial = true })"
+               data-ajax="true"
+               data-ajax-mode="replace"
+               data-ajax-update="#attendance-block">
+                <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="m10.211 7.155c-.141-.108-.3-.157-.456-.157-.389 0-.755.306-.755.749v8.501c0 .445.367.75.755.75.157 0 .316-.05.457-.159 1.554-1.203 4.199-3.252 5.498-4.258.184-.142.29-.36.29-.592 0-.23-.107-.449-.291-.591-1.299-1.002-3.945-3.044-5.498-4.243z" />
+                </svg>
+            </a>
+        }
+        else{
+            <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = startDate.AddDays(-1), monthly = ViewBag.Monthly })">
             <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="m13.789 7.155c.141-.108.3-.157.456-.157.389 0 .755.306.755.749v8.501c0 .445-.367.75-.755.75-.157 0-.316-.05-.457-.159-1.554-1.203-4.199-3.252-5.498-4.258-.184-.142-.29-.36-.29-.592 0-.23.107-.449.291-.591 1.299-1.002 3.945-3.044 5.498-4.243z" />
             </svg>
-        </a>
-        <span class="date-span">
-            @startDate.ToString("dd/MM/yyyy")
-            -
-            @endDate.ToString("dd/MM/yyyy")
-        </span>
-        <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = endDate.AddDays(1), monthly = ViewBag.Monthly })">
-            <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="m10.211 7.155c-.141-.108-.3-.157-.456-.157-.389 0-.755.306-.755.749v8.501c0 .445.367.75.755.75.157 0 .316-.05.457-.159 1.554-1.203 4.199-3.252 5.498-4.258.184-.142.29-.36.29-.592 0-.23-.107-.449-.291-.591-1.299-1.002-3.945-3.044-5.498-4.243z" />
-            </svg>
-        </a>
+            </a>
+            <span class="date-span">
+                @startDate.ToString("dd/MM/yyyy")
+                -
+                @endDate.ToString("dd/MM/yyyy")
+            </span>
+            <a class="arrow" href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.groupId, date = endDate.AddDays(1), monthly = ViewBag.Monthly })">
+                <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="m10.211 7.155c-.141-.108-.3-.157-.456-.157-.389 0-.755.306-.755.749v8.501c0 .445.367.75.755.75.157 0 .316-.05.457-.159 1.554-1.203 4.199-3.252 5.498-4.258.184-.142.29-.36.29-.592 0-.23-.107-.449-.291-.591-1.299-1.002-3.945-3.044-5.498-4.243z" />
+                </svg>
+            </a>
+        }
     </p>
 </div>
 <div class="overflow">
@@ -66,7 +104,7 @@
         {
             <tr>
                 <td class="padding-rem">
-                    <span class="pointer" data-url="@Url.Action("LessonDetail", "Student", new {StudentId = student.StudentId})" data-action="lesson-detail">
+                    <span class="pointer" data-url="@Url.Action(studentUrlAction, "Student", new {StudentId = student.StudentId})" data-action="lesson-detail">
                         @student.StudentName
                     </span>
                     (<span class="pointer hint" data-hint="&#x1F5CE;" onclick="toCopy(this)">@student.StudentLogin</span>)
@@ -110,7 +148,7 @@
 </div>
 <span class="d-none" id="hint-element"></span>
 <script>
-    $('.arrow').on('click', (event) => {
+    $('.arrow:not([data-ajax="true"])').on('click', (event) => {
         event.preventDefault();
         let next_url = $(event.currentTarget).attr('href');
         $.ajax({

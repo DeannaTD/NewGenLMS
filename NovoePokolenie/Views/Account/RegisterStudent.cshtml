@@ -2,40 +2,42 @@
 
 <div>
     <form method="post" asp-controller="Account" asp-action="RegisterStudent"
-    data-ajax="true" id="registerForm">
+    data-ajax="true" id="registerForm" autocomplete="off" class="full-form">
         <div asp-validation-summary="All"></div>
         <div>
             <input asp-for="GroupId" value="@Model.GroupId" />
         </div>
         <div>
             <label asp-for="ParentName"></label><br />
-            <input asp-for="ParentName" class="form-control" />
+            <input asp-for="ParentName" class="form-control"/>
             <span asp-validation-for="ParentName"></span>
         </div>
-        <div>
+        <div class="hidden">
             <label asp-for="Login"></label><br />
-            <input asp-for="Login" class="form-control" />
+            <input asp-for="Login" class="form-control" value=" "/>
             <span asp-validation-for="Login"></span>
         </div>
-        <div>
+        <div class="hidden">
             <label asp-for="Password"></label><br />
-            <input asp-for="Password" class="form-control" id="password_input" />
+            <input asp-for="Password" class="form-control" id="password_input" value="12345abcde" />
             <span asp-validation-for="Password" id="password_span"></span>
         </div>
-        <div>
+        <div class="hidden">
             <label asp-for="PasswordConfirm"></label><br />
-            <input asp-for="PasswordConfirm" class="form-control" id="confirm_input" />
+            <input asp-for="PasswordConfirm" class="form-control" id="confirm_input" value="12345abcde" />
             <span asp-validation-for="PasswordConfirm" id="confirm_span"></span>
         </div>
-        <div>
-            <label asp-for="FirstName"></label><br />
-            <input asp-for="FirstName" class="form-control" />
-            <span asp-validation-for="FirstName"></span>
-        </div>
-        <div>
-            <label asp-for="LastName"></label><br />
-            <input asp-for="LastName" class="form-control" />
-            <span asp-validation-for="LastName"></span>
+        <div class="flex">
+            <div>
+                <label asp-for="FirstName"></label><br />
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName"></span>
+            </div>
+            <div>
+                <label asp-for="LastName"></label><br />
+                <input asp-for="LastName" class="form-control"/>
+                <span asp-validation-for="LastName"></span>
+            </div>
         </div>
         <div>
             <label asp-for="PhoneNumber"></label><br />
@@ -47,20 +49,22 @@
             <input asp-for="StudentPhoneNumber" class="form-control" />
             <span asp-validation-for="StudentPhoneNumber"></span>
         </div>
-        <div>
-            <label asp-for="DateOfBirth"></label><br />
-            <input asp-for="DateOfBirth" class="form-control" />
-            <span asp-validation-for="DateOfBirth"></span>
-        </div>
-        <div>
-            <label asp-for="DateOfTrial"></label><br />
-            <input asp-for="DateOfTrial" class="form-control" />
-            <span asp-validation-for="DateOfTrial"></span>
-        </div>
-        <div>
-            <label asp-for="DateStarted"></label><br />
-            <input asp-for="DateStarted" asp-format="{0:yyyy-MM-dd}" class="form-control" />
-            <span asp-validation-for="DateStarted"></span>
+        <div class="flex">
+            <div>
+                <label asp-for="DateOfBirth"></label><br />
+                <input asp-for="DateOfBirth" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="DateOfBirth"></span>
+            </div>
+            <div>
+                <label asp-for="DateOfTrial"></label><br />
+                <input asp-for="DateOfTrial" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="DateOfTrial"></span>
+            </div>
+            <div>
+                <label asp-for="DateStarted"></label><br />
+                <input asp-for="DateStarted" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+                <span asp-validation-for="DateStarted"></span>
+            </div>
         </div>
         <div>
             <input asp-for="Role" class="form-control" value="Student" />
@@ -76,13 +80,13 @@
             <span asp-validation-for="Note"></span>
         </div>
         <div>
-            <input type="submit" value="Регистрация" class="add_button" />
+            <input type="button" value="Регистрация" id="registerFormButton" class="form-control accent-button"/>
         </div>
     </form>
 </div>
 
 <script>
-    $("[type='submit'].add_button").on('click', event=>{
+    $("#registerFormButton").on('click', event => {
         event.preventDefault();
         event.currentTarget.disabled = true;
         $('#registerForm').submit();

@@ -513,3 +513,74 @@ form.grid-2 {
 .link:hover{
     text-decoration: underline;
 }
+
+.hidden{
+    display: none;
+}
+
+.font-icon {
+    border: 1px solid #4E5478;
+    background: #4E5478;
+    color: #F4E0BE !important;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.self-bottom{
+    align-self: flex-end;
+}
+
+.full-form{
+    width: 50vw;
+    border: 0px solid red;
+    margin: 1rem auto;
+    padding: 1rem;
+    min-width: 600px;
+}
+
+@media screen and (max-width: 900px){
+    .full-form{
+        width: 80vw;
+    }
+}
+.form-control{
+    padding: .5rem;
+    border: 1px solid #4E5478;
+}
+
+.full-form .form-control{
+    width: 100%;
+}
+
+.full-form>div{
+    margin-bottom: .5rem;
+    width: 100%;
+}
+
+.full-form>.flex{
+    gap: 1rem;
+}
+
+.full-form>.flex>div{
+    width: 100%;
+}
+
+.accent-button{
+    background: #4E5478;
+    color: #F4E0BE !important;
+    text-align: center;
+    cursor: pointer;
+}
+
+.scroll_card>form{
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+div.validation{
+    display: none;
+}

@@ -133,15 +133,16 @@ namespace NovoePokolenie.Helpers
 
         public static IEnumerable<SelectListItem> DaysOfWeek()
         {
-            List<SelectListItem> list = new List<SelectListItem>();
-            list.Add(new SelectListItem("Понедельник", "1"));
-            list.Add(new SelectListItem("Вторник", "2"));
-            list.Add(new SelectListItem("Среда", "3"));
-            list.Add(new SelectListItem("Четверг", "4"));
-            list.Add(new SelectListItem("Пятница", "5"));
-            list.Add(new SelectListItem("Суббота", "6"));
-            list.Add(new SelectListItem("Воскресенье", "0"));
-            return list;
+            return new List<SelectListItem>
+            {
+                new SelectListItem("Понедельник", "1"),
+                new SelectListItem("Вторник", "2"),
+                new SelectListItem("Среда", "3"),
+                new SelectListItem("Четверг", "4"),
+                new SelectListItem("Пятница", "5"),
+                new SelectListItem("Суббота", "6"),
+                new SelectListItem("Воскресенье", "0")
+            };
         }
         public static string GetLatinFromCyrillic(char symbol) => letters.ContainsKey(symbol) ? letters.GetValueOrDefault(symbol) : string.Empty;
 

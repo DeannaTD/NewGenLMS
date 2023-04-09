@@ -6,6 +6,9 @@
     data-ajax="true"
           class="flex flex-acenter flex-evenly centered-container ajax-form">
         <div asp-validation-summary="All"></div>
+        <a href="@Url.Action("RegisterStudent", "Account", new {groupId = ViewBag.Id})" class="font-icon self-bottom">
+            <i class="fas fa-plus"></i>
+        </a>
         <div>
             <label asp-for="Day1"></label><br />
             <select asp-for="Day1" class="form-control" asp-items="@NovoePokolenie.Helpers.StHel.DaysOfWeek()">
@@ -41,7 +44,9 @@
         </div>
     </form>
 </div>
+
 <div id="attendance-block"></div>
+
 <a href="@Url.Action("GroupAttendanceNew", "Attendance", new { groupId = ViewBag.Id, date = DateTime.Now, monthly = false, partial=true })"
 id="triggerLink"
 data-ajax="true"

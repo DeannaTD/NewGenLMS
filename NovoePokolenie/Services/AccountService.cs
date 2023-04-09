@@ -73,6 +73,7 @@ namespace NovoePokolenie.Services
 
         public async Task<IdentityResult> RegisterStudent(StudentRegistrationViewModel model)
         {
+            model.Login = StHel.CreateLogin(model.FirstName, model.LastName);
             NPUser userNameExisted = await _userManager.FindByNameAsync(model.Login);
             int accountNumber = 1;
             string tempLogin = model.Login;
@@ -82,6 +83,7 @@ namespace NovoePokolenie.Services
                 userNameExisted = await _userManager.FindByNameAsync(tempLogin);
             }
             model.Login = tempLogin;
+            model.Password = model.Login;
 
             NPUser user = new NPUser
             {
@@ -91,8 +93,8 @@ namespace NovoePokolenie.Services
                 ParentName = model.ParentName,
                 Email = model.Login + "@pokolenie.kg",
                 EmailConfirmed = true,
-                PhoneNumber = model.PhoneNumber,
-                StudentPhoneNumber = model.StudentPhoneNumber,
+                PhoneNumber = model.PhoneNumber ?? "",
+                StudentPhoneNumber = model.StudentPhoneNumber ?? "",
                 PhoneNumberConfirmed = true,
                 DateOfBirth = model.DateOfBirth,
                 DateOfTrial = model.DateOfTrial,

@@ -45,7 +45,7 @@ namespace NovoePokolenie.Controllers
 
         public async Task Block(string studentId)
         {
-            await _studentService.ChageStudentStatus(studentId, Helpers.ActivityStatus.Blocked);
+            await _studentService.ChageStudentStatus(studentId, ActivityStatus.Blocked);
         }
 
         [HttpPost]
@@ -69,9 +69,9 @@ namespace NovoePokolenie.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> StudentDetail(string studentId)
+        public async Task<IActionResult> StudentDetail(string StudentId)
         {
-            var student = await _studentService.GetStudentById(studentId);
+            var student = await _studentService.GetStudentById(StudentId);
             var model = new StudentCardViewModel(student, new List<Group>());
             var level = await _studentService.GetStudentLevelByProjectId(student.CurrentProjectId ?? 0);
             model.Level = level.Name;
@@ -136,16 +136,25 @@ namespace NovoePokolenie.Controllers
             return View("TrialList", trialsCards);
         }
 
-        public async Task MakeArchived(string studentId)
+        public async Task<IActionResult> MakeArchived(string studentId, int? groupId = null)
         {
-            StatusHistory statusRecord = new StatusHistory()
+            //StatusHistory statusRecord = new StatusHistory()
+            //{
+            //    UserId = studentId,
+            //    FromStatusId = (await _studentService.GetStudentById(studentId)).StatusId,
+            //    ToStatusId = (int)Helpers.ActivityStatus.Archive,
+            //    StatusChanged = DateTime.Now
+            //};
+            await _studentService.ChageStudentStatus(studentId, ActivityStatus.Archive);
+            if(groupId != null)
             {
-                UserId = studentId,
-                FromStatusId = (await _studentService.GetStudentById(studentId)).StatusId,
-                ToStatusId = (int)Helpers.ActivityStatus.Archive,
-                StatusChanged = DateTime.Now
-            };
-            await _studentService.ChageStudentStatus(studentId, Helpers.ActivityStatus.Archive);
+                return RedirectToAction("Edit", "Group", new { id = groupId });
+            }
+            else
+            {
+                //TODO: проверить есть ли где-то еще вызов методаы
+                return new EmptyResult();
+            }
             //TODO: проверить что не так с созданием статура
             //await _statusHistoryService.CreateRecordAsync(statusRecord);
         }
