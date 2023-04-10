@@ -1,7 +1,7 @@
 ﻿@model NovoePokolenie.ViewModels.StudentRegistrationViewModel
 
 <div>
-    <form method="post" asp-controller="Account" asp-action="RegisterStudent"
+    <form data-ajax-method="post" asp-controller="Account" asp-action="RegisterStudent"
     data-ajax="true" id="registerForm" autocomplete="off" class="full-form">
         <div asp-validation-summary="All"></div>
         <div>
@@ -81,6 +81,7 @@
         </div>
         <div>
             <input type="button" value="Регистрация" id="registerFormButton" class="form-control accent-button"/>
+            <input type="submit" id="submitForm" class="hidden"/>
         </div>
     </form>
 </div>
@@ -89,6 +90,6 @@
     $("#registerFormButton").on('click', event => {
         event.preventDefault();
         event.currentTarget.disabled = true;
-        $('#registerForm').submit();
+        $('#registerForm #submitForm')[0].click();
     })
 </script>

@@ -43,6 +43,14 @@ namespace NovoePokolenie.Controllers
             return View("ArchiveList", archivedStudents);
         }
 
+        public async Task<IActionResult> NotActiveUsers()
+        {
+            List<NPUser> notActiveusers = await _studentService.GetStudentsByStatus(ActivityStatus.Blocked);
+            notActiveusers.AddRange(await _studentService.GetStudentsByStatus(ActivityStatus.Archive));
+
+            return View(notActiveusers);
+        }
+
         public async Task Block(string studentId)
         {
             await _studentService.ChageStudentStatus(studentId, ActivityStatus.Blocked);
@@ -51,7 +59,7 @@ namespace NovoePokolenie.Controllers
         [HttpPost]
         public async Task<IActionResult> UnblockUser(string studentId, int groupId)
         {
-            await _studentService.ChageStudentStatus(studentId, Helpers.ActivityStatus.Active);
+            await _studentService.ChageStudentStatus(studentId, ActivityStatus.Active);
             NPUser student = await _studentService.GetStudentById(studentId);
             student.GroupId = groupId;
             await _userManager.UpdateAsync(student);
@@ -152,10 +160,9 @@ namespace NovoePokolenie.Controllers
             }
             else
             {
-                //TODO: проверить есть ли где-то еще вызов методаы
-                return new EmptyResult();
+                return Ok();
             }
-            //TODO: проверить что не так с созданием статура
+            //TODO: проверить что не так с созданием статуса
             //await _statusHistoryService.CreateRecordAsync(statusRecord);
         }
 

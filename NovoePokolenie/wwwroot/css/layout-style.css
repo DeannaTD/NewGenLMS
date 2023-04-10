@@ -584,3 +584,31 @@ form.grid-2 {
 div.validation{
     display: none;
 }
+
+.list-table{
+    width: 70%;
+    margin: 1rem auto;
+    min-width: 600px;
+    border-collapse: collapse;
+}
+
+.list-table th{
+    background-color: #4E5478;
+    color: #F4E0BE;
+    padding: .5rem;
+    font-weight: 400;
+    border: 1px solid black;
+}
+
+.list-table td{
+    padding: .5rem;
+    border: 1px solid #4E5478;
+}
+
+.list-table select{
+    width: 100%;
+}
+
+.list-table td:not(:first-child){
+    text-align: center;
+}

@@ -62,6 +62,12 @@ namespace NovoePokolenie.Services
             return await _unitOfWork.Students.GetByIdAsync(id);
         }
 
+        public async Task<List<NPUser>> GetStudentsByStatus(ActivityStatus status)
+        {
+            var students =  await _unitOfWork.Students.GetAllStatusStudentsAsync();
+            return students.Where(student => student.StatusId == (int)status).ToList();
+        }
+
         public async Task<List<NPUser>> GetStudents()
         {
             return await _unitOfWork.Students.GetCollectionAsync();
@@ -111,6 +117,8 @@ namespace NovoePokolenie.Services
             student.GroupId = null;
             await _unitOfWork.Save();
         }
+
+        //TODO: replaced by GetByStatus
 
         public async Task<List<NPUser>> GetArchivedAsync()
         {

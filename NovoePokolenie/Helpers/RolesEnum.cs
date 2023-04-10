@@ -27,6 +27,16 @@ namespace NovoePokolenie.Helpers
             if (role == "Administrator") return "Администратор";
             return string.Empty;
         }
+
+        public static string GetActivityStatusName(ActivityStatus status)
+        {
+            switch (status)
+            {
+                case ActivityStatus.Archive: return "Архив";
+                case ActivityStatus.Blocked: return "Блок";
+                default: return "Неизвестно";
+            }
+        }
     }
 
 

@@ -1,0 +1,68 @@
+﻿@using NovoePokolenie.Helpers
+
+@inject NovoePokolenie.Services.GroupService _groupService
+@inject NovoePokolenie.Services.BranchService _branchService
+
+@model List<NPUser>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Group> groups = await _groupService.GetGroupsAsync();
+    List<Branch> branches = await _branchService.GetBranchesAsync();
+
+    List<SelectListItem> groupSelectItems = groups.Select(group => new SelectListItem()
+    {
+        Value = group.Id.ToString(),
+        Text = branches.Find(branch => branch.Id == group.BranchId).Name + StHel.TimeTableToString(group.TimeTable)
+    }).ToList();
+}
+
+<div>
+    <table class="list-table">
+        <tr>
+            <th>Имя</th>
+            <th>Статус</th>
+            <th colspan="2">Действие</th>
+        </tr>
+        @foreach(NPUser student in Model)
+        {
+            <tr data-id="@student.Id">
+                <td>@student.FirstName @student.Lastname</td>
+                <td>@RolesEnum.GetActivityStatusName((ActivityStatus)student.StatusId)</td>
+                @if(student.StatusId == (int)ActivityStatus.Blocked)
+                {
+                    <td>
+                        <a class="link" data-ajax="true" data-ajax-success="MakeArchived('@student.Id')" href="@Url.Action("MakeArchived", "Student", new {studentId = student.Id})">В архив</a>
+                    </td>
+                }
+                <td colspan="@(student.StatusId == (int)ActivityStatus.Archive ? 2 : 1)">
+                    <form asp-action="UnblockUser" asp-controller="Student" data-ajax="true" data-ajax-method="post" data-ajax-success="RemoveRow('@student.Id')">
+                        <input type="hidden" name="studentId" value="@student.Id" />
+                        <select name="groupId" class="form-control" data-name="@(student.FirstName + " " + student.Lastname)"
+                            asp-items="groupSelectItems" data-groupId="@student.GroupId"></select>
+                        <input type="submit" id="submitForm" class="hidden" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<script>
+    function RemoveRow(st_data) {
+        $("[data-id = " + st_data + "]").remove();
+    }
+
+    function MakeArchived(st_data){
+        $("[data-id = " + st_data + "] td:nth-child(2)").text("Архив")
+        let tdDel = $("[data-id = " + st_data + "] td:nth-child(3)");
+        let tdCol = $("[data-id = " + st_data + "] td:nth-child(4)");
+        $(tdDel).remove();
+        $(tdCol).attr("colspan", 2);
+    }
+
+    var ect;
+    $("select[name=groupId]").on("change", event=>{
+        event.currentTarget.nextElementSibling.click();
+    })
+</script>
