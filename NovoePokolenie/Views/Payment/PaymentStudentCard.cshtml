@@ -32,7 +32,7 @@
         return period.Payments.Last().PaymentCreated;
     }
 }
-<table class="table table_bordered w-60 center-table">
+<table class="list-table centered table table_bordered w-60 center-table">
     <tr>
         <th>Имя</th>
         <th>Номер</th>
@@ -46,10 +46,10 @@
          <td id="total-debt-td">@GetDebt(Model)</td>
     </tr>
 </table>
-<button id="add-period" class="button button_green">Добавить новый период</button>
-<div class="flex gap-2">
+<button id="add-period" class="center-block form-control form-button button_green">Добавить новый период</button>
+<div class="flex gap-2 flex-jcenter margin-top">
 <div class="page-small adapt-small">
-<table class="table table_bordered_up w-100" id="payments-table">
+<table class="list-table table table_bordered_up w-100" id="payments-table">
     <tr>
         <th>Период</th>
         <th>Стоимость</th>
@@ -62,9 +62,9 @@
     <tr data-periodId="@period.Id">
         <td class="w-40">
             <form asp-action='ChangePeriodDates' asp-controller='Payment' data-ajax='true' data-ajax-failure="ErrorAjax()">
-                <input class='trigger-input table-input' type='date' name='PaymentStart' value='@period.PaymentStart.ToString("yyyy-MM-dd")'>
+                <input class='trigger-input table-input form-control' type='date' name='PaymentStart' value='@period.PaymentStart.ToString("yyyy-MM-dd")'>
                 -
-                <input class='trigger-input table-input' type='date' name='PaymentEnd' value='@period.PaymentEnd.ToString("yyyy-MM-dd")'>
+                <input class='trigger-input table-input form-control' type='date' name='PaymentEnd' value='@period.PaymentEnd.ToString("yyyy-MM-dd")'>
                 <input type='text' class='hidden' name='periodId' value='@period.Id'>
             </form>
         </td>
@@ -102,13 +102,13 @@
     <tr id="add-period-row" class="d-none">
         <td colspan="5">
             <form id="add-new-period-form" data-ajax="true">
-                <input class="table-input" id="start-date-input" type='date' name='start'>
+                <input class="table-input form-control" id="start-date-input" type='date' name='start'>
                 -
-                <input class="table-input" id="end-date-input" type='date' name='end'>
-                <input type="number" name="amount" class="w-10 text-right" value="@Model.PaymentCharge"/>
+                <input class="table-input form-control" id="end-date-input" type='date' name='end'>
+                <input type="number" name="amount" class="w-10 text-right form-control" value="@Model.PaymentCharge"/>
                 <input type="text" class="hidden" value="@Model.Id" name="studentId" />
-                <input type="button" value="Добавить" class="button button_green" id="submit-button-form" />
-                <input type="button" value="Отмена" class="button button_red" onclick="AddPeriodCancel()" />
+                <input type="button" value="&#x2713" class="form-control button button_green" id="submit-button-form" />
+                <input type="button" value="&#x2717" class="form-control button button_red" onclick="AddPeriodCancel()" />
             </form>
         </td>
         <td class="w-10 text-center d-none" id="sampleInfoDelete">
@@ -168,6 +168,8 @@
 
     $('#submit-button-form').on('click', (event) =>{
         let form = $('#add-new-period-form');
+        let dates = $("#add-new-period-form input[type='date']")
+        if(dates[0].value == '' || dates[1].value == '') return;
         console.log(form);
         $.ajax({
             type: "post",

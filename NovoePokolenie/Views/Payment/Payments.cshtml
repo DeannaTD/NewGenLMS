@@ -9,9 +9,9 @@
         <div class="payment-block table_row_mimic">
             <form>
                 <label>Оплачено:</label>
-                <input type="number" class="text-right border-bottom money" name="PaymentAmount" value="@payment.PaymentAmount"/>
+                <input type="number" class="text-right border-bottom money form-control" name="PaymentAmount" value="@payment.PaymentAmount"/>
                 <label>с.</label>
-                <input type="date" class="border-bottom" name="PaymentCreated" value="@payment.PaymentCreated.ToString("yyyy-MM-dd")"/>
+                <input type="date" class="border-bottom form-control" name="PaymentCreated" value="@payment.PaymentCreated.ToString("yyyy-MM-dd")"/>
                 <input type="hidden" name="PaymentId" value="@payment.Id"/>
                 <a class="text-error" asp-action="DeletePayment" asp-controller="Payment" asp-route-paymentId="@payment.Id"
                     data-period="@payment.PaymentPeriodId"
@@ -32,14 +32,14 @@
                 class="flex-column-form">
                 <div>
                     <label>Дата:</label>
-                    <input name="dateCreated" class="border-bottom" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")"/>
+                    <input name="dateCreated" class="border-bottom form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")"/>
                 </div>
                 <input name="periodId" type="hidden" value="@ViewBag.PeriodId"/>
                 <div>
                     <label>Внесено:</label>
-                    <input name="amount" class="money border-bottom" type="number" value="@ViewBag.Amount"/>
+                    <input name="amount" class="money border-bottom form-control" type="number" value="@ViewBag.Amount"/>
                 </div>
-                <input type="submit" id="create_payment_button" class="button button_green" value="Создать" />
+                <input type="submit" id="create_payment_button" class="button button_green form-control form-button" value="Создать" />
             </form>
         </div>
     </div>

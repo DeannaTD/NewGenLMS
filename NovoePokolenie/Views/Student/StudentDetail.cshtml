@@ -19,8 +19,8 @@
         <input asp-for="StatusId" type="hidden" value="@Model.StatusId" />
         <div class="flex">
             <p>@ViewBag.UserName</p>
-            <a class="link" href="@Url.Action("Block", "Student", new { studentId = Model.StudentId })">Блок</a>
-            <a class="link" href="@Url.Action("MakeArchived", "Student", new {studentId = Model.StudentId, groupId = Model.GroupId})">В архив</a>
+            <a class="link" data-ajax="true" data-ajax-success="reloadAjax()" href="@Url.Action("Block", "Student", new { studentId = Model.StudentId })">Блок</a>
+            <a class="link" data-ajax="true" data-ajax-success="reloadAjax()" href="@Url.Action("MakeArchived", "Student", new {studentId = Model.StudentId})">В архив</a>
         </div>
         <div class="flex">
             <div>
@@ -177,10 +177,18 @@
     });
 
     function endWait() {
+        let waiter = document.getElementById("waiter");
+        if(waiter != undefined)
+            waiter.remove();
         alert("Изменения успешно сохранены");
         if(reload){
             window.location.reload();
         }
+    }
+
+    function reloadAjax(){
+        reload = true;
+        endWait();
     }
 
 </script>

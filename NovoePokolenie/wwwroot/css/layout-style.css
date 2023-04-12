@@ -46,6 +46,10 @@ header {
     justify-content: space-evenly;
 }
 
+.flex-jcenter{
+    justify-content: center;
+}
+
 .menu-toggle-button {
     width: 4rem;
     height: 4rem;
@@ -534,12 +538,13 @@ form.grid-2 {
     align-self: flex-end;
 }
 
-.full-form{
+.full-form {
     width: 50vw;
     border: 0px solid red;
     margin: 1rem auto;
     padding: 1rem;
     min-width: 600px;
+    text-align: left;
 }
 
 @media screen and (max-width: 900px){
@@ -611,4 +616,78 @@ div.validation{
 
 .list-table td:not(:first-child){
     text-align: center;
+}
+
+.centered{
+    text-align: center;
+}
+
+.flex-ul {
+    display: flex;
+    list-style-type: none;
+    justify-content: space-around;
+    margin: 1rem auto;
+    width: 80vw;
+}
+
+.center-block{
+    display: block;
+    margin: auto;
+}
+
+a.invoice{
+    color: #2B8C8B;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+a.text-error {
+    color: #C34A4A;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.form-button{
+    background: #4E5478;
+    color: #F4E0BE;
+    cursor: pointer;
+}
+
+#payments-container{
+    align-self: flex-start;
+}
+
+#payments-table{
+    margin: 0;
+}
+
+.table_row_mimic {
+    border: 1px solid #4E5478;
+    padding: 1rem;
+}
+
+.margin-top{
+    margin-top: 1rem;
+}
+
+.form-control.button_green{
+    background: #2B8C8B;
+    color: #FFFFFF;
+    border-color: #2B8C8B;
+}
+
+.form-control.button_red{
+    background: #C34A4A;
+    color: #FFFFFF;
+    border-color: #C34A4A;
+}
+
+.gap-2{
+    gap: 2rem;
+}
+
+.header-search {
+    position: absolute;
+    left: 4rem;
+    align-self: center;
 }

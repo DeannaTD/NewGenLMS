@@ -6,7 +6,7 @@
 @inject NovoePokolenie.Services.BranchService _branchService
 
 @{
-    Layout = null;
+    Layout = ViewBag.useLayout ? "~/Views/Shared/_Layout.cshtml" : null;
     var groups = await _groupService.GetGroupsAsync();
     int i = 0;
 }
@@ -24,7 +24,7 @@
     }
 </style>
 <div class="container table-container">
-    <table class="table table_bordered">
+    <table class="list-table table table_bordered">
         <tr>
             <th>№</th>
             <th>Имя</th>
@@ -53,12 +53,12 @@
                             }
                             else
                             {
-                                <a href="@Url.Action("StudentDetail", "Student", new { studentId = user.Id })"
-                                   data-ajax="true"
+                                <a href="@Url.Action("Edit", "Group", new { id = user.GroupId })"
+                                   data-ajax="false"
                                    data-ajax-mode="replace"
                                    data-ajax-update="#student_card"
                                    data-ajax-success="$('#studentCard').css('display','block')"
-                                   title="Открыть карточку">
+                                   title="В группу">
                                     @user.FirstName @user.Lastname
                                 </a>
                                 <a asp-action="StudentPaymentCard" asp-controller="Payment" asp-route-studentId="@user.Id">

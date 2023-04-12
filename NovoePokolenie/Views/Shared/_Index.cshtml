@@ -5,17 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     NPUser user = await _userManager.GetUserAsync(User);
 }
-@if (User.IsInRole("Manager"))
-{
-    <form asp-action="AllUserSearch" asp-controller="Account" method="post"
-          data-ajax="true" data-ajax-mode="replace"
-          data-ajax-update="#users">
-        <input type="text" placeholder="Имя" name="name" autofocus />
-        <input type="text" placeholder="Телефон" name="phone" />
-        <input type="submit" value="Поиск" />
-    </form>
-}
-
 <div id="users">
     <div>
         <p class="greeting_container">

@@ -2,7 +2,8 @@
 
 <div>
     <form data-ajax-method="post" asp-controller="Account" asp-action="RegisterStudent"
-    data-ajax="true" id="registerForm" autocomplete="off" class="full-form">
+    data-ajax="true" id="registerForm" autocomplete="off" class="full-form"
+          data-ajax-success="window.location.href = '@Url.Action("Edit", "Group", new {id = Model.GroupId})'">
         <div asp-validation-summary="All"></div>
         <div>
             <input asp-for="GroupId" value="@Model.GroupId" />

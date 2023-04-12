@@ -107,7 +107,14 @@
                     <span class="pointer" data-url="@Url.Action(studentUrlAction, "Student", new {StudentId = student.StudentId})" data-action="lesson-detail">
                         @student.StudentName
                     </span>
-                    (<span class="pointer hint" data-hint="&#x1F5CE;" onclick="toCopy(this)">@student.StudentLogin</span>)
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <a class="link" asp-action="StudentPaymentCard" asp-controller="Payment" asp-route-studentId="@student.StudentId">(к оплате)</a>
+                        }
+                        else
+                        {
+                        <span class="pointer hint" data-hint="&#x1F5CE;" onclick="toCopy(this)">&#40;@student.StudentLogin &#41;</span>
+                        }
                 </td>
                 @for (int i = 0; i < dates; i++)
                 {

@@ -13,7 +13,7 @@
     List<SelectListItem> groupSelectItems = groups.Select(group => new SelectListItem()
     {
         Value = group.Id.ToString(),
-        Text = branches.Find(branch => branch.Id == group.BranchId).Name + StHel.TimeTableToString(group.TimeTable)
+        Text = branches.Find(branch => branch.Id == group.BranchId).Name + " " + StHel.TimeTableToString(group.TimeTable)
     }).ToList();
 }
 

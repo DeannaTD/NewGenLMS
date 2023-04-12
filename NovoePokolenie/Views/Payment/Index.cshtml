@@ -20,20 +20,20 @@
     var branches = await _branchService.GetBranchesAsync();
 }
 
-<ul class="menu-list fj-sb fs-second">
+<ul class="flex-ul menu-list fj-sb fs-second">
     @foreach (var branch in branches)
     {
         <li>
-            @Html.ActionLink(branch.Name, "SortedIndex", "Payment", new StFilter(FilterOption.Branch, branch.Id))
+            @Html.ActionLink(branch.Name, "SortedIndex", "Payment", new StFilter(FilterOption.Branch, branch.Id), new {@class = "link"})
         </li>
     }
 </ul>
 
 @{
-    <table class="table table_bordered">
+    <table class="table table_bordered list-table centered">
         <tr>
             <th>№</th>
-            <th>
+            <th class="pointer">
                 <span id="sort_firstname">Имя</span>
                 /
                 <span id="sort_lastname">Фамилия</span>
@@ -44,16 +44,15 @@
             <th>
                 Оплата
             </th>
-            <th>
+            <th class="pointer">
                 <span id="sort_debt">Долг</span>
             </th>
-            <th>
+            <th class="pointer">
                 <span id="sort_date">Дата</span>
             </th>
         </tr>
         @foreach (NPUser student in Model)
         {
-            //index++;
             <tr>
                 <td class="table-index"></td>
                 <td id="row_name">
@@ -61,6 +60,9 @@
                         <span data-name="lastname">@student.Lastname</span>
                         <span data-name="firstname">@student.FirstName</span>
                     </a>
+                    <span class="pointer" data-url="@Url.Action("StudentDetail", "Student", new {StudentId = student.Id})" data-action="lesson-detail">
+                        (карточка)
+                    </span>
                 </td>
                 <td id="row_number">
                     <span data-name="">@student.PhoneNumber</span>
@@ -130,4 +132,33 @@
     $(window).on("load", ()=>{
         sortTableByOption($('td.table-index'), "debt", true);
     })
+
+    $("[data-action='lesson-detail']").on('click', (event) => {
+        let next_url = $(event.currentTarget).attr('data-url');
+        $.ajax({
+            type: 'GET',
+            url: next_url,
+            beforeSend: function () {
+                $(event.currentTarget).css('cursor', 'wait');
+                $("main").css('cursor', 'wait');
+            },
+            success: function (data) {
+                $(event.currentTarget).siblings('.lesson-window').remove();
+                let lesson_window = document.createElement('div');
+                lesson_window.className = 'lesson-window';
+                $(lesson_window).css('left', event.pageX + 'px');
+                lesson_window.innerHTML = data;
+                $(lesson_window).insertAfter($(event.currentTarget));
+                $(event.currentTarget).css('cursor', 'pointer');
+                $("main").css('cursor', 'unset');
+            }
+        });
+    });
+
+    $(document).on('click', (event) => {
+        let target = event.target;
+        let lesson = $('.lesson-window')[0]
+        if (!$.contains(lesson, target) && target != lesson)
+            $('.lesson-window').remove();
+    });
 </script>

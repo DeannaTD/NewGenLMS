@@ -20,6 +20,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@roleTitle - Новое Поколение</title>
     <link rel="stylesheet" href="~/css/layout-style.css" />
+    <link rel="icon" type="image/x-icon" href="../img/logo.ico" />
     @if (User.IsInRole("Mentor"))
     {
         <link rel="stylesheet" href="~/css/mentor-temp-style.css" />
@@ -38,7 +39,23 @@
         <div class="menu-toggle-button flex flex-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 3l3-3 12 12-12 12-3-3 9-9z" /></svg>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 3l3-3 12 12-12 12-3-3 9-9z" /></svg>
+
         </div>
+
+
+        @if (User.IsInRole("Manager"))
+        {
+            <form asp-action="AllUserSearch" asp-controller="Account" method="post"
+                  data-ajax="true" data-ajax-mode="replace"
+                  data-ajax-update="#users"
+                  class="header-search" id="header-search-form">
+                <input type="text" class="form-control" placeholder="Имя" name="name" autofocus />
+                <input type="text" class="form-control" placeholder="Телефон" name="phone" />
+                <input type="submit" class="form-control form-button button_green" value="Поиск" />
+                <input type="number" value="0" class="hidden" name="isAjax" id="ajaxInput" />
+            </form>
+        }
+
         <div class="info-block flex flex-acenter">
             <p class="datetime flex flex-list text-right">
                 <span id="date"></span>
@@ -46,6 +63,7 @@
             </p>
             <img class="avatar-image" src="@avatar">
         </div>
+        
     </header>
     <aside class="navigation">
         <nav>
@@ -129,6 +147,7 @@
         </nav>
     </aside>
     <main class="content">
+    <div id="users-search"></div>
         @RenderBody()
     </main>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -147,6 +166,15 @@
                 time = new Date();
                 $('span#time').text(getTimeString(time));
             }, 1000)
+
+            console.log("done")
+            console.log(document.getElementById("users"))
+            if (document.getElementById("users") == null) {
+                document.getElementById("header-search-form").setAttribute("data-ajax", "false");
+                document.getElementById("ajaxInput").value = 1;
+                //1 - ajax false, reload the page
+                //0 - ajax true
+            }
 
         });
 

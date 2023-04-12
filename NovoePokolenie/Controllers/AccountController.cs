@@ -361,7 +361,7 @@ namespace NovoePokolenie.Controllers
             return View("LoginError");
         }
 
-        public IActionResult AllUserSearch(string name, string phone)
+        public IActionResult AllUserSearch(string name, string phone, int isAjax)
         {
             if (name == "" || name is null) name = " ";
             if (phone == "" || phone is null) phone = "null";
@@ -375,6 +375,7 @@ namespace NovoePokolenie.Controllers
                 }
             }
 
+            ViewBag.useLayout = isAjax == 1;
             return View("AllUser", users);
         }
 
