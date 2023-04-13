@@ -18,11 +18,16 @@
                 <p class="pseudo_input">@Model.LastName</p>
                 <label>Логин</label>
                 <input type="text" name="Login" class="form-control" value="@Model.Login" />
-                <label>Пароль:</label>
-                <input type="password" name="Password" class="form-control" />
-            <div class="grid-all-2">
-                <input type="submit" class="accent-submit block" value="Сохранить" />
-            </div>
+                @{
+                    if(User.IsInRole("Manager") || User.IsInRole("Mentor") || User.IsInRole("Admin"))
+                    {
+                        <label>Пароль:</label>
+                        <input type="password" name="Password" class="form-control" />
+                        <div class="grid-all-2">
+                            <input type="submit" class="accent-submit block" value="Сохранить" />
+                        </div>
+                }
+                }
         </form>
     </div>
     <div>
