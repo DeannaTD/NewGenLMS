@@ -3,7 +3,7 @@
 @using NovoePokolenie.Helpers
 
 @{
-    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     List<DateTime> attended = Model.Where(x => x.AttendanceStatus == (int)AttendanceStatus.Attended)
                                    .Select(x => x.Date)
                                    .ToList();

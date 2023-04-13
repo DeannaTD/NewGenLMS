@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="lesson_container">
@@ -9,6 +9,23 @@
 <script>
     $(document).ready(() => {
         let path = $('#lesson_detail').attr("data-project");
-        $("#lesson_detail").load(path);
+        $("#lesson_detail").load(path, function(){
+            let prefix = path.split('/').slice(0, -1).join('/') + "/";
+            let sources = $('#lesson_detail *[src]');
+            let links = $('#lesson_detail *[href]');
+            let globals = $('#lesson_detail *[src^=http]');
+            globals.push(...$('#lesson_detail *[href^=http]'))
+            globals = globals.toArray()
+            for (let i = 0; i < sources.length; i++) {
+                if (globals.includes(sources[i])) continue;
+                let s = sources[i].getAttribute('src')
+                sources[i].setAttribute('src', prefix + s)
+            }
+            for(let i = 0; i<links.length; i++){
+                if (globals.includes(sources[i])) continue;
+                let s = links[i].getAttribute('href')
+                links[i].setAttribute('href', prefix + s)
+            }
+        });
     });
 </script>

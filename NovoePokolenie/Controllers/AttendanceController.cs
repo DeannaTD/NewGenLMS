@@ -137,17 +137,21 @@ namespace NovoePokolenie.Controllers
         public async Task<IActionResult> StudentAttendance(string studentId)
         {
             List<Attendance> model = await _attendanceService.GetAttendances(studentId);
-            for (int i = 0; i < model.Count; i++)
+            if(model.GroupBy(a => a.Date).Count() != model.Count)
             {
-                var atts = model.FindAll(attendance => attendance.Date == model[i].Date);
-                if (atts.Count > 1)
-                {
-                    for (int j = atts.Count - 1; j > 0; j--)
-                    {
-                        await _attendanceService.DeleteAttendanceByIdAsync(atts[j].Id);
-                    }
-                }
+                return new NoContentResult();
             }
+            //for (int i = 0; i < model.Count; i++)
+            //{
+            //    var atts = model.FindAll(attendance => attendance.Date == model[i].Date);
+            //    if (atts.Count > 1)
+            //    {
+            //        for (int j = atts.Count - 1; j > 0; j--)
+            //        {
+            //            await _attendanceService.DeleteAttendanceByIdAsync(atts[j].Id);
+            //        }
+            //    }
+            //}
             return View(model);
         }
 

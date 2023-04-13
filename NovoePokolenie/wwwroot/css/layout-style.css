@@ -691,3 +691,41 @@ a.text-error {
     left: 4rem;
     align-self: center;
 }
+
+.checkCalendarRed{
+    background-color: #C34A4A;
+    color: #FFF;
+}
+
+.checkCalendarGreen{
+    background-color: #2B8C8B;
+    color: #FFF;
+}
+
+.attendanceCalendarBlock{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+table.calendar {
+    margin: 1rem auto;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+    table.calendar td {
+        border: 1px solid #4E5478;
+        height: 3rem;
+        width: 3rem;
+    }
+
+    table.calendar td.title-case{
+        background-color: #4E5478;
+        color: #F4E0BE;
+    }
+
+@media screen and (max-width: 900px){
+    table.calendar td{
+        height: 2rem;
+    }
+}
