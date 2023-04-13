@@ -1,44 +1,32 @@
-﻿@*List<PaymentPeriod> payments = await _paymentPeriodService.GetStudentsPaymentPeriodsAsync(studentId);
-    return View("StudentPayment", payments);*@
-
+﻿@model List<PaymentPeriod>
 @{ 
-    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model List<PaymentPeriod>
 
 <div class="payments_list">
     @foreach(var period in Model)
     {
+    long debt = period.MustTotal;
     <div class="payment_detail">
-        <p class="period_title">От @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentStart, false) до @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentEnd, false)</p>
+        <p class="period_title">Период оплаты от @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentStart, false) до @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentEnd, false)</p>
         <p>Внесено:</p>
+        @if(period.Payments.Count != 0){
         <ul class="period_payments_list">
             @foreach (var payment in period.Payments)
             {
+            debt -= payment.PaymentAmount;
              <li>
                  <span>@NovoePokolenie.Helpers.StHel.GetFormatedDate(payment.PaymentCreated, false) - @payment.PaymentAmount с.</span>
              </li>
             }
         </ul>
+        }
+        @if(debt > 0){
+            <p class="text-debt">Долг: @debt c.</p>
+        }
+        else{
+            <p class="text-done">Оплачено</p>
+        }
     </div>
     }
-    @*<ul class="period_list">
-        @foreach (var period in Model)
-        {
-        <li>
-            <p class="period_name">Период от @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentStart, false) до @NovoePokolenie.Helpers.StHel.GetFormatedDate(period.PaymentEnd, false)</p>
-            <p>Внесено:</p>
-            <ul class="payment_list">
-                @foreach (var payment in period.Payments)
-                {
-                <li>
-                    <p class="list_item">
-                        <span class="icon"><i class="fas fa-circle"></i></span> <span>@NovoePokolenie.Helpers.StHel.GetFormatedDate(payment.PaymentCreated, false) - @payment.PaymentAmount сом</span>
-                    </p>
-                </li>
-                }
-            </ul>
-        </li>
-        }
-    </ul>*@
 </div>

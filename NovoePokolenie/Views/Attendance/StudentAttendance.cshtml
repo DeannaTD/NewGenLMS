@@ -21,8 +21,6 @@
         var model_months = year.GroupBy(x => x.Date.Month);
         foreach(var month in model_months)
         {
-            
-
             List<DateTime> skipped = new List<DateTime>();
             int maxDay = DateTime.DaysInMonth(year.Key, month.Key);
             DateTime cDate = new DateTime(year.Key, month.Key, 1);

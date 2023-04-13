@@ -729,3 +729,41 @@ table.calendar {
         height: 2rem;
     }
 }
+
+.payment_detail{
+    width: 80vw;
+    margin: 1rem auto;
+    border: 1px solid #4E5478;
+    padding-bottom: 1rem;
+}
+
+.payment_detail>*:not(:empty){
+    padding-top: 1rem;
+    padding-left: 1rem;
+}
+
+.payment_detail ul{
+    margin-left: 2rem;
+}
+
+.period_title{
+    background-color: #4E5478;
+    color: #F4E0BE;
+    padding: 1rem;
+}
+
+.text-debt{
+    font-weight: 700;
+    color: #C34A4A;
+}
+
+.text-done {
+    font-weight: 700;
+    color: #2B8C8B;
+}
+
+@media screen and (max-width: 900px){
+    .period_detail{
+        width: 90vw;
+    }
+}
