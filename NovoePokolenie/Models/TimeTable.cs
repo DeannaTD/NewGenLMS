@@ -12,8 +12,6 @@ namespace NovoePokolenie.Models
         public DayOfWeek Day2 { get; set; }
         public string TimeName { get; set; }
 
-        //TODO: какая тут должна быть связь?
-        
         public virtual ICollection<Group> Groups { get; set; }
     }
 }
