@@ -54,7 +54,6 @@ namespace NovoePokolenie.Controllers
 
         public async Task<IActionResult> GroupAttendanceNew(int groupId, DateTime date, bool monthly = false, bool partial = false)
         {
-            //todo - manager monthly issue
             List<NPUser> students = await _studentService.GetStudentsAndAttendances(groupId);
             //ID, NAME, USERNAME, CURRENT PROJECT ID
             List<MentorViewModel> model = new List<MentorViewModel>();

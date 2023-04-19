@@ -767,3 +767,11 @@ table.calendar {
         width: 90vw;
     }
 }
+
+.text-okay{
+    color: #2B8C8B;
+}
+
+.text-error {
+    color: #C34A4A;
+}
