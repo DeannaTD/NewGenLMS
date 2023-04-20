@@ -140,6 +140,7 @@ namespace NovoePokolenie.Services
 
         public async Task<Microsoft.AspNetCore.Identity.SignInResult> SignPassword(LoginViewModel model)
         {
+            //todo: Add remember me
             return await _signInManager.PasswordSignInAsync(model.Login, model.Password, true, false);
         }
 

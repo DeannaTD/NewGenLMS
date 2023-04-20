@@ -222,7 +222,7 @@
         attendance = (attendance + 1) % 3; //get next attendance if there is 3 attendance statuses
         $(element).siblings("input[name='AttendanceState']").val(attendance);
         $(element).attr('data-value', attendance);
-        $(element).siblings("input[type='submit']")[0].click();
+        $(element).siblings("input[type='submit']").click();
     }
 
     function AttendanceOnCreate(element) {
@@ -230,6 +230,6 @@
         attendance = (attendance + 1) % 3; //get next attendance if there is 3 attendance statuses
         $(element).siblings("input[name='AttendanceState']").val(attendance);
         $(element).attr('data-value', attendance);
-        $(element).siblings("input[type='submit']")[0].click();
+        $(element).siblings("input[type='submit']").click();
     }
 </script>

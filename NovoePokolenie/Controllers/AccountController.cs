@@ -29,6 +29,20 @@ namespace NovoePokolenie.Controllers
             _webHost = webHost;
         }
 
+        //todo: удалить
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        //todo: удалить, обхединено со всеми настройками
+        [HttpGet]
+        public IActionResult SettingsPassword()
+        {
+            return View();
+        }
+
+        //todo: что это
         [HttpPost]
         public async Task<IActionResult> ResetPassword(string NewPassword, string CurrentPassword, string CheckPassword)
         {
@@ -91,11 +105,13 @@ namespace NovoePokolenie.Controllers
             return View(new StudentRegistrationViewModel() { GroupId = groupId });
         }
 
+        //todo: что это
         public async Task RegisterUsers()
         {
             await _service.RegisterUser();
         }
 
+        //todo: что это
         [HttpPost]
         public async Task<IActionResult> RegisterStudent(StudentRegistrationViewModel model)
         {
@@ -115,6 +131,7 @@ namespace NovoePokolenie.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        //todo: что это
         [HttpPost]
         public async Task<IActionResult> RegisterStudentTrial(StudentCardViewModel model, string trialId)
         {
@@ -160,6 +177,7 @@ namespace NovoePokolenie.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            //todo: куда делся view MainPage?
             if (User.Identity.IsAuthenticated) return View("_Index");
             return View();
         }
@@ -206,6 +224,7 @@ namespace NovoePokolenie.Controllers
         #region Settings
 
 
+        //TODO: Other settings to User
         [HttpPost]
         public async Task<IActionResult> Settings(UserSettingsViewModel model)
         {
@@ -236,6 +255,7 @@ namespace NovoePokolenie.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        //TODO: account testing method
         public async Task<IActionResult> Staff()
         {
             List<NPUser> staff = (await _service.GetAllUsersInRole("Mentor")).ToList();

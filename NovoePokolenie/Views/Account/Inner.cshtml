@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+@model List<NPUser>
+@inject Microsoft.AspNetCore.Identity.UserManager<NPUser> userManager
+<div class="container">
+    <table class="table">
+        <tr>
+            <th>Имя</th>
+            <th>Логин</th>
+            <th>Роль</th>
+        </tr>
+        @foreach (var emp in Model)
+        {
+            <tr>
+                <td>@(emp.FirstName + " " + emp.Lastname)</td>
+                <td>@emp.UserName</td>
+                <td>@((await userManager.GetRolesAsync(emp))[0])</td>
+            </tr>
+        }
+    </table>
+    <a asp-action="Register" asp-controller="Account" class="add_button">Создать</a>
+</div>

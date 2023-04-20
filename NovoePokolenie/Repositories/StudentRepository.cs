@@ -40,6 +40,7 @@ namespace NovoePokolenie.Repositories
                             .Include(s => s.Attendances)
                             .ToListAsync();
         }
+        //TODO: плохо работает
         public async Task<List<NPUser>> GetCollectionWithPayments()
         {
             return await _dbSet

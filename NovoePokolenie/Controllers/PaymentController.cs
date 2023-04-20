@@ -72,6 +72,7 @@ namespace NovoePokolenie.Controllers
 
         public async Task<IActionResult> StudentPaymentCard(string studentId)
         {
+            //TODO: оптимизировать получение пользователя
             List<NPUser> students = await _paymentPeriodService.GetStudentsWithPaymentsAsync();
             NPUser student = students.Find(x => x.Id == studentId);
             student.PaymentPeriods = student.PaymentPeriods.OrderBy(x => x.PaymentStart).ToList();
@@ -295,3 +296,6 @@ namespace NovoePokolenie.Controllers
         }
     }
 }
+
+
+//TODO: нельзя сохранять периоды с одним и тем же периодом

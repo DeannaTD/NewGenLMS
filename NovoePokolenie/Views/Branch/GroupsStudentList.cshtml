@@ -1,0 +1,19 @@
+﻿@model NovoePokolenie.ViewModels.BranchViewModel
+
+<ul>
+    @foreach (var group in Model.Groups)
+    {
+        <li>
+            <a href="@Url.Action("GroupStudents", "Student", new { groupId = group.Id })"
+               data-ajax="true"
+               data-ajax-mode="replace"
+               data-ajax-update="#students">
+                @NovoePokolenie.Helpers.StHel.TimeTableToString(group.TimeTable)
+            </a>
+        </li>
+    }
+</ul>
+
+<div id="students">
+
+</div>
