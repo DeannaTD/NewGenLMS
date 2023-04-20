@@ -8,6 +8,15 @@
 @{
     Layout = ViewBag.useLayout ? "~/Views/Shared/_Layout.cshtml" : null;
     var groups = await _groupService.GetGroupsAsync();
+
+    List<SelectListItem> groupListItems = new List<SelectListItem>();
+    foreach(Group group in groups)
+    {
+        string text = (await _branchService.GetBranchByIdAsync(group.BranchId)).Name + " " + NovoePokolenie.Helpers.StHel.TimeTableToShortString(group.TimeTable);
+        text = text.Replace("ТЕСТ", "*");
+        groupListItems.Add(new SelectListItem(text, group.Id.ToString()));
+    }
+
     int i = 0;
 }
 <style>
@@ -30,7 +39,8 @@
             <th>Имя</th>
             <th>Логин</th>
             <th>Номер</th>
-            <th>Из архива</th>
+            <th>Группа</th>
+            <th>Оплата</th>
         </tr>
         @{
             if (Model.Count == 0)
@@ -71,23 +81,22 @@
                     <td>@user.UserName</td>
                     <td>@user.PhoneNumber</td>
                     <td>
-                        @{
-                            if (user.StatusId == (int)ActivityStatus.Archive)
+                        <form asp-action="UnblockUser" asp-controller="Student" data-ajax="true">
+                            <input type="hidden" name="studentId" value="@user.Id" />
+                            @if(user.StatusId == (int)ActivityStatus.Active)
                             {
-                                <form asp-action="UnblockUser" asp-controller="Student" data-ajax="true" data-ajax-success="Okay(@user.Id)">
-                                    <input type="hidden" name="studentId" value="@user.Id" />
-                                    <select name="groupId" class="form_control" data-name="@(user.FirstName+" "+user.Lastname)">
-                                        @foreach (var group in groups)
-                                        {
-                                            <option value="@group.Id">
-                                                @((await _branchService.GetBranchByIdAsync(group.BranchId)).Name)
-                                                @NovoePokolenie.Helpers.StHel.TimeTableToString(group.TimeTable)
-                                            </option>
-                                        }
-                                    </select>
-                                </form>
+                                groupListItems.First(option => option.Selected).Selected = false;
+                                groupListItems.First(option => option.Value == user.GroupId.ToString()).Selected = true;
                             }
-                        }
+                            else
+                            {
+                                groupListItems[0].Selected = true;
+                            }
+                            <select name="groupId" asp-items="@groupListItems" class="form_control" data-name="@(user.FirstName+" "+user.Lastname)"></select>
+                        </form>
+                    </td>
+                    <td>
+                        @user.PaymentCharge
                     </td>
                 </tr>
             }
@@ -97,76 +106,11 @@
 <div id="student_card"></div>
 
 <script>
-    $('.close_icon').on('click', () => {
-        $('.add_period').css('display', 'none');
-        $('.add_period').children().not(':first-child').remove();
-    });
-
-    function Okay(st_data) {
-        let st = "[data-id = " + st_data + "]";
-        $(st).remove();
-    }
-
     $('select').on('change', (event) => {
         let submit_button = $(event.currentTarget).parent();
-        let message = 'Разархивировать пользователя ' + $(event.currentTarget).attr('data-name') + "?";
+        let message = 'Переместить пользователя ' + $(event.currentTarget).attr('data-name') + "?";
         if (confirm(message)) {
             $(submit_button).submit();
-            $(event.currentTarget).parents('tr').remove();
         }
     });
 </script>
-
-
-
-@*
-    Blocked users page
-
-    @{
-    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
-}
-
-@model List<NPUser>
-@inject NovoePokolenie.Services.GroupService _groupService
-@inject NovoePokolenie.Services.BranchService _branchService
-
-@{
-    var groups = await _groupService.GetGroupsAsync();
-    Model.Sort((x,y) => String.Compare(x.FirstName, y.FirstName));
-}
-<div class="users_container">
-    <table class="table table_bordered">
-        @foreach (var student in Model)
-        {
-            <tr data-id="@student.Id">
-                <td>
-                    @student.FirstName @student.Lastname
-                </td>
-                <td>
-                    <form asp-action="UnblockUser" asp-controller="Student"
-                          data-ajax="true"
-                          data-ajax-success="Okay(@student.Id)">
-                        <input type="hidden" name="studentId" value="@student.Id" />
-                        <select name="groupId" class="form_control">
-                            @foreach (var group in groups)
-                            {
-                                <option value="@group.Id">
-                                    @((await _branchService.GetBranchByIdAsync(group.BranchId)).Name)
-                                    @NovoePokolenie.Helpers.StHel.TimeTableToString(group.TimeTable)
-                                </option>
-                            }
-                        </select>
-                        <input type="submit" class="button_fit" value="Разблокировать"/>
-                    </form>
-                </td>
-            </tr>
-        }
-    </table>
-</div>
-<script>
-    function Okay(st_data) {
-        let st = "[data-id = " + st_data + "]";
-        $(st).remove();
-    }
-</script>
-*@

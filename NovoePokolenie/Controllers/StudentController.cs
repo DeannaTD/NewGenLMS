@@ -59,8 +59,9 @@ namespace NovoePokolenie.Controllers
         [HttpPost]
         public async Task<IActionResult> UnblockUser(string studentId, int groupId)
         {
-            await _studentService.ChageStudentStatus(studentId, ActivityStatus.Active);
             NPUser student = await _studentService.GetStudentById(studentId);
+            if(student.StatusId != (int)ActivityStatus.Active)
+                await _studentService.ChageStudentStatus(studentId, ActivityStatus.Active);
             student.GroupId = groupId;
             await _userManager.UpdateAsync(student);
             return Ok();
