@@ -86,7 +86,6 @@ namespace NovoePokolenie.Controllers
             model.Level = level.Name;
             model.LevelId = level.Id;
             model.Group = await _studentService.GetStudentGroupNameAsync(student.GroupId ?? 0);
-            //TODO: хз че я тут натворила
             model.MentorId = await _studentService.GetGroupMentorIdAsync(student.GroupId ?? 0);
             ViewBag.UserName = student.UserName;
             return PartialView(model);

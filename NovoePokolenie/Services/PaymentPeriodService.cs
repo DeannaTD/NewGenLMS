@@ -27,11 +27,9 @@ namespace NovoePokolenie.Services
             await _unitOfWork.Save();
         }
 
-        //TODO: косяк с датой последней оплаты
         public async Task<List<PaymentPeriod>> GetStudentsPaymentPeriodsAsync(string studentId)
         {
             var payments = await _unitOfWork.PaymentPeriods.GetCollectionAsync();
-            //TODO: ты отупела, тут что-то не так 
             var lastPaymentPeriod = payments.Where(payment => payment.UserId == studentId).ToList();
             lastPaymentPeriod.Sort((p1, p2) => p1.PaymentEnd > p2.PaymentEnd ? 1 : 0);
             PaymentPeriod period = lastPaymentPeriod.LastOrDefault();
@@ -46,7 +44,6 @@ namespace NovoePokolenie.Services
             for (int i = 0; i < students.Count; i++)
             {
                 students[i].PaymentPeriods = payments.Where(period => period.UserId == students[i].Id).ToList();
-                //TODO: а группы вообще в оплате нужны?
                 students[i].Group = await _unitOfWork.Groups.GetByIdAsync(students[i].GroupId);
             }
             return students;

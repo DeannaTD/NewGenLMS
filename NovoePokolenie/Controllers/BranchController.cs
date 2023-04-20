@@ -35,6 +35,7 @@ namespace NovoePokolenie.Controllers
             return PartialView("GroupsAttendanceList", new BranchViewModel() { Id = Branch.Id, BranchName = Branch.Name, Groups = groups });
         }
 
+        //Is not used anymore
         public async Task<IActionResult> MentorLessonDetail(int BranchId)
         {
             Branch Branch = await _branchService.GetBranchByIdAsync(BranchId);
