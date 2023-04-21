@@ -51,23 +51,6 @@ namespace NovoePokolenie.Controllers
                 }
             }
             return View("Index", students);
-            
-            /*
-             * comparators:
-             *  debt
-             *  firstname
-             *  lastname
-             *  date
-             *  
-             *  filters:
-             *  status
-             *  branch
-             *  
-             *  search:
-             *  name
-             *  surname
-             *  number
-             */
         }
 
         public async Task<IActionResult> StudentPaymentCard(string studentId)

@@ -43,7 +43,7 @@
         </div>
 
 
-        @if (User.IsInRole("Manager"))
+        @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
         {
             <form asp-action="AllUserSearch" asp-controller="Account" method="post"
                   data-ajax="true" data-ajax-mode="replace"
@@ -92,7 +92,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a asp-action="PaymentMenu" asp-controller="Manager" class="icon-link">
+                    <a asp-action="Index" asp-controller="Payment" class="icon-link">
                         <i class="fas fa-credit-card"></i>
                         <span class="hidden-span"><span>Оплата</span></span>
                     </a>

@@ -54,7 +54,7 @@ namespace NovoePokolenie.Controllers
             var branches = await _branchService.GetBranchesAsync();
             return View(branches);
         }
-        public async Task<IActionResult> PaymentMenu()
+        public IActionResult PaymentMenu()
         {
             if (!User.IsInRole("Manager"))
             {
@@ -62,7 +62,7 @@ namespace NovoePokolenie.Controllers
             }
             return RedirectToAction("Index", "Payment");
         }
-        public async Task<IActionResult> UsersMenu()
+        public IActionResult UsersMenu()
         {
             return View();
         }
