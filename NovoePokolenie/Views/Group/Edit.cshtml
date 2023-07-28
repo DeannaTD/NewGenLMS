@@ -6,9 +6,14 @@
     data-ajax="true"
           class="flex flex-acenter flex-evenly centered-container ajax-form">
         <div asp-validation-summary="All"></div>
-        <a href="@Url.Action("RegisterStudent", "Account", new {groupId = ViewBag.Id})" class="font-icon self-bottom">
-            <i class="fas fa-plus"></i>
-        </a>
+        <div class="flex self-bottom">
+            <a title="Добавить ученика" href="@Url.Action("RegisterStudent", "Account", new {groupId = ViewBag.Id})" class="font-icon self-bottom">
+                <i class="fas fa-plus"></i>
+            </a>
+            <a title="Удалить группу" href="@Url.Action("Delete", "Group", new {groupId = ViewBag.Id})" class="font-icon self-bottom font-icon-red">
+                <i class="fas fa-minus"></i>
+            </a>
+        </div>
         <div>
             <label asp-for="Day1"></label><br />
             <select asp-for="Day1" class="form-control" asp-items="@NovoePokolenie.Helpers.StHel.DaysOfWeek()">

@@ -18,7 +18,10 @@
     @foreach (Branch branch in Model)
     {
         <div class="branchBlock">
-            <div class="branchBlock-header">@branch.Name</div>
+            <div class="branchBlock-header">
+                @branch.Name
+                <a class="header-icon-link" href="@Url.Action("Create", "Group", new { branchId = branch.Id })">+</a>
+            </div>
             @{
                 List<Group> groups = await _groupService.GetGroupsByBranchIdAsync(branch.Id);
                 groups.Sort((g1, g2) => StHel.CompareTimeTables(g1.TimeTable, g2.TimeTable));

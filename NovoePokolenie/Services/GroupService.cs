@@ -60,6 +60,7 @@ namespace NovoePokolenie.Services
             TimeTable timeTable = await _unitOfWork.TimeTables.GetByIdAsync(group.TimeTableId);
             timeTable.Day1 = model.Day1;
             timeTable.Day2 = model.Day2;
+            timeTable.TimeName = model.Time;
             group.MentorId = model.MentorId;
             await _unitOfWork.Save();
         }

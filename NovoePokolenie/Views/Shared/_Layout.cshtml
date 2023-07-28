@@ -68,6 +68,12 @@
     <aside class="navigation">
         <nav>
             <ul class="nav-list flex-list">
+                <li class="nav-item">
+                    <a asp-action="Index" asp-controller="Home" class="icon-link">
+                        <i class="fas fa-home"></i>
+                        <span class="hidden-span"><span>Главная</span></span>
+                    </a>
+                </li>
             @if(User.IsInRole("Mentor"))
             {
                  <li class="nav-item">
@@ -98,9 +104,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a asp-action="NotActiveUsers" asp-controller="Student" class="icon-link">
-                        <i class="fas fa-users"></i>
-                        <span class="hidden-span"><span>Пользователи</span></span>
+                    <a asp-action="BlockList" asp-controller="Student" class="icon-link">
+                        <i class="fas fa-user-lock"></i>
+                        <span class="hidden-span"><span>Блок</span></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-action="Archive" asp-controller="Student" class="icon-link">
+                        <i class="fas fa-user-clock"></i>
+                        <span class="hidden-span"><span>Архив</span></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-action="Staff" asp-controller="Account" class="icon-link">
+                        <i class="far fa-id-badge"></i>
+                        <span class="hidden-span"><span>Персонал</span></span>
                     </a>
                 </li>
                 //<li class="nav-item">

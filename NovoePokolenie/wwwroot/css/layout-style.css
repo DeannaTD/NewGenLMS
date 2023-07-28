@@ -185,6 +185,13 @@ header {
         height: 4rem;
     }
 
+    .branchBlock-header a.header-icon-link{
+        color: #F4E0BE;
+        text-decoration: none;
+        margin-left: .2rem;
+        font-size: 1.5rem;
+    }
+
     .branchContainer .branchBlock-content {
         display: block;
         color: #4E5478;
@@ -534,6 +541,11 @@ form.grid-2 {
     cursor: pointer;
 }
 
+.font-icon-red {
+    border: 1px solid #C34A4A;
+    background: #C34A4A;
+}
+
 .self-bottom{
     align-self: flex-end;
 }
@@ -774,4 +786,33 @@ table.calendar {
 
 .text-error {
     color: #C34A4A;
+}
+
+.inline-button{
+    display: inline-block;
+    padding: .5rem 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button-green{
+    background-color: #2B8C8B;
+    color: #FFF;
+}
+
+.button-red{
+    background-color: #C34A4A;
+    color: #FFF;
+}
+
+.general-select {
+    padding: .5rem;
+    outline: none;
+    border: 1px solid #4E5478;
+}
+
+.menu-staff-block{
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
 }

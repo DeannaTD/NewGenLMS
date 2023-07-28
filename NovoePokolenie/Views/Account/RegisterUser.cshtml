@@ -1,7 +1,7 @@
 ﻿@model NovoePokolenie.ViewModels.StaffRegistrationViewModel
 
 <div>
-    <form method="post" asp-controller="Account" asp-action="Register">
+    <form method="post" asp-controller="Account" asp-action="Register" class="full-form">
         <div asp-validation-summary="All"></div>
         <div>
             <label asp-for="Login"></label><br />
@@ -42,7 +42,8 @@
             </select>
         </div>
         <div>
-            <input type="submit" value="Регистрация" class="btn add_button" />
+            <input type="button" value="Регистрация" id="registerFormButton" class="form-control accent-button" />
+            <input type="submit" value="Регистрация" class="hidden" id="submitForm" />
         </div>
     </form>
 </div>
@@ -51,4 +52,9 @@
     $('#role_picker').on('change', () => {
         $('.role_input').val($('#role_picker').val());
     });
+    $("#registerFormButton").on('click', event => {
+        event.preventDefault();
+        event.currentTarget.disabled = true;
+        $('#submitForm')[0].click();
+    })
 </script>

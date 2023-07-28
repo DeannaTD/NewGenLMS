@@ -61,7 +61,7 @@ namespace NovoePokolenie.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            return View("RegisterUser");
         }
 
         //todo: что это
@@ -73,7 +73,7 @@ namespace NovoePokolenie.Controllers
                 var result = await _service.Register(model);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("UsersMenu", "Manager");
+                    return RedirectToAction("Staff");
                 }
                 else
                 {
@@ -81,7 +81,7 @@ namespace NovoePokolenie.Controllers
                         ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            return RedirectToAction("UsersMenu", "Manager");
+            return RedirectToAction("Staff");
         }
 
         //todo: что это
@@ -181,6 +181,13 @@ namespace NovoePokolenie.Controllers
                     }
                     else
                     {
+                        NPUser user = await _userManager.FindByNameAsync(model.Login);
+                        bool isStudent = await _userManager.IsInRoleAsync(user, "Student");
+                        if (!user.EmailConfirmed && !isStudent)
+                        {
+                            ModelState.AddModelError("", "Ваш аккаунт заблокирован");
+                            return View(model);
+                        }
                         StreamWriter sw = new StreamWriter(Path.Combine(_webHost.WebRootPath, "img/lilog.txt"), true);
                         string udata = DateTime.UtcNow.ToString("G") + " - " + model.Login;
                         sw.WriteLine(udata);
@@ -238,14 +245,41 @@ namespace NovoePokolenie.Controllers
 
         public async Task<IActionResult> Staff()
         {
-            List<NPUser> staff = (await _service.GetAllUsersInRole("Mentor")).ToList();
-            staff.AddRange(await _service.GetAllUsersInRole("Manager"));
-            return View("Inner", staff);
+            List<StaffViewModel> staffList = new List<StaffViewModel>();
+
+            staffList.AddRange((await _service.GetAllUsersInRole("Mentor"))
+                .Select(user => new StaffViewModel(
+                    user.Id, user.FirstName, user.Lastname, user.UserName, "Mentor", !user.EmailConfirmed
+                    )).ToList());
+
+            staffList.AddRange((await _service.GetAllUsersInRole("Manager"))
+                .Select(user => new StaffViewModel(
+                    user.Id, user.FirstName, user.Lastname, user.UserName, "Manager", !user.EmailConfirmed
+                    )).ToList());
+
+            staffList.AddRange((await _service.GetAllUsersInRole("Admin"))
+                .Select(user => new StaffViewModel(
+                    user.Id, user.FirstName, user.Lastname, user.UserName, "Admin", !user.EmailConfirmed
+                    )).ToList());
+
+            return View("InnerUsers", staffList);
         }
 
+        public async Task<IActionResult> BlockStaffUser(string id)
+        {
+            await _service.SetEmailConfirm(id, false);
+            return RedirectToAction("Staff");
+        }
+
+        public async Task<IActionResult> UnblockStaffUser(string id)
+        {
+            await _service.SetEmailConfirm(id, true);
+            return RedirectToAction("Staff");
+        }
         public async Task DeleteUser(string login)
         {
-            NPUser user = await _userManager.FindByIdAsync(login);
+            //NPUser user = await _userManager.FindByIdAsync(login);
+            NPUser user = await _userManager.FindByNameAsync(login);
             await _userManager.DeleteAsync(user);
         }
 

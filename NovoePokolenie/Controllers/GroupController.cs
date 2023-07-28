@@ -67,9 +67,10 @@ namespace NovoePokolenie.Controllers
             Group group = await _groupService.GetByIdAsync(id);
             group.TimeTable = await _timeTableService.GetByIdAsync(group.TimeTableId);
             //TimeTable timeTable = await _timeTableService.GetByIdAsync(group.TimeTableId);
+            var mentors = await _accountService.GetAllUsersInRole("Mentor");
             CreateGroupViewModel model = new CreateGroupViewModel()
             {
-                Mentors = await _accountService.GetAllUsersInRole("Mentor"),
+                Mentors = mentors.Where(mentor => mentor.EmailConfirmed).ToList(),
                 BranchId = group.Id,
                 MentorId = group.MentorId,
                 Day1 = group.TimeTable.Day1,
@@ -87,7 +88,7 @@ namespace NovoePokolenie.Controllers
             await _groupService.EditGroup(Id, model);
         }
 
-        [HttpPost]
+        //[HttpPost]
         public async Task<StatusCodeResult> Delete(string groupId)
         {
             int id = 0;

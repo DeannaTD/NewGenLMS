@@ -63,17 +63,24 @@
                             }
                             else
                             {
-                                <a href="@Url.Action("Edit", "Group", new { id = user.GroupId })"
-                                   data-ajax="false"
-                                   data-ajax-mode="replace"
-                                   data-ajax-update="#student_card"
-                                   data-ajax-success="$('#studentCard').css('display','block')"
-                                   title="В группу">
-                                    @user.FirstName @user.Lastname
-                                </a>
-                                <a asp-action="StudentPaymentCard" asp-controller="Payment" asp-route-studentId="@user.Id">
-                                    <i class="fas fa-file-invoice"></i>
-                                </a>
+                                if(user.GroupId == null)
+                                {
+                                    <span>!!! @user.FirstName @user.Lastname</span>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Edit", "Group", new { id = user.GroupId })"
+                                       data-ajax="false"
+                                       data-ajax-mode="replace"
+                                       data-ajax-update="#student_card"
+                                       data-ajax-success="$('#studentCard').css('display','block')"
+                                       title="В группу">
+                                        @user.FirstName @user.Lastname
+                                    </a>
+                                    <a asp-action="StudentPaymentCard" asp-controller="Payment" asp-route-studentId="@user.Id">
+                                        <i class="fas fa-file-invoice"></i>
+                                    </a>
+                                }
                             }
                         }
 
@@ -83,7 +90,7 @@
                     <td>
                         <form asp-action="UnblockUser" asp-controller="Student" data-ajax="true">
                             <input type="hidden" name="studentId" value="@user.Id" />
-                            @if(user.StatusId == (int)ActivityStatus.Active)
+                            @if(user.StatusId == (int)ActivityStatus.Active && user.GroupId != null)
                             {
                                 groupListItems.First(option => option.Selected).Selected = false;
                                 groupListItems.First(option => option.Value == user.GroupId.ToString()).Selected = true;

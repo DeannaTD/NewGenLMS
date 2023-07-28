@@ -1,0 +1,86 @@
+﻿@using NovoePokolenie.Helpers
+@using NovoePokolenie.ViewModels
+
+@inject NovoePokolenie.Services.GroupService _groupService
+@inject NovoePokolenie.Services.BranchService _branchService
+
+@model List<StaffViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int index = 0;
+}
+
+<div>
+    <div class="menu-staff-block">
+        <select class ="switch-staff-select general-select">
+            <option value="-1">Все</option>
+            <option value="0" selected>Активные</option>
+            <option value="1">Заблокированные</option>
+        </select>
+
+        <a class="font-icon self-bottom" href="@Url.Action("Register", "Account")">
+            <i class="fas fa-plus"></i>
+        </a>
+    </div>
+    <table class="list-table">
+        <tr>
+            <th>№</th>
+            <th>Имя</th>
+            <th>Роль</th>
+            <th>Логин</th>
+            <th>Действие</th>
+        </tr>
+        @foreach(var user in Model)
+        {
+        int blocked = user.Blocked ? 0 : 1;
+        <tr data-status="@blocked" class="staff-row">
+            <td class="index-column">@(++index)</td>
+            <td>@user.FirstName @user.LastName</td>
+            <td>@RolesEnum.NormalizedToRus(user.Role)</td>
+            <td>@user.Login</td>
+            <td>
+                @if(user.Blocked)
+                {
+                    <a href="@Url.Action("UnblockStaffUser", "Account", new { id = user.Id })" class="inline-button button-green">Разблокировать</a>
+                }
+                else{
+                    <a href="@Url.Action("BlockStaffUser", "Account", new { id = user.Id })" class="inline-button button-red">Заблокировать</a>
+                }
+            </td>
+        </tr>
+        }
+    </table>
+</div>
+<script>
+    function hideStaff(status){
+        let rows = document.querySelectorAll('tr.staff-row');
+        for (let i = 0; i < rows.length; i++) {
+            let stat = rows[i].getAttribute('data-status');
+            $(rows[i]).removeClass('hidden');
+            if (stat == status) {
+                rows[i].classList.add('hidden');
+            }
+        }
+        let inds = document.querySelectorAll('td.index-column');
+        let index = 0;
+        for (let i = 0; i < inds.length; i++) {
+            if (!inds[i].parentElement.classList.contains('hidden')) {
+                inds[i].innerHTML = ++index;
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        hideStaff(0);
+        $('.switch-staff-select').on("change", (event)=>{
+            console.log("fire");
+            let statusToHide = event.currentTarget.value;
+            console.log(statusToHide);
+            hideStaff(statusToHide);
+        });
+
+        let margin = $('.list-table').css('margin-left');
+        $('.menu-staff-block').css('margin-left', margin);
+    });
+</script>

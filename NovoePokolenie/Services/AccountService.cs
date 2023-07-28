@@ -171,6 +171,15 @@ namespace NovoePokolenie.Services
             _unitOfWork.Leads.Delete(lead);
             await _unitOfWork.Save();
         }
+
+        public async Task SetEmailConfirm(string id, bool status)
+        {
+            NPUser user = await _userManager.FindByIdAsync(id);
+            if (user == null) return;
+            user.EmailConfirmed = status;
+            await _unitOfWork.Save();
+        }
+
         public async Task<IdentityResult> InitializeRoles()
         {
             var result = await _roleManager.CreateAsync(new IdentityRole("dev"));

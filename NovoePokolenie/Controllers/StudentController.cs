@@ -40,7 +40,14 @@ namespace NovoePokolenie.Controllers
         {
             var archivedStudents = await _studentService.GetArchivedAsync();
             archivedStudents.Sort((x, y) => x.Lastname.CompareTo(y.Lastname));
-            return View("ArchiveList", archivedStudents);
+            return View("NotActiveUsers", archivedStudents);
+        }
+
+        public async Task<IActionResult> BlockList()
+        {
+            List<NPUser> notActiveusers = await _studentService.GetStudentsByStatus(ActivityStatus.Blocked);
+            notActiveusers.Sort((x, y) => x.Lastname.CompareTo(y.Lastname));
+            return View("NotActiveUsers", notActiveusers);
         }
 
         public async Task<IActionResult> NotActiveUsers()

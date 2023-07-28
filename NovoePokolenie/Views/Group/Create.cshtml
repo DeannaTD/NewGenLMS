@@ -1,7 +1,7 @@
 ﻿@model NovoePokolenie.ViewModels.CreateGroupViewModel
 
 <div>
-    <form method="post" asp-controller="Group" asp-action="Create">
+    <form method="post" asp-controller="Group" asp-action="Create" class="full-form">
         <div asp-validation-summary="All"></div>
         <div>
             <label asp-for="Day1"></label><br />
@@ -19,7 +19,7 @@
         </div>
         <div>
             <label asp-for="Time"></label><br />
-            <input asp-for="Time" class="form-control" />
+            <input asp-for="Time" class="form-control" placeholder="00:00-00:00" />
             <span asp-validation-for="Time"></span>
         </div>
         <div>
@@ -35,7 +35,7 @@
             <input asp-for="BranchId" value="@Model.BranchId" />
         </div>
         <div>
-            <input type="submit" value="Создать" class="btn btn-outline-dark" />
+            <input type="submit" value="Создать" class="form-control accent-button" />
         </div>
     </form>
 </div>
