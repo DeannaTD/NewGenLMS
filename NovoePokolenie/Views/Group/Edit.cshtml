@@ -10,7 +10,10 @@
             <a title="Добавить ученика" href="@Url.Action("RegisterStudent", "Account", new {groupId = ViewBag.Id})" class="font-icon self-bottom">
                 <i class="fas fa-plus"></i>
             </a>
-            <a title="Удалить группу" href="@Url.Action("Delete", "Group", new {groupId = ViewBag.Id})" class="font-icon self-bottom font-icon-red">
+            <a title="Удалить группу" href="@Url.Action("Delete", "Group", new {groupId = ViewBag.Id})" class="font-icon self-bottom font-icon-red"
+                data-ajax="true" data-ajax-confirm="Удалить группу?" 
+                data-ajax-success="groupDeleted(true)"
+                data-ajax-failure="groupDeleted(false)">
                 <i class="fas fa-minus"></i>
             </a>
         </div>
@@ -68,4 +71,13 @@ data-ajax-success="endWait()">
     $(".ajax-form input, .ajax-form select").on('change', () => {
         $(".ajax-form").submit();
     })
+
+    function groupDeleted(result){
+        if(!result){
+            alert("Невозможно удалить группу");
+            return;
+        }
+        alert("Группа удалена");
+        window.location.href="@Url.Action("Index", "Branch")";
+    }
 </script>
