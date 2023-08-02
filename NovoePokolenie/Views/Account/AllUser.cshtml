@@ -92,7 +92,9 @@
                             <input type="hidden" name="studentId" value="@user.Id" />
                             @if(user.StatusId == (int)ActivityStatus.Active && user.GroupId != null)
                             {
-                                groupListItems.First(option => option.Selected).Selected = false;
+                                //var selected = groupListItems.First(option => option.Selected);
+                                //if(selected != null)
+                                //    groupListItems.First(option => option.Selected).Selected = false;
                                 groupListItems.First(option => option.Value == user.GroupId.ToString()).Selected = true;
                             }
                             else
