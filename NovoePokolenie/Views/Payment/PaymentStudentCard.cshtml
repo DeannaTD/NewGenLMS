@@ -158,12 +158,30 @@
         DeletePeriod(event);
     });
 
+    function lastDayOfMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
+    }
+
     $("#add-period").on('click', (event) => {
         //showing the ANP row - the last in the table with correct index
         $('#add-period-row').removeClass('d-none');
-
+        
         //disabling the button
         $('#add-period').prop('disabled', true);
+
+        let tt = $('#payments-table tr:not(#add-period-row)');
+        
+        if(tt.length == 1) return;
+        
+        tt = $(tt).last();
+        let date1 = $(tt).find('input[type=date]').last().val();
+        $('#start-date-input').val(date1);
+
+        let date2 = new Date(Date.parse(date1));
+        date2.setMonth(date2.getMonth() + 1);
+        date2 = date2.toISOString().split('T')[0];
+        $('#end-date-input').val(date2);
+
     });
 
     $('#submit-button-form').on('click', (event) =>{
