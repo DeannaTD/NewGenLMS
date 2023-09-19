@@ -48,7 +48,7 @@
 </table>
 <button id="add-period" class="center-block form-control form-button button_green">Добавить новый период</button>
 <div class="flex gap-2 flex-jcenter margin-top">
-<div class="page-small adapt-small">
+<div class="page-small adapt-small payment-table-block">
 <table class="list-table table table_bordered_up w-100" id="payments-table">
     <tr>
         <th>Период</th>
@@ -72,13 +72,24 @@
             @period.MustTotal
         </td>
         <td class="w-10 text-center debt-td" id="@period.Id">
-            @GetPeriodDebt(period)
+            @{
+                long debt = GetPeriodDebt(period);
+                string debtDisplay = debt == 0 ? "Оплачено" : debt.ToString();
+            }
+            @debtDisplay
         </td>
         <td class="w-30 date-cell">
             @{
-                var date = GetLastPaidDate(period);
-                if(date != DateTime.MinValue) @date.ToString(@"dd/MM/yyyy");
-             }
+                 //var date = GetLastPaidDate(period);
+                 foreach(var payment in period.Payments)
+                 {
+                     var date = payment.PaymentCreated;
+                     if(date != DateTime.MinValue) 
+                         @date.ToString(@"dd/MM/yyyy");
+                     <span>-</span> @payment.PaymentAmount 
+                     <br />
+                 }
+            }
         </td>
         <td class="w-10 text-center">
             <a class="invoice" title="Чеки"

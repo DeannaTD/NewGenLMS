@@ -32,7 +32,7 @@ namespace NovoePokolenie.Controllers
         {
             CreateGroupViewModel model = new CreateGroupViewModel()
             {
-                Mentors = await _accountService.GetAllUsersInRole("Mentor"),
+                Mentors = (await _accountService.GetAllUsersInRole("Mentor")).OrderBy(x => x.FirstName).ToList(),
                 BranchId = branchId,
                 MentorId = "0"
             };

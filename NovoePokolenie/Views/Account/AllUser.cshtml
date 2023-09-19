@@ -65,7 +65,7 @@
                             {
                                 if(user.GroupId == null)
                                 {
-                                    <span>!!! @user.FirstName @user.Lastname</span>
+                                    <span>@user.FirstName @user.Lastname</span>
                                 }
                                 else
                                 {
@@ -92,9 +92,6 @@
                             <input type="hidden" name="studentId" value="@user.Id" />
                             @if(user.StatusId == (int)ActivityStatus.Active && user.GroupId != null)
                             {
-                                //var selected = groupListItems.First(option => option.Selected);
-                                //if(selected != null)
-                                //    groupListItems.First(option => option.Selected).Selected = false;
                                 groupListItems.First(option => option.Value == user.GroupId.ToString()).Selected = true;
                             }
                             else

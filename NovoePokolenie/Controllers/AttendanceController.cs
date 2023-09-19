@@ -136,10 +136,10 @@ namespace NovoePokolenie.Controllers
         public async Task<IActionResult> StudentAttendance(string studentId)
         {
             List<Attendance> model = await _attendanceService.GetAttendances(studentId);
-            if(model.GroupBy(a => a.Date).Count() != model.Count)
-            {
-                return new NoContentResult();
-            }
+            //if(model.GroupBy(a => a.Date).Count() != model.Count)
+            //{
+                //return new NoContentResult();
+            //}
             //for (int i = 0; i < model.Count; i++)
             //{
             //    var atts = model.FindAll(attendance => attendance.Date == model[i].Date);

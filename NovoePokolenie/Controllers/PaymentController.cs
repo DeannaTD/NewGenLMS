@@ -57,7 +57,7 @@ namespace NovoePokolenie.Controllers
         {
             List<NPUser> students = await _paymentPeriodService.GetStudentsWithPaymentsAsync();
             NPUser student = students.Find(x => x.Id == studentId);
-            student.PaymentPeriods = student.PaymentPeriods.OrderBy(x => x.PaymentStart).ToList();
+            student.PaymentPeriods = student.PaymentPeriods.OrderBy(x => x.PaymentStart).Reverse().ToList();
             return View("PaymentStudentCard", student);
         }
 
@@ -275,6 +275,35 @@ namespace NovoePokolenie.Controllers
         public async Task DeletePayment(string paymentId)
         {
             await _paymentService.DeletePaymentAsync(paymentId);
+        }
+
+        public async Task<IActionResult> GetNewPeriodUsers(int year, int month, int day)
+        {
+            DateTime date = new DateTime(year, month, day);
+
+            List<NPUser> students = await _studentService.GetStudents();
+            List<NPUser> renew = new List<NPUser>();
+            foreach(NPUser student in students)
+            {
+                List<PaymentPeriod> payments = await _paymentPeriodService.GetStudentsPaymentPeriodsAsync(student.Id);
+                PaymentPeriod p1 = payments.Find(period => period.PaymentEnd.ToShortDateString() == date.ToShortDateString());
+                PaymentPeriod p2 = payments.Find(period => period.PaymentStart.ToShortDateString() == date.ToShortDateString());
+                if(p1 != null && p2 == null)
+                {
+                    renew.Add(student);
+                }
+            }
+
+            if(renew.Count > 0)
+            {
+                //DateTime dateEnd = new
+                foreach(NPUser student in students)
+                {
+                    //string id = await CreatePaymentPeriod2(student.Id, student.PaymentCharge, date, date.)
+                }
+
+            }
+            return new JsonResult(renew);
         }
     }
 }

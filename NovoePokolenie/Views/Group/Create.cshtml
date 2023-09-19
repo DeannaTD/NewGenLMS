@@ -26,7 +26,10 @@
             <select asp-for="MentorId" class="form-control">
                 @foreach (var mentor in Model.Mentors)
                 {
-                    <option value="@mentor.Id">@(mentor.FirstName + " " + mentor.Lastname)</option>
+                    if (mentor.EmailConfirmed)
+                    {
+                        <option value="@mentor.Id">@(mentor.FirstName + " " + mentor.Lastname)</option>
+                    }
                 }
             </select>
             <span asp-validation-for="MentorId" id="password_span"></span>

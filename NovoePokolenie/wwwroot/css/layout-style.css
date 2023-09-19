@@ -714,9 +714,10 @@ a.text-error {
     color: #FFF;
 }
 
-.attendanceCalendarBlock{
+.attendanceCalendarBlock {
     display: flex;
     flex-wrap: wrap;
+    align-items: flex-start;
 }
 
 table.calendar {
@@ -815,4 +816,13 @@ table.calendar {
     display: flex;
     gap: 2rem;
     margin-top: 2rem;
+}
+
+
+.payment-table-block td form {
+    width: fit-content;
+}
+
+.payment-table-block .list-table {
+    width: fit-content !important;
 }

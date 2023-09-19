@@ -442,5 +442,13 @@ namespace NovoePokolenie.Controllers
             //}
             return View("Duplicates", all);
         }
+
+
+        public async Task<JsonResult> StudentsInGroup(int groupId)
+        {
+            var students = await _service.GetAllUsersInRole("Student"); 
+            var result = students.Where(s => s.GroupId == groupId).ToList();
+            return Json(result);
+        }
     }
 }

@@ -10,7 +10,7 @@
     List<DateTime> absent = Model.Where(x => x.AttendanceStatus == (int)AttendanceStatus.Absent)
                                  .Select(x => x.Date)
                                  .ToList();
-    var model_years = Model.OrderBy(x => x.Date)
+    var model_years = Model.OrderByDescending(x => x.Date)
                            .GroupBy(x => x.Date.Year);
     string className = "";
 }

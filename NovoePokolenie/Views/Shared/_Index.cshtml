@@ -4,6 +4,12 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     NPUser user = await _userManager.GetUserAsync(User);
+    if (User.IsInRole("Mentor"))
+    {
+        <script>
+            window.location.href = "@Url.Action("AttendanceMenu", "Attendance")";
+        </script>
+    }
 }
 <div id="users">
     <div>
