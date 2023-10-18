@@ -32,9 +32,10 @@ namespace NovoePokolenie
                opts =>
                {
                    opts.Password.RequireDigit = false;
-                   opts.Password.RequiredLength = 5;
+                   opts.Password.RequiredLength = 3;
                    opts.Password.RequireNonAlphanumeric = false;
                    opts.Password.RequireUppercase = false;
+                   
                }).AddEntityFrameworkStores<NewGenContext>()
                  .AddTokenProvider<DataProtectorTokenProvider<NPUser>>(TokenOptions.DefaultProvider);
 
@@ -42,7 +43,7 @@ namespace NovoePokolenie
 
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(5);
+                options.IdleTimeout = TimeSpan.FromMinutes(3600);
                 options.Cookie.HttpOnly= true;
                 options.Cookie.IsEssential = true;
             });
