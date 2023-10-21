@@ -7,10 +7,10 @@
     {
         long totalSum = 0;
         long paid = 0;
-        foreach(PaymentPeriod period in student.PaymentPeriods)
+        foreach (PaymentPeriod period in student.PaymentPeriods)
         {
             totalSum += period.MustTotal;
-            foreach(Payment payment in period.Payments)
+            foreach (Payment payment in period.Payments)
             {
                 paid += payment.PaymentAmount;
             }
@@ -40,120 +40,147 @@
         <th>Долг</th>
     </tr>
     <tr>
-         <td>@Model.Lastname @Model.FirstName</td>
-         <td>@Model.PhoneNumber</td>
-         <td>@Model.PaymentCharge</td>
-         <td id="total-debt-td">@GetDebt(Model)</td>
+        <td>@Model.Lastname @Model.FirstName</td>
+        <td>@Model.PhoneNumber</td>
+        <td>@Model.PaymentCharge</td>
+        <td id="total-debt-td">@GetDebt(Model)</td>
     </tr>
 </table>
 <button id="add-period" class="center-block form-control form-button button_green">Добавить новый период</button>
 <div class="flex gap-2 flex-jcenter margin-top">
-<div class="page-small adapt-small payment-table-block">
-<table class="list-table table table_bordered_up w-100" id="payments-table">
-    <tr>
-        <th>Период</th>
-        <th>Стоимость</th>
-        <th>Долг</th>
-        <th>Дата оплаты</th>
-        <th></th>
-    </tr>
-@foreach(PaymentPeriod period in Model.PaymentPeriods)
-{
-    <tr data-periodId="@period.Id">
-        <td class="w-40">
-            <form asp-action='ChangePeriodDates' asp-controller='Payment' data-ajax='true' data-ajax-failure="ErrorAjax()">
-                <input class='trigger-input table-input form-control' type='date' name='PaymentStart' value='@period.PaymentStart.ToString("yyyy-MM-dd")'>
-                -
-                <input class='trigger-input table-input form-control' type='date' name='PaymentEnd' value='@period.PaymentEnd.ToString("yyyy-MM-dd")'>
-                <input type='text' class='hidden' name='periodId' value='@period.Id'>
-            </form>
-        </td>
-        <td class="w-10 text-center">
-            @period.MustTotal
-        </td>
-        <td class="w-10 text-center debt-td" id="@period.Id">
-            @{
-                long debt = GetPeriodDebt(period);
-                string debtDisplay = debt == 0 ? "Оплачено" : debt.ToString();
+    <div class="page-small adapt-small payment-table-block">
+        <table class="list-table table table_bordered_up w-100" id="payments-table">
+            <tr>
+                <th>Период</th>
+                <th>Стоимость</th>
+                <th>Долг</th>
+                <th>Дата оплаты</th>
+                <th></th>
+            </tr>
+            <tr id="add-period-row" class="d-none">
+                <td colspan="5">
+                    <form id="add-new-period-form" data-ajax="true">
+                        <input class="table-input form-control" id="start-date-input" type='date' name='start'>
+                        -
+                        <input class="table-input form-control" id="end-date-input" type='date' name='end'>
+                        <input type="number" name="amount" class="w-10 text-right form-control" value="@Model.PaymentCharge" />
+                        <input type="text" class="hidden" value="@Model.Id" name="studentId" />
+                        <input type="button" value="&#x2713" class="form-control button button_green" id="submit-button-form" />
+                        <input type="button" value="&#x2717" class="form-control button button_red" onclick="AddPeriodCancel()" />
+                    </form>
+                </td>
+                <td class="w-10 text-center d-none" id="sampleInfoDelete">
+                    <a class="invoice" title="Чеки"
+                       data-ajax="true"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#payments-container"
+                       asp-action="GetPayments"
+                       asp-asp-controller="Payment"
+                       asp-route-PeriodId="">
+                        <i class="fas fa-file-invoice"></i>
+                    </a>
+                    <a class="text-error delete-period" title="Удалить"
+                       asp-action="DeletePaymentPeriod"
+                       asp-controller="Payment"
+                       asp-route-PeriodId="">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+            </tr>
+            @foreach (PaymentPeriod period in Model.PaymentPeriods)
+            {
+                <tr data-periodId="@period.Id">
+                    <td class="w-40">
+                        <form asp-action='ChangePeriodDates' asp-controller='Payment' data-ajax='true' data-ajax-failure="ErrorAjax()">
+                            <input class='trigger-input table-input form-control' type='date' name='PaymentStart' value='@period.PaymentStart.ToString("yyyy-MM-dd")'>
+                            -
+                            <input class='trigger-input table-input form-control' type='date' name='PaymentEnd' value='@period.PaymentEnd.ToString("yyyy-MM-dd")'>
+                            <input type='text' class='hidden' name='periodId' value='@period.Id'>
+                        </form>
+                    </td>
+                    <td class="w-10 text-center">
+                        @period.MustTotal
+                    </td>
+                    <td class="w-10 text-center debt-td" id="@period.Id">
+                        @{
+                            long debt = GetPeriodDebt(period);
+                            string debtDisplay = debt == 0 ? "Оплачено" : debt.ToString();
+                        }
+                        @debtDisplay
+                    </td>
+                    <td class="w-30 date-cell">
+                        @{
+                            //var date = GetLastPaidDate(period);
+                            foreach (var payment in period.Payments)
+                            {
+                                var date = payment.PaymentCreated;
+                                if (date != DateTime.MinValue)
+                                    @date.ToString(@"dd/MM/yyyy")
+                                ;
+                                <span>-</span> @payment.PaymentAmount
+                                <br />
+                            }
+                        }
+                    </td>
+                    <td class="w-10 text-center">
+                        <a class="invoice" title="Чеки"
+                           data-ajax="true"
+                           data-ajax-mode="replace"
+                           data-ajax-update="#payments-container"
+                       asp-action="GetPayments"
+                           asp-asp-controller="Payment"
+                       asp-route-PeriodId="@period.Id">
+                            <i class="fas fa-file-invoice"></i>
+                        </a>
+                        <a class="text-error delete-period" title="Удалить"
+                       asp-action="DeletePaymentPeriod"
+                       asp-controller="Payment"
+                       asp-route-PeriodId="@period.Id">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>
             }
-            @debtDisplay
-        </td>
-        <td class="w-30 date-cell">
-            @{
-                 //var date = GetLastPaidDate(period);
-                 foreach(var payment in period.Payments)
-                 {
-                     var date = payment.PaymentCreated;
-                     if(date != DateTime.MinValue) 
-                         @date.ToString(@"dd/MM/yyyy");
-                     <span>-</span> @payment.PaymentAmount 
-                     <br />
-                 }
-            }
-        </td>
-        <td class="w-10 text-center">
-            <a class="invoice" title="Чеки"
-                data-ajax="true"
-                data-ajax-mode="replace"
-                data-ajax-update="#payments-container"
-                asp-action="GetPayments"
-                asp-asp-controller="Payment"
-                asp-route-PeriodId="@period.Id">
-                <i class="fas fa-file-invoice"></i>
-            </a>
-            <a class="text-error delete-period" title="Удалить" 
-                asp-action="DeletePaymentPeriod"
-                asp-controller="Payment"
-                asp-route-PeriodId="@period.Id">
-                <i class="fas fa-trash-alt"></i>
-            </a>
-        </td>
-    </tr>
-}
-    <tr id="add-period-row" class="d-none">
-        <td colspan="5">
-            <form id="add-new-period-form" data-ajax="true">
-                <input class="table-input form-control" id="start-date-input" type='date' name='start'>
-                -
-                <input class="table-input form-control" id="end-date-input" type='date' name='end'>
-                <input type="number" name="amount" class="w-10 text-right form-control" value="@Model.PaymentCharge"/>
-                <input type="text" class="hidden" value="@Model.Id" name="studentId" />
-                <input type="button" value="&#x2713" class="form-control button button_green" id="submit-button-form" />
-                <input type="button" value="&#x2717" class="form-control button button_red" onclick="AddPeriodCancel()" />
-            </form>
-        </td>
-        <td class="w-10 text-center d-none" id="sampleInfoDelete">
-            <a class="invoice" title="Чеки"
-                data-ajax="true"
-                data-ajax-mode="replace"
-                data-ajax-update="#payments-container"
-                asp-action="GetPayments"
-                asp-asp-controller="Payment"
-                asp-route-PeriodId="">
-                <i class="fas fa-file-invoice"></i>
-            </a>
-            <a class="text-error delete-period" title="Удалить" 
-                asp-action="DeletePaymentPeriod"
-                asp-controller="Payment"
-                asp-route-PeriodId="">
-                <i class="fas fa-trash-alt"></i>
-            </a>
-        </td>
-    </tr>
-</table>
-</div>
-<div id="payments-container" class="fb-30"></div>
+        </table>
+    </div>
+    <div id="payments-container" class="fb-30"></div>
 </div>
 <script>
-
-    function GetFormatedDate(date)
-    {
+    function GetFormatedDate(date) {
         return (new Date(Date.parse(date))).toLocaleDateString('it');
     }
 
-    //click on Add New Period button
+    function lastDayOfMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
+    }
 
-    function DeletePeriod(event){
+    function AddPeriodCancel(){
+    $('#add-period-row').addClass('d-none');
+    $('#add-period').prop('disabled', false);
+}
+
+    $('.trigger-input').on('change', (event) => {
+        let form = $(event.currentTarget).parents('form');
+        $(form).submit();
+    });
+
+    function ErrorAjax() {
+        if (!alert("Возникла ошибка, попробуйте еще раз"))
+            window.location.reload();
+    }
+
+    function SuccessAjax(link) {
+        let d = $(link).parents('tr').children('.debt-td').text();
+        let debt = document.getElementById('total-debt-td');
+        debt.innerText = (Number(debt.innerText) - d);
+        ChangeDebtCondition();
+        $(link).parents('tr').remove();
+        $('#payments-container').text('');
+        alert("Период успешно удалён");
+    }
+
+
+    function DeletePeriod(event) {
         let inputs = $(event.currentTarget).parents('tr').find('input[type=date]');
         let isSure = confirm('Удалить период с ' + GetFormatedDate(inputs[0].value) + " по " + GetFormatedDate(inputs[1].value) + "?");
         if (isSure) {
@@ -164,159 +191,132 @@
             });
         }
     }
-    $(".delete-period").on('click', (event)=>{
+    $(".delete-period").on('click', (event) => {
         event.preventDefault();
         DeletePeriod(event);
     });
 
-    function lastDayOfMonth(year, month) {
-        return new Date(year, month + 1, 0).getDate();
-    }
+    var parts = []
 
     $("#add-period").on('click', (event) => {
         //showing the ANP row - the last in the table with correct index
         $('#add-period-row').removeClass('d-none');
-        
+
         //disabling the button
         $('#add-period').prop('disabled', true);
 
         let tt = $('#payments-table tr:not(#add-period-row)');
-        
-        if(tt.length == 1) return;
-        
-        tt = $(tt).last();
+
+        if (tt.length == 1) return;
+
+        tt = $(tt)[1];
         let date1 = $(tt).find('input[type=date]').last().val();
+        parts.push({"date1": date1})
         $('#start-date-input').val(date1);
 
         let date2 = new Date(Date.parse(date1));
         date2.setMonth(date2.getMonth() + 1);
         date2 = date2.toISOString().split('T')[0];
         $('#end-date-input').val(date2);
-
     });
 
     $('#submit-button-form').on('click', (event) =>{
-        let form = $('#add-new-period-form');
-        let dates = $("#add-new-period-form input[type='date']")
-        if(dates[0].value == '' || dates[1].value == '') return;
-        console.log(form);
-        $.ajax({
-            type: "post",
-            url: "/payment/createpaymentperiod2",
-            data: form.serialize(),
-            success: function(data) {
-                var new_row = document.createElement('tr');
-                new_row.setAttribute('data-periodId', data);
-                var cells = [];
+    let form = $('#add-new-period-form');
+    let dates = $("#add-new-period-form input[type='date']")
+    if(dates[0].value == '' || dates[1].value == '') return;
+    console.log(form);
+    $.ajax({
+        type: "post",
+        url: "/payment/createpaymentperiod2",
+        data: form.serialize(),
+        success: function(data) {
+            var new_row = document.createElement('tr');
+            new_row.setAttribute('data-periodId', data);
+            var cells = [];
 
-                //cells[1] - form cell
-                cells.push(document.createElement('td'));
-                let form = document.createElement('form');
-                let inputDS = document.createElement('input');
-                inputDS.setAttribute('type', 'date');
-                inputDS.setAttribute('name', 'PaymentStart');
-                inputDS.setAttribute('value', $('#start-date-input').val());
-                inputDS.className = 'trigger-input table-input';
-                form.appendChild(inputDS);
-                form.append(" - ");
-                let inputDE = document.createElement('input');
-                inputDE.setAttribute('type', 'date');
-                inputDE.setAttribute('name', 'PaymentEnd');
-                inputDE.setAttribute('value', $('#end-date-input').val());
-                inputDE.className = 'trigger-input table-input';
-                form.appendChild(inputDE);
-                let inputPI = document.createElement('input');
-                inputPI.setAttribute('value', data);
-                inputPI.setAttribute('name', 'periodId');
-                inputPI.className = 'hidden';
-                form.appendChild(inputPI);
+            //cells[1] - form cell
+            cells.push(document.createElement('td'));
+            let form = document.createElement('form');
+            let inputDS = document.createElement('input');
+            inputDS.setAttribute('type', 'date');
+            inputDS.setAttribute('name', 'PaymentStart');
+            inputDS.setAttribute('value', $('#start-date-input').val());
+            inputDS.className = 'trigger-input table-input form-control';
+            form.appendChild(inputDS);
+            form.append(" - ");
+            let inputDE = document.createElement('input');
+            inputDE.setAttribute('type', 'date');
+            inputDE.setAttribute('name', 'PaymentEnd');
+            inputDE.setAttribute('value', $('#end-date-input').val());
+            inputDE.className = 'trigger-input table-input form-control';
+            form.appendChild(inputDE);
+            let inputPI = document.createElement('input');
+            inputPI.setAttribute('value', data);
+            inputPI.setAttribute('name', 'periodId');
+            inputPI.className = 'hidden';
+            form.appendChild(inputPI);
 
-                form.setAttribute('data-ajax', 'true');
-                form.setAttribute('action', '/Payment/ChangePeriodDates');
-                form.setAttribute('method', 'post');
-                form.setAttribute('data-ajax-failure', 'ErrorAjax()');
+            form.setAttribute('data-ajax', 'true');
+            form.setAttribute('action', '/Payment/ChangePeriodDates');
+            form.setAttribute('method', 'post');
+            form.setAttribute('data-ajax-failure', 'ErrorAjax()');
 
-                $(inputDE).on('change', (event)=>{
-                    $(form).submit();
-                });
+            $(inputDE).on('change', (event)=>{
+                $(form).submit();
+            });
 
-                $(inputDS).on('change', (event)=>{
-                    $(form).submit();
-                });
+            $(inputDS).on('change', (event)=>{
+                $(form).submit();
+            });
 
-                cells[0].appendChild(form);
-                cells[0].className = 'w-40';
+            cells[0].appendChild(form);
+            cells[0].className = 'w-40';
 
-                let amount = $('#add-new-period-form').find('[type=number]').val()
-                //cells[1] - must total
-                cells.push(document.createElement('td'));
-                cells[1].className = 'w-10 text-center';
-                cells[1].innerHTML = amount;
+            let amount = $('#add-new-period-form').find('[type=number]').val()
+            //cells[1] - must total
+            cells.push(document.createElement('td'));
+            cells[1].className = 'w-10 text-center';
+            cells[1].innerHTML = amount;
 
-                //cells[2] - debt (is eq to must total)
-                cells.push(document.createElement('td'));
-                cells[2].className = 'w-10 text-center debt-td';
-                cells[2].setAttribute('id', data);
-                cells[2].innerHTML = amount;
+            //cells[2] - debt (is eq to must total)
+            cells.push(document.createElement('td'));
+            cells[2].className = 'w-10 text-center debt-td';
+            cells[2].setAttribute('id', data);
+            cells[2].innerHTML = amount;
 
-                //cells[3] - empty cell with date
-                cells.push(document.createElement('td'));
-                cells[3].className = 'w-30';
+            //cells[3] - empty cell with date
+            cells.push(document.createElement('td'));
+            cells[3].className = 'w-30';
 
-                //cells[4] - info and del cell
-                actionCell = $('#sampleInfoDelete').clone();
-                $(actionCell).children('a:nth-child(2)').attr('href', ('/Payment/DeletePaymentPeriod?PeriodId=' + data));
-                $(actionCell).children('a:nth-child(2)').on('click', (event)=> {
-                    DeletePeriod(event);
-                });
+            //cells[4] - info and del cell
+            actionCell = $('#sampleInfoDelete').clone();
+            $(actionCell).children('a:nth-child(2)').attr('href', ('/Payment/DeletePaymentPeriod?PeriodId=' + data));
+            $(actionCell).children('a:nth-child(2)').on('click', (event)=> {
+                DeletePeriod(event);
+            });
 
-                $(actionCell).children('a:nth-child(1)').attr('href', ('/Payment/GetPayments?PeriodId=' + data));
+            $(actionCell).children('a:nth-child(1)').attr('href', ('/Payment/GetPayments?PeriodId=' + data));
 
-                $(actionCell).removeClass('d-none');
-                cells[4] = $(actionCell)[0];
+            $(actionCell).removeClass('d-none');
+            cells[4] = $(actionCell)[0];
 
-                for (let i = 0; i < cells.length; i++) { 
-                    new_row.appendChild(cells[i]);
-                }
-
-                $(new_row).insertBefore('#add-period-row');
-
-                $('#add-period-row').addClass('d-none');
-                $('#add-period').prop('disabled', false);
-
-                let debt = document.getElementById('total-debt-td');
-                debt.innerText = (Number(debt.innerText) + Number(amount));
-                ChangeDebtCondition();
+            for (let i = 0; i < cells.length; i++) { 
+                new_row.appendChild(cells[i]);
             }
-        })
-    });
 
-    $('.trigger-input').on('change', (event)=>{
-        let form = $(event.currentTarget).parents('form');
-        $(form).submit();
-    });
+            $(new_row).insertAfter('#add-period-row');
 
-    function ErrorAjax(){
-        if(!alert("Возникла ошибка, попробуйте еще раз"))
-            window.location.reload();
-    }
+            $('#add-period-row').addClass('d-none');
+            $('#add-period').prop('disabled', false);
 
-    function SuccessAjax(link){
-        let d = $(link).parents('tr').children('.debt-td').text();
-        let debt = document.getElementById('total-debt-td');
-        debt.innerText = (Number(debt.innerText) - d);
-        ChangeDebtCondition();
-        $(link).parents('tr').remove();
-        $('#payments-container').text('');
-        alert("Период успешно удалён");
-    }
+            let debt = document.getElementById('total-debt-td');
+            debt.innerText = (Number(debt.innerText) + Number(amount));
+            ChangeDebtCondition();
+        }
+    })
+});
 
-    function AddPeriodCancel(){
-        $('#add-period-row').addClass('d-none');
-        $('#add-period').prop('disabled', false);
-    }
-
-    function ChangeDebtCondition(){
+    function ChangeDebtCondition() {
         let td = document.getElementById('total-debt-td');
         if (Number(td.innerText) > 0) {
             td.className = "back-error";
@@ -326,5 +326,5 @@
         }
     }
 
-ChangeDebtCondition();
+    ChangeDebtCondition();
 </script>

@@ -71,9 +71,16 @@
 
         let date = $(form).children().children("[name='dateCreated']").val();
         date = new Date(Date.parse(date))
-        $(row).children('.date-cell').text(date.toLocaleDateString('it'));
+        let dateCell = $(row).children('.date-cell')
+        let cellText = ""
+        if($(dateCell).text() != "")
+            cellText = $(dateCell).html() + "<br>"
+        cellText += date.toLocaleDateString('it') + " - " + amount
+        $(dateCell).html(cellText);
         ChangeDebtCondition();
     }
+
+
 </script>
 
 
