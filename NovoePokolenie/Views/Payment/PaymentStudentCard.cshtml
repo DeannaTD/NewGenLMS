@@ -25,12 +25,6 @@
             paid += payment.PaymentAmount;
         return -(paid - period.MustTotal);
     }
-
-    DateTime GetLastPaidDate(PaymentPeriod period)
-    {
-        if (period.Payments.Count == 0) return DateTime.MinValue;
-        return period.Payments.Last().PaymentCreated;
-    }
 }
 <table class="list-table centered table table_bordered w-60 center-table">
     <tr>

@@ -329,7 +329,7 @@ namespace NovoePokolenie.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SettingsAccount()
+        public IActionResult SettingsAccount()
         {
             //NPUser user = await _userManager.GetUserAsync(User);
             return View();
@@ -383,7 +383,7 @@ namespace NovoePokolenie.Controllers
             List<NPUser> users = new List<NPUser>();
             foreach (NPUser user in _userManager.Users)
             {
-                if (isTrue(user, name, phone))
+                if (IsTrue(user, name, phone))
                 {
                     users.Add(user);
                 }
@@ -392,16 +392,16 @@ namespace NovoePokolenie.Controllers
             ViewBag.useLayout = isAjax == 1;
             return View("AllUser", users);
         }
-
-        public bool isTrue(NPUser user, string name, string phone)
+        //TODO: sense сделал много упрощений
+        public bool IsTrue(NPUser user, string name, string phone)
         {
             name = name.ToUpper();
             string fn = user.FirstName.ToUpper();
             string ln = user.Lastname.ToUpper();
             bool bname = (fn + " " + ln).Contains(name) || (ln + " " + fn).Contains(name);
-            bool bp1 = user.PhoneNumber == null ? false : user.PhoneNumber.Contains(phone);
-            bool bp2 = user.StudentPhoneNumber == null ? false : user.StudentPhoneNumber.Contains(phone);
-            return bname && (phone == "null" ? true : (bp1 || bp2));
+            bool bp1 = user.PhoneNumber != null && user.PhoneNumber.Contains(phone);
+            bool bp2 = user.StudentPhoneNumber != null && user.StudentPhoneNumber.Contains(phone);
+            return bname && (phone == "null" || (bp1 || bp2));
         }
         public IActionResult AllUserMainPage()
         {

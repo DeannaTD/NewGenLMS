@@ -118,8 +118,12 @@ namespace NovoePokolenie.Services
             await _unitOfWork.Save();
         }
 
-        //TODO: replaced by GetByStatus
-
+        //TODO: replace by GetByStatus
+        public async Task<List<NPUser>> GetByStatus(ActivityStatus status)
+        {
+            var students = await _unitOfWork.Students.GetAllStatusStudentsAsync();
+            return students.Where(st => st.StatusId == (int)status).ToList();
+        }
         public async Task<List<NPUser>> GetArchivedAsync()
         {
             var students = await _unitOfWork.Students.GetAllStatusStudentsAsync();

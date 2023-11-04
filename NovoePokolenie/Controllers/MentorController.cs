@@ -29,10 +29,5 @@ namespace NovoePokolenie.Controllers
         {
             return View();
         }
-
-        //public async Task<IActionResult> StudentDetail(int BranchId)
-        //{
-
-        //}
     }
 }

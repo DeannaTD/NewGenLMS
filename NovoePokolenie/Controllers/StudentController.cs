@@ -38,7 +38,9 @@ namespace NovoePokolenie.Controllers
 
         public async Task<IActionResult> Archive()
         {
-            var archivedStudents = await _studentService.GetArchivedAsync();
+            //todo: remove comment if GetByStatus works
+            //var archivedStudents = await _studentService.GetArchivedAsync();
+            var archivedStudents = await _studentService.GetByStatus(ActivityStatus.Archive);
             archivedStudents.Sort((x, y) => x.Lastname.CompareTo(y.Lastname));
             return View("NotActiveUsers", archivedStudents);
         }
@@ -132,9 +134,6 @@ namespace NovoePokolenie.Controllers
                 studentCards.Last().MentorName = await _studentService.GetStudentMentorNameAsync(trial.GroupId);
             }
             return PartialView("ManagerStudentList", studentCards);
-            if (User.IsInRole("Mentor")) return PartialView(students);
-            else if (User.IsInRole("Manager")) return PartialView("ManagerStudentList", studentCards);
-            return new EmptyResult();
         }
 
         public async Task<IActionResult> Trial()

@@ -51,7 +51,6 @@ namespace NovoePokolenie.Controllers
         public async Task<IActionResult> StudentProjectInfo()
         {
             var levels = await _levelService.GetCollectionAsync();
-            List<UserProject> taskLinks = new List<UserProject>();
 
             return PartialView(levels);
         }
@@ -80,7 +79,8 @@ namespace NovoePokolenie.Controllers
         public async Task LoadProject(int projectId, IFormFile file)
         {
             var project = await _projectService.GetProjectAsync(projectId);
-            string zipLink = project.Level.Name + "_id" + projectId;
+            string levelName = project.Level.Name.Contains('/') ? project.Level.Name.Replace('/', '_') : project.Level.Name;
+            string zipLink = levelName + "_id" + projectId;
             //AI4_id57 - name of dir
             string path = Path.Combine(_webHost.WebRootPath, "projects", zipLink + ".zip");
             //path to zip file

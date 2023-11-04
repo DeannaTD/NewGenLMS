@@ -193,7 +193,7 @@ namespace NovoePokolenie.Controllers
         public async Task<IActionResult> CreatePaymentPeriod(PaymentPeriod period)
         {
             await _paymentPeriodService.CreateAsync(period);
-            return RedirectToAction("GetStudentPeriodsList", "Payment", new { UserId = period.UserId });
+            return RedirectToAction("GetStudentPeriodsList", "Payment", new { period.UserId });
         }
 
         public async Task<string> CreatePaymentPeriod2(string studentId, int amount, DateTime start, DateTime end)
@@ -231,7 +231,7 @@ namespace NovoePokolenie.Controllers
                 Comment = Comment
             };
             await _paymentService.CreateAsync(payment);
-            return RedirectToAction("PeriodInfo", new { periodId = PaymentPeriodId, UserId = UserId });
+            return RedirectToAction("PeriodInfo", new { periodId = PaymentPeriodId, UserId });
         }
 
         [HttpPost]

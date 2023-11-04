@@ -11,10 +11,10 @@
         let path = $('#lesson_detail').attr("data-project");
         $("#lesson_detail").load(path, function(){
             let prefix = path.split('/').slice(0, -1).join('/') + "/";
-            let sources = $('#lesson_detail *[src]');
-            let links = $('#lesson_detail *[href]');
-            let globals = $('#lesson_detail *[src^=http]');
-            globals.push(...$('#lesson_detail *[href^=http]'))
+            let sources = $('#lesson_detail *[src]:not(.no-route-link)');
+            let links = $('#lesson_detail *[href]:not(.no-route-link)');
+            let globals = $('#lesson_detail *[src^=http]:not(.no-route-link)');
+            globals.push(...$('#lesson_detail *[href^=http]:not(.no-route-link)'))
             globals = globals.toArray()
             for (let i = 0; i < sources.length; i++) {
                 if (globals.includes(sources[i])) continue;
