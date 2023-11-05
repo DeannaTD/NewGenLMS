@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronSoftware.Drawing;
 
 //0551 20 47 10 Бурмат Султановна Шукурова Московская-Логвиненко, со стороны Московской, 2 этаж, Эндокринология
 namespace NovoePokolenie.Controllers
@@ -346,12 +347,10 @@ namespace NovoePokolenie.Controllers
                 Directory.CreateDirectory(path);
             }
             string fileName = user.Id + "." + Path.GetExtension(image.FileName);
-            using FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create);
-            image.CopyTo(stream);
-
-            //WEIRD!!!
-            //Random r = new Random();
-            //user.AvatarLink = fileName + "?" + r.Next(1000,9999);
+            AnyBitmap b = AnyBitmap.FromStream(image.OpenReadStream());
+            int k = b.Width / 100;
+            AnyBitmap bitmap = new AnyBitmap(b, b.Width / k, b.Height / k);
+            bitmap.SaveAs(Path.Combine(path, fileName));
             user.AvatarLink = fileName;
             await _userManager.UpdateAsync(user);
             return new EmptyResult();

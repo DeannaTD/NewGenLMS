@@ -6,6 +6,7 @@ namespace NovoePokolenie.Helpers
 {
     public class DateHelper
     {
+        //todo: переписать месяца на словарь
         private static string[] months = new string[] { "Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря" };
         private static string[] monthsDefault = new string[] { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" };
         private static Dictionary<DayOfWeek, string> dofRuShort = new Dictionary<DayOfWeek, string>()

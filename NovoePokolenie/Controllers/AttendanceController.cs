@@ -30,9 +30,9 @@ namespace NovoePokolenie.Controllers
             return View();
         }
 
-        public async Task CreateAttendanceA()
-        {
-        }
+        //public async Task CreateAttendanceA()
+        //{
+        //}
 
         public async Task<List<DateTime>> CheckAndCreate(int groupId)
         {
